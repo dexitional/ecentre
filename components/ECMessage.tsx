@@ -5,7 +5,7 @@ import { TfiArrowCircleRight } from 'react-icons/tfi'
 function ECMessage() {
   return (
     <div className="p-14 h-[35rem] col-span-1 bg-[#153b50] text-white text-sm leading-6 flex flex-col justify-center space-y-6">
-        <h1 className="text-2xl">UNIVERSITY ELECTION CENTRE</h1>
+        <h1 className="text-[1.35rem] font-semibold tracking-wider">UNIVERSITY ELECTION CENTRE</h1>
         <p>On behalf of the Election Team, I am pleased to welcome you to the University Election Centre.</p>
         <p>This website offers a channel to stay abreast with electoral processes in the University. </p>
         <p>From Student Elections to Staff Association elections communicate directly with you. We value this opportunity immensely.</p>

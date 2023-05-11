@@ -15,7 +15,7 @@ function QuickCard() {
         <IntroPill title="Electoral Calendar" Icon={GoCalendar} />
         <IntroPill title="General Instructions" Icon={BsCardChecklist} />
         <IntroPill title="Nomination Voucher" Icon={TfiTicket} />
-        <IntroPill title="Engage Voters with SMS-TRON&reg;" Icon={FaSms} />
+        <IntroPill title="Engage Voters with SMS-FLY&reg;" Icon={FaSms} />
         {/* <IntroPill title="File Nomination" Icon={HiOutlineDocumentCheck} /> */}
         <IntroPill title="Electoral Groups" Icon={VscOrganization} />
         {/* <IntroPill title="Check Register" Icon={BsCardChecklist} /> */}

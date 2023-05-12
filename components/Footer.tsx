@@ -47,8 +47,8 @@ function Footer() {
          </div>
       </section>
       <section className="w-full h-14 bg-[#153b50] flex items-center">
-         <div className="mx-auto w-full max-w-6xl flex items-center">
-            <p className="text-[0.65rem] md:text-xs text-white">© Copyright {new Date().getFullYear()} | Electoral Unit | All Rights Reserved.</p>
+         <div className="md:mx-auto w-full md:max-w-6xl flex items-center justify-center">
+            <p className="text-xs md:text-sm text-white text-center">&copy; Copyright {new Date().getFullYear()} | Electoral Unit | All Rights Reserved.</p>
          </div>
       </section>
    </footer>

@@ -4,7 +4,7 @@ import Logo from '../public/logo.png'
 
 function EligibilityBox() {
   return (
-    <div className="z-1 relative w-full h-96 overflow-hidden border-t-8 border-t-[#153b50]">
+    <div className="z-1 relative w-full h-64 md:h-96  overflow-hidden border-t-8 border-t-[#153b50]">
         <Image src={Logo} alt="BG" className="z-10 absolute h-96 object-contain opacity-30" />
         <div className="z-20 absolute h-full w-full flex flex-col items-center justify-center space-y-4 rounded bg-yellow-500/70 text-white"></div>
         <div className="z-30 px-10 py-6 h-full w-full flex flex-col items-center justify-center space-y-6 text-[#153b50]">

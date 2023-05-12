@@ -7,11 +7,11 @@ import NavPill from './NavPill';
 function Navigation() {
   return (
     <div className="z-10 w-full shadow-xl shadow-black/20 text-gray-800">
-        <div className="px-6 mx-auto w-full max-w-6xl h-[5.8rem] flex items-center space-x-8">
+        <div className="px-3 md:px-6 md:mx-auto w-full md:max-w-6xl h-[4.3rem] md:h-[5.8rem] flex items-center space-x-8">
             <Link href="/" className="relative">
-                <Image src={Logo} alt="Logo" className="h-20 w-20 object-contain" />
+                <Image src={Logo} alt="Logo" className="h-14 w-14 md:h-20 md:w-20 object-contain" />
             </Link>
-            <nav className="flex items-center space-x-10">
+            <nav className="hidden md:flex items-center space-x-10">
                <NavPill
                     title="HOME" 
                     link="/" 

@@ -3,10 +3,10 @@ import Image from 'next/image'
 import Logo from '../../../public/logo.png'
 import NominationForm from "@/components/NominationForm"
 import Link from "next/link"
+import { appwriteDB } from '../../../appwrite'
 
+export default async function Page() {
 
-export default function Page() {
-  
   return (
     <main className="flex-1 space-y-8">
         <h1 className="px-4 py-2 text-4xl text-center font-bold tracking-wider rounded border-2 border-[#153B50] text-[#153B50]">GRASAG/JCRC ELECTIONS NOMINATION FORM</h1>

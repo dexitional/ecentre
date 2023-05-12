@@ -18,14 +18,9 @@ function Banner() {
      const { total, documents } = res;
      if(total > 0){
         // @ts-ignore
-        cookies().set('applicant', JSON.stringify({ serial, data: documents[0] }))
-        redirect('/application')
-     } else {
-
+        cookies().set('applicant', JSON.stringify({ serial, data: documents[0] }))   // Generate session token - cookie
+        redirect('/application')  // Redirect to Secured Nomiation Page
      }
-     console.log(res)
-     // Generate session token - cookie
-     // Redirect to Secured Nomiation Page
   }
 
   return (

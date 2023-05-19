@@ -102,7 +102,7 @@ export const setupCourses = async (data: any) => {
         //    }))
         let count = 0;
         for (const row of data) {
-            const res = await db.createDocument(APPWRITE_DATABASE_ID!, '64673f52adb0b86585fd', ID.unique(), row);
+            const res = await db.createDocument(APPWRITE_DATABASE_ID!, '64675233e5c4abbb09b1', ID.unique(), row);
             count++;
             console.log(`count: ${count} out of  ${data.length}`)
         } return count;

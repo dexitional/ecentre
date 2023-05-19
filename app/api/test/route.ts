@@ -2,13 +2,14 @@
 //import { promises as fs } from 'fs';
 //const jsonDirectory = path.join(process.cwd(), 'json');
 
-import { fetchTest, setupCourses } from "@/utils/serverApi";
+import { fetchTest, setupCourses, setupVenues } from "@/utils/serverApi";
 
 const courses = require('../../../public/courses.json')
 const venues = require('../../../public/venues.json')
 
 export async function GET(request: Request) {
   const res = await setupCourses(courses)
+  //const res = await setupVenues(venues)
   //const res = await fetchTest()
   return new Response(JSON.stringify({ res }), { status: 200 });
 }

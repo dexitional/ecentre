@@ -1,6 +1,6 @@
 import React from 'react'
 import TopNavPill from './TopNavPill'
-import { MdMail, MdPhone } from 'react-icons/md'
+import { MdMail, MdPhone,MdOutlineWhatsapp } from 'react-icons/md'
 import Socials from './Socials'
 
 function TopNav() {
@@ -11,7 +11,7 @@ function TopNav() {
                <div className="text-xs font-medium">Transparency. Fairness. Integrity</div>
                <div className="flex items-center flex-col md:flex-row space-x-16">
                   <TopNavPill title="ec@ucc.edu.gh" Icon={MdMail} />
-                  <TopNavPill title="+233 (0) 55 864 1826" Icon={MdPhone} />
+                  <TopNavPill title="+233 (0) 20 355 6742" Icon={MdOutlineWhatsapp} />
                </div>
            </div>
            <div className="md:pr-8">

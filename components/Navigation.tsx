@@ -10,9 +10,7 @@ import UserBox from './UserBox';
 import { cookies } from 'next/headers';
 
 function Navigation() {
-  const applicant = cookies().get('applicant')?.value
-  console.log("KOBBY NAV: ",applicant)
-
+  
   return (
     <div className="z-10 w-full shadow-xl shadow-black/20 text-gray-800">
         <div className="px-3 md:px-6 md:mx-auto w-full md:max-w-6xl h-[4.3rem] md:h-[5.8rem] flex items-center justify-between space-x-8">
@@ -22,7 +20,8 @@ function Navigation() {
             </Link>
             {/* @ts-ignore */}
             <MainMenu />
-            { applicant ? <UserBox /> : null }
+            {/* @ts-ignore */}
+            <UserBox />
         </div>
     </div>
   )

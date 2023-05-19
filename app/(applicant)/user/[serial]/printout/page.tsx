@@ -1,12 +1,12 @@
 import { useState } from "react"
 import Image from 'next/image'
-import Logo from '../../../public/logo.png'
+import Logo from '../../../../../public/logo.png'
 import NominationForm from "@/components/NominationForm"
 import Link from "next/link"
 import PrintPill from "@/components/PrintPill"
 
 
-export default function Page() {
+export default function Page({ params}:{ params: { serial: string }}) {
   
   return (
     <main className="flex-1 space-y-3 md:space-y-8">

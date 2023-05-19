@@ -1,0 +1,672 @@
+﻿[
+    {
+        "location_name": "SK ADJAPONG LECTURE THEATRE",
+        "shorthand": "SKALT/LLT",
+        "venue_name": "SKALT/LLT"
+    },
+    {
+        "location_name": "ASSEMBLY HALL",
+        "shorthand": "ASSEMBLY HALL",
+        "venue_name": "ASSEMBLY HALL"
+    },
+    {
+        "location_name": "ASSEMBLY HALL ANNEX",
+        "shorthand": "ASSEMBLY HALL ANNEX",
+        "venue_name": "ASSEMBLY HALL ANNEX"
+    },
+    {
+        "location_name": "FRENCH LECTURE ROOM",
+        "shorthand": "LA SALLE",
+        "venue_name": "LA SALLE"
+    },
+    {
+        "location_name": "DEPARTMENT ",
+        "shorthand": "DEPARTMENT ",
+        "venue_name": "DEPARTMENT "
+    },
+    {
+        "location_name": "DEPARTMENT  LAB",
+        "shorthand": "DEPARTMENT  LAB",
+        "venue_name": "DEPARTMENT  LAB"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT1"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT2"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT3"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT4"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT5"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT6"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT7"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT8"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT9"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT10"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT11"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT12"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT13"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT14"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT15"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT16"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT17"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT18"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT19"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT20"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT21"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT22"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT23"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT24"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT25"
+    },
+    {
+        "location_name": "NEW LECTURE THEATRE",
+        "shorthand": "NLT",
+        "venue_name": "NLT26"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT1"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT2"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT3"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT4"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT5"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT6"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT7"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT8"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT9"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT10"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT11"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT12"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT13"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT14"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT15"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT16"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT17"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT18"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT19"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT20"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT21"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT22"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT23"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT24"
+    },
+    {
+        "location_name": "SANDWICH LECTURE THEATRE",
+        "shorthand": "SWLT",
+        "venue_name": "SWLT25"
+    },
+    {
+        "location_name": "G BLOCK",
+        "shorthand": "GB",
+        "venue_name": "G10"
+    },
+    {
+        "location_name": "G BLOCK",
+        "shorthand": "GB",
+        "venue_name": "G11"
+    },
+    {
+        "location_name": "G BLOCK",
+        "shorthand": "GB",
+        "venue_name": "G15"
+    },
+    {
+        "location_name": "G BLOCK",
+        "shorthand": "GB",
+        "venue_name": "G16"
+    },
+    {
+        "location_name": "G BLOCK",
+        "shorthand": "GB",
+        "venue_name": "G20"
+    },
+    {
+        "location_name": "G BLOCK",
+        "shorthand": "GB",
+        "venue_name": "G21"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT1"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT2"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT3"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT4"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT5"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT6"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT7"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT8"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT9"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT10"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT11"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT12"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT13"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT14"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT15"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT16"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT17"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT18"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT19"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT20"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT21"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT22"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT23"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT24"
+    },
+    {
+        "location_name": "LECTURE THEATRE",
+        "shorthand": "LT",
+        "venue_name": "LT25"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT1"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT2"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT3"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT4"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT5"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT6"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT7"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT8"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT9"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT10"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT11"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT12"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT13"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT14"
+    },
+    {
+        "location_name": "C A ACKAH LECTURE THEATRE",
+        "shorthand": "CAALT",
+        "venue_name": "CAALT15"
+    },
+    {
+        "location_name": "CAFÉ ROOF TOP",
+        "shorthand": "CRT",
+        "venue_name": "CRT1"
+    },
+    {
+        "location_name": "CAFÉ ROOF TOP",
+        "shorthand": "CRT",
+        "venue_name": "CRT2"
+    },
+    {
+        "location_name": "CAFÉ ROOF TOP",
+        "shorthand": "CRT",
+        "venue_name": "CRT3"
+    },
+    {
+        "location_name": "CAFÉ ROOF TOP",
+        "shorthand": "CRT",
+        "venue_name": "CRT4"
+    },
+    {
+        "location_name": "CAFÉ ROOF TOP",
+        "shorthand": "CRT",
+        "venue_name": "CRT5"
+    },
+    {
+        "location_name": "CAFÉ ROOF TOP",
+        "shorthand": "CRT",
+        "venue_name": "CRT6"
+    },
+    {
+        "location_name": "SCIENCE ROOF TOP",
+        "shorthand": "SRT",
+        "venue_name": "SRT1"
+    },
+    {
+        "location_name": "SCIENCE ROOF TOP",
+        "shorthand": "SRT",
+        "venue_name": "SRT2"
+    },
+    {
+        "location_name": "SCIENCE ROOF TOP",
+        "shorthand": "SRT",
+        "venue_name": "SRT3"
+    },
+    {
+        "location_name": "SCIENCE ROOF TOP",
+        "shorthand": "SRT",
+        "venue_name": "SRT4"
+    },
+    {
+        "location_name": "EDUCATION LECTURE THEATRE",
+        "shorthand": "ELT",
+        "venue_name": "ELT1"
+    },
+    {
+        "location_name": "EDUCATION LECTURE THEATRE",
+        "shorthand": "ELT",
+        "venue_name": "ELT2"
+    },
+    {
+        "location_name": "EDUCATION LECTURE THEATRE",
+        "shorthand": "ELT",
+        "venue_name": "ELT3"
+    },
+    {
+        "location_name": "EDUCATION LECTURE THEATRE",
+        "shorthand": "ELT",
+        "venue_name": "ELT4"
+    },
+    {
+        "location_name": "EDUCATION LECTURE THEATRE",
+        "shorthand": "ELT",
+        "venue_name": "ELT5"
+    },
+    {
+        "location_name": "LAW LECTURE THEATRE",
+        "shorthand": "LLR",
+        "venue_name": "LLR1"
+    },
+    {
+        "location_name": "LAW LECTURE THEATRE",
+        "shorthand": "LLR",
+        "venue_name": "LLR2"
+    },
+    {
+        "location_name": "LAW LECTURE THEATRE",
+        "shorthand": "LLR",
+        "venue_name": "LLR3"
+    },
+    {
+        "location_name": "LAW LECTURE THEATRE",
+        "shorthand": "LLR",
+        "venue_name": "LLR4"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD1"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD2"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD3"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD4"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD5"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD6"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD7"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD8"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD9"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD10"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD11"
+    },
+    {
+        "location_name": "CoDE LECTURE ROOM",
+        "shorthand": "CD",
+        "venue_name": "CD12"
+    }
+]

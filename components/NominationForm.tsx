@@ -12,6 +12,7 @@ export type Inputs = {
   aspirant_phone: string;
   mate_regno: string;
   mate_phone: string;
+  has_mate: string;
   guarantor1_regno: string;
   guarantor1_phone: string;
   guarantor2_regno: string;
@@ -20,13 +21,15 @@ export type Inputs = {
   photo: string;
   position: string;
   consent: string;
+  //is_candidate, vetscore, vettotal, 
+  
 };
 
 function NominationForm() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
-  const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
-  const { aspirant_regno, mate_regno, guarantor1_regno, guarantor2_regno } = watch()
-  console.log(IMAGE_URL)
+  //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
+  const { aspirant_regno, has_mate, mate_regno, guarantor1_regno, guarantor2_regno } = watch()
+  const IMAGE_URL = `https://ehub.ucc.edu.gh`
   // const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
   const onSubmit: SubmitHandler<Inputs> = async data => {
       try {
@@ -46,15 +49,19 @@ function NominationForm() {
         <div className="space-y-4">
             <Legend label="ASPIRANT" />
             <Input  register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" />
-            <Input  register={register} label="Phone Number of Aspirant" name="position" placeholder="Phone Number of Aspirant" />
+            <Input  register={register} label="Phone Number of Aspirant" name="aspirant_phone" placeholder="Phone Number of Aspirant" />
             <Select register={register} label="Position Being Applied" name="position" placeholder="Choose Position" />
+            <Select register={register} label="Add Running Mate ?" name="has_mate" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
+            
             {/* <Input register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" /> */}
         </div>
+        { has_mate && has_mate == '1' ?
         <div className="space-y-4">
             <Legend label="RUNNING MATE <sub>( IF ANY )</sub>" />
             <Input register={register} label="Registration Number of Running-mate" name="mate_regno" placeholder="Registration Number of Running-mate" />
             <Input register={register} label="Phone Number of Running-mate" name="mate_phone" placeholder="Phone Number of Running-mate" />
-        </div>
+        </div> : null 
+        }
         <div className="space-y-4">
             <Legend label="GUARANTORS ( ENDORSEMENT )" />
             <Input register={register} label="Registration Number of First (1st) Guarantor" name="guarantor1_regno" placeholder="Registration Number of 1st Guarantor" />
@@ -87,11 +94,11 @@ function NominationForm() {
         <div className="p-4 py-6 pb-10 flex-1 space-y-4 bg-gray-50 shadow-md shadow-gray-600/20 rounded-lg">
             <legend className="px-4 py-2 bg-slate-100 border text-[#153B50] text-center md:text-left font-semibold tracking-widest">ELECTORAL SETUP</legend>
             <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
-                <PhotoBox label="CANDIDACY PHOTO" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno || '15666'}`)} />
-                <PhotoBox label="ASPIRANT" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno || '90000'}`)} />
-                <PhotoBox label="RUNNING MATE" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${mate_regno || '90000'}`)} />
-                <PhotoBox label="GUARANTOR #1" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1_regno || '90000'}`)} />
-                <PhotoBox label="GUARANTOR #2" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2_regno || '90000'}`)} />
+                <PhotoBox label="CANDIDACY PHOTO" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`)} />
+                <PhotoBox label="ASPIRANT" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`)} />
+                { has_mate && has_mate == '1' ? <PhotoBox label="RUNNING MATE" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${mate_regno}`)} /> : null }
+                <PhotoBox label="GUARANTOR #1" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1_regno}`)} />
+                <PhotoBox label="GUARANTOR #2" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2_regno}`)} />
             </div>
         </div>
     </section>

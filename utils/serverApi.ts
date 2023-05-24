@@ -1,5 +1,8 @@
 import { appwriteDB as db } from "@/appwrite"
 import { Query, ID } from 'node-appwrite'
+import { Queue } from 'async-await-queue';
+
+const mainQueue = new Queue(1, 100);
 const { APPWRITE_DATABASE_ID } = process.env;
 
 
@@ -102,10 +105,13 @@ export const setupCourses = async (data: any) => {
         //    }))
         let count = 0;
         for (const row of data) {
-            const res = await db.createDocument(APPWRITE_DATABASE_ID!, '64675233e5c4abbb09b1', ID.unique(), row);
-            count++;
-            console.log(`count: ${count} out of  ${data.length}`)
-        } return count;
+            mainQueue.run(async () => {
+                const res = await db.createDocument(APPWRITE_DATABASE_ID!, '6467ff2717916c0a710c', ID.unique(), row);
+                count++;
+                //if (count % 1000 == 0)  await new Promise(resolve => setTimeout(resolve, 1000));
+                console.log(`count: ${count} out of  ${data.length}`)
+            })
+        }   return count;
     } catch (e) {
         console.log(e)
         return null
@@ -187,9 +193,20 @@ export const setupVenues = async (data: any) => {
 }
 
 
+export const deleteCourses = async () => {
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '6467de30d7bdae30a42c')
+    for(const row of res.documents){
+        console.log(row)
+        const m = await db.deleteDocument(APPWRITE_DATABASE_ID!, 'v6467de30d7bdae30a42c', row.$id)
+        console.log(m)
+    }
+    return res;
+}
+
+
 
 export const fetchTest = async () => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '64673f52adb0b86585fd', [
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '6467de30d7bdae30a42c', [
         //Query.equal("$id",'646638ae631e9896529f'),
         Query.equal("code", 'INF399D'),
     ])

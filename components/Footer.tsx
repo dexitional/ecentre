@@ -8,7 +8,7 @@ import FootSocials from './FootSocials'
 
 function Footer() {
   return (
-    <footer className="w-full">
+    <footer className="w-full print:hidden">
       <section className="hidden w-full h-96 bg-[#153B50E8] text-white">
          <div className="mx-auto h-full w-full max-w-6xl grid grid-cols-4 gap-x-20 place-items-center">
              <div className="col-span-1 flex flex-col items-center justify-center space-y-10">

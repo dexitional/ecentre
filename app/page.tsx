@@ -7,12 +7,15 @@ import ElectionSection from "@/components/ElectionSection";
 import EventSection from "@/components/EventSection";
 import NewsLetterBox from "@/components/NewsLetterBox";
 import UpcomingSection from "@/components/UpcomingSection";
+import UserBanner from "@/components/UserBanner";
 
 export default function Home() {
 
   return (
     <main className="w-full">
        <Banner />
+       {/* @ts-ignore */}
+       <UserBanner />
        <Statistics />
        <BreakNews />
        <QuickGuide />

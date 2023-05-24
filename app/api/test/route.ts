@@ -1,14 +1,17 @@
 //import path from 'path';
 //import { promises as fs } from 'fs';
 //const jsonDirectory = path.join(process.cwd(), 'json');
+import { Queue } from 'async-await-queue';
 
-import { fetchTest, setupCourses, setupVenues } from "@/utils/serverApi";
+import { deleteCourses, fetchTest, setupCourses, setupVenues } from "@/utils/serverApi";
 
+const mainQueue = new Queue(2, 100);
 const courses = require('../../../public/courses.json')
 const venues = require('../../../public/venues.json')
 
 export async function GET(request: Request) {
   const res = await setupCourses(courses)
+  //const res = await deleteCourses()
   //const res = await setupVenues(venues)
   //const res = await fetchTest()
   return new Response(JSON.stringify({ res }), { status: 200 });

@@ -1,3 +1,3 @@
 export { default } from 'next-auth/middleware'
 // See "Matching Paths" below to learn more
-export const config = { matcher: ['/application', '/printout'] };
+export const config = { matcher: ['/user/'] };

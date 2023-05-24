@@ -7,10 +7,10 @@ import Navigation from './Navigation'
 
 function Header() {
   return (
-    <>
+    <div className="print:hidden">
       <TopNav />
       <Navigation />
-    </>
+    </div>
   )
 }
 

@@ -15,7 +15,7 @@ APPWRITE MODELS
 + position [ tag, title, groupIds ] { }
 + station [ tag, title, location, venue, ] { ...jcrc, online, local }
 + group  [ tag, title, logo, email, phone, stationId, visible ] { src-lnugs,grasag,jcrcs,uccabs,nusa,}
-+ application  [ sessionId, photo, aspirant_regno,aspirant_phone,.... ]
++ application  [ sessionId, photo, aspirant_regno,aspirant_phone,...., serial,cgpa,form_submit,is_candidate,vetscore,vettotal ]
 + user [ staff_no, name, email, password, roleId, groupId, visible  ]
 + role  [ tag, title, visible ] { super = all privileges, admin = DOS admins, agent = voucher sales, clerk = electoral group admin  }
 + request [ sessionId, title, content, email, phone, request_date,]

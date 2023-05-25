@@ -6,10 +6,10 @@ const mainQueue = new Queue(1, 100);
 const { APPWRITE_DATABASE_ID } = process.env;
 
 
-export const getVoucher = async (serial: FormDataEntryValue, pin: FormDataEntryValue) => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '645b562c59f8241f270b', [
-        Query.equal("serial", serial.toString()),
-        Query.equal("pin", pin.toString()),
+export const getVoucher = async (serial: string, pin: string) => {
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
+      Query.equal("serial", serial.toString()),
+      Query.equal("pin", pin.toString()),
     ])
     return res;
 }
@@ -29,7 +29,7 @@ export const fetchNominee = async (serial: string) => {
 }
 
 export const postNominee = async (body: object) => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '645b562c59f8241f270b')
+    const res = await db.createDocument(APPWRITE_DATABASE_ID!, '6467ff2717916c0a710c', ID.unique(), body);
     return res;
 }
 
@@ -99,11 +99,7 @@ export const fetchSmsSenderId = async (id: string) => {
 
 export const setupCourses = async (data: any) => {
     try {
-        //    const md = await Promise.all(data.map( async (row:any, i: number) => {
-        //         const res = await db.createDocument(APPWRITE_DATABASE_ID!,'64663cd32e2f15fae96e', ID.unique(), row );
-        //         console.log(`count: ${(i+1)} out of  ${data.length}`)
-        //    }))
-        let count = 0;
+       let count = 0;
         for (const row of data) {
             mainQueue.run(async () => {
                 const res = await db.createDocument(APPWRITE_DATABASE_ID!, '6467ff2717916c0a710c', ID.unique(), row);
@@ -122,10 +118,8 @@ export const setupCourses = async (data: any) => {
 export const setupVenues = async (data: any) => {
     try {
 
-        const mdata = new Map();
         const locations = new Map()
         const venues = new Map()
-              
         const md = await Promise.all(data.map(async (row: any, i: number) => {
              
              if(!locations.has(row.shorthand)){
@@ -151,41 +145,6 @@ export const setupVenues = async (data: any) => {
         })
 
         return { locations: Object.fromEntries(locations), venues: Object.fromEntries(venues) }
-
-        
-
-
-            // var locationId;
-            // var sig;
-
-            // if(mdata.has(row.shorthand)){
-            //    locationId = mdata.get(row.shorthand)
-            //    sig = "exist"
-
-            // } else {
-            //     const res = await db.createDocument(APPWRITE_DATABASE_ID!, '6464dd203db9635d5c5e', ID.unique(), {
-            //         name: row.location_name,
-            //         shorthand: row.shorthand
-            //     });
-            //     locationId = res.$id 
-            //     sig = "new"
-            //     mdata.set(row.shorthand, res.$id)
-            // }
-
-            // let rowData = {
-            //     locationId,
-            //     name: row.venue_name,
-            // }
-            
-            // const res1 = await db.createDocument(APPWRITE_DATABASE_ID!, '6464de98857b29c0ab93', ID.unique(), rowData);
-
-            // console.log(`count: ${(i + 1)} out of  ${data.length}`,' ||  Location: '+sig)
-            // console.log(res1)
-            // return res1
-        
-        // console.log(locations)
-        // return { locations: Object.fromEntries(locations), venues: Object.fromEntries(venues) };
-        return md
     } catch (e) {
         console.log(e)
         return null

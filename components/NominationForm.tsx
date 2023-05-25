@@ -6,6 +6,7 @@ import Select from './Select';
 import Legend from './Legend';
 import File from './File';
 import PhotoBox from './PhotoBox';
+import None from '../public/none.png'
 
 export type Inputs = {
   aspirant_regno: string;
@@ -37,6 +38,7 @@ function NominationForm() {
            method: 'POST',
            body: JSON.stringify(data)
         })
+        const response = await resp.json()
         console.log(data)
       } catch(e){
 
@@ -74,11 +76,11 @@ function NominationForm() {
             <Input register={register} label="Candidacy Teaser" name="teaser" placeholder="Teaser" />
             <File register={register} label="Candidacy Photo Upload" name="photo" />
             <hr/>
-            <label id="agree-1" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
+            {/* <label id="agree-1" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
                 <input {...register("consent")} id="agree-1" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                 <p className="w-full font-serif text-base tracking-wider">I agree that all information provided in this form is true and therefore held accountable and suffer disqualification if proven false.</p>
             </label>
-            <hr/>
+            <hr/> */}
             <label id="agree-2" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
                 <input {...register("consent")} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                 <p className="w-full font-serif text-base tracking-wider">I hereby pledge to abide by all rules and regulations governing elections and students conduction on UCC campus during the electioneering and voting period, and that should I or any of my polling agents/supporters do contrary, I be disqualified from the elections.</p>
@@ -94,11 +96,11 @@ function NominationForm() {
         <div className="p-4 py-6 pb-10 flex-1 space-y-4 bg-gray-50 shadow-md shadow-gray-600/20 rounded-lg">
             <legend className="px-4 py-2 bg-slate-100 border text-[#153B50] text-center md:text-left font-semibold tracking-widest">ELECTORAL SETUP</legend>
             <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
-                <PhotoBox label="CANDIDACY PHOTO" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`)} />
-                <PhotoBox label="ASPIRANT" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`)} />
-                { has_mate && has_mate == '1' ? <PhotoBox label="RUNNING MATE" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${mate_regno}`)} /> : null }
-                <PhotoBox label="GUARANTOR #1" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1_regno}`)} />
-                <PhotoBox label="GUARANTOR #2" image={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2_regno}`)} />
+                <PhotoBox label="CANDIDACY PHOTO" image={aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`) : None } />
+                <PhotoBox label="ASPIRANT" image={aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`) : None } />
+                { has_mate && has_mate == '1' ? <PhotoBox label="RUNNING MATE" image={mate_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${mate_regno}`) : None } /> : null }
+                <PhotoBox label="GUARANTOR #1" image={guarantor1_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1_regno}`) : None } />
+                <PhotoBox label="GUARANTOR #2" image={guarantor2_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2_regno}`) : None } />
             </div>
         </div>
     </section>

@@ -24,6 +24,7 @@ function Banner() {
       e.preventDefault()
       try {
         const resp = await signIn('credentials', { callbackUrl: `/user/${form?.serial}/application`, serial: form?.serial, pin: form.pin })
+        //const resp = await signIn('credentials', { redirect: false, serial: form?.serial, pin: form.pin })
       } catch(e){
         console.log(e)
       }

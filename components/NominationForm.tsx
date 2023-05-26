@@ -7,6 +7,7 @@ import Legend from './Legend';
 import File from './File';
 import PhotoBox from './PhotoBox';
 import None from '../public/none.png'
+import { useSession } from 'next-auth/react';
 
 export type Inputs = {
   aspirant_regno: string;
@@ -26,12 +27,18 @@ export type Inputs = {
   
 };
 
-function NominationForm() {
+function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
+  const { data:session }:any = useSession()
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
   //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
-  const { aspirant_regno, has_mate, mate_regno, guarantor1_regno, guarantor2_regno } = watch()
   const IMAGE_URL = `https://ehub.ucc.edu.gh`
-  // const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
+  
+  // Activate Group or Category
+  const groupId = session?.user?.groupId;
+  let portfolios = positions.documents?.filter((row: any) => row.groupId.includes(groupId))
+  portfolios = portfolios?.map((row:any) => ({ label: row.title, value: row.$id }))
+  
+  const { aspirant_regno, has_mate, mate_regno, guarantor1_regno, guarantor2_regno } = watch()
   const onSubmit: SubmitHandler<Inputs> = async data => {
       try {
         const resp = await fetch('/api/nominee',{
@@ -48,24 +55,24 @@ function NominationForm() {
   return (
     <>
     <form className="md:col-span-2 space-y-6 md:space-y-14 order-2 md:order-1"  onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4">
+    <div className="space-y-4">
             <Legend label="ASPIRANT" />
             <Input  register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" />
             <Input  register={register} label="Phone Number of Aspirant" name="aspirant_phone" placeholder="Phone Number of Aspirant" />
-            <Select register={register} label="Position Being Applied" name="position" placeholder="Choose Position" />
+            <Select register={register} label="Position Being Applied" name="position" placeholder="Choose Position" optionData={portfolios}/>
             <Select register={register} label="Add Running Mate ?" name="has_mate" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
             
             {/* <Input register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" /> */}
         </div>
         { has_mate && has_mate == '1' ?
         <div className="space-y-4">
-            <Legend label="RUNNING MATE <sub>( IF ANY )</sub>" />
+            <Legend label="RUNNING MATE" />
             <Input register={register} label="Registration Number of Running-mate" name="mate_regno" placeholder="Registration Number of Running-mate" />
             <Input register={register} label="Phone Number of Running-mate" name="mate_phone" placeholder="Phone Number of Running-mate" />
         </div> : null 
         }
         <div className="space-y-4">
-            <Legend label="GUARANTORS ( ENDORSEMENT )" />
+            <Legend label="GUARANTORS (ENDORSEMENT)" />
             <Input register={register} label="Registration Number of First (1st) Guarantor" name="guarantor1_regno" placeholder="Registration Number of 1st Guarantor" />
             <Input register={register} label="Phone Number of First (1st) Guarantor" name="guarantor1_phone" placeholder="Phone Number of 1st Guarantor" />
             <Input register={register} label="Registration Number of Second (2nd) Guarantor" name="guarantor2_regno" placeholder="Registration Number of 2nd Guarantor" />

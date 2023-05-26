@@ -17,32 +17,32 @@ export const getVoucher = async (serial: string, pin: string) => {
 
 // Nominees Queries
 export const fetchNominees = async () => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '645b562c59f8241f270b')
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1')
     return res;
 }
 
 export const fetchNominee = async (serial: string) => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '645b562c59f8241f270b', [
-        Query.equal("voucher", serial.toString()),
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', [
+        Query.equal("serial", serial),
     ])
     return res;
 }
 
 export const postNominee = async (body: object) => {
-    const res = await db.createDocument(APPWRITE_DATABASE_ID!, '6467ff2717916c0a710c', ID.unique(), body);
+    const res = await db.createDocument(APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', ID.unique(), body);
     return res;
 }
 
 
 export const updateNominee = async (serial: string, body: object) => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '645b562c59f8241f270b', [
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', [
         Query.equal("serial", serial.toString()),
     ])
     return res;
 }
 
 export const deleteNominee = async (serial: string) => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '645b562c59f8241f270b', [
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', [
         Query.equal("serial", serial.toString()),
     ])
     return res;
@@ -51,7 +51,7 @@ export const deleteNominee = async (serial: string) => {
 
 // Helper Queries
 export const fetchPositions = async () => {
-    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '645b562c59f8241f270b')
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID!, '646e226d756c832acd9e')
     return res;
 }
 

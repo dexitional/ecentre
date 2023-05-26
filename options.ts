@@ -18,16 +18,21 @@ export const options: NextAuthOptions = {
         },
         async authorize(credentials) {
           const { serial, pin }: any = credentials;
+          if(!serial) throw new Error("Serial field empty !")
+          if(!pin) throw new Error("Pin field empty !")
+          
           const resp = await getVoucher(serial,pin);
           console.log(resp)
           if(resp.total > 0){
              const user:any = resp.documents[0];
              return user
           }
-          return null
+
+          throw new Error("Invalid details")
         },
       }),
     ],
+
     callbacks: {
         async jwt({ token, user }) {
             return { ...token, ...user };
@@ -38,6 +43,7 @@ export const options: NextAuthOptions = {
             return session;
         },
     },
+    
     pages:{
       signIn:'/'
     }

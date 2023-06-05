@@ -4,22 +4,38 @@ import Logo from '../../../../../public/logo.png'
 import NominationForm from "@/components/NominationForm"
 import Link from "next/link"
 import PrintPill from "@/components/PrintPill"
-import { fetchNominee } from "@/utils/serverApi"
+import { fetchNominee, fetchPosition } from "@/utils/serverApi"
 import { getServerSession } from "next-auth"
 import { options } from "@/options"
+import { fetchRecord } from "@/utils/fetchRecord"
 //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
 const IMAGE_URL = `https://ehub.ucc.edu.gh`;  
 
 const getApplicant = async (serial: string) => {
-    const applicant = fetchNominee(serial);
-    console.log(applicant)
+    const applicant = await fetchNominee(serial);
+    const voucher = await fetchNominee(serial);
+    const row = applicant?.documents[0]
+    // @ts-ignore
+    const position = await fetchPosition(row.positionId);
+    const { title }: any = position?.documents[0];
+    const { aspirant_regno, mate_regno, guarantor1_regno, guarantor2_regno }:any = row
+    const rowData:any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
+    const mapData: any = {};
+    for(const r of Object.keys(rowData)){
+      const newData = await fetchRecord(rowData[r])
+      mapData[r] = rowData[r] && newData.success ? newData?.data[0]?.user : null;
+    }
+
+    return { applicant, title, data: mapData }
+
+    //console.log(mapData)
 }
 
 export default async function Page() {
   const session:any = await getServerSession(options)
   const serial = session.user.serial
-  // @ts-ignore
   const data = await getApplicant(serial);
+  const { applicant, title, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
   
   return (
     <main className="flex-1 space-y-3 md:space-y-8">
@@ -46,64 +62,65 @@ export default async function Page() {
                  <div className=" relative space-y-4 border-r-2 border-dashed print:space-y-2">
                     <legend className="my-4 px-4 py-2 print:py-0.5 7/bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">ASPIRANT</legend>
                     <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
-                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=15666`)} alt="" fill/>
+                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant?.regno}`)} alt="" fill/>
                     </div>
-                    <PrintPill label="Name" content="EBENEZER KWABENA BLAY ACKAH" />
-                    <PrintPill label="Position" content="ADEHYE HALL PRESIDENT" />
-                    <PrintPill label="Hall of Affiliation" content="ADEHYE HALL" />
-                    <PrintPill label="Department" content="DEPARTMENT OF RELIGION" />
-                    <PrintPill label="Program of Study" content="BSC. NURSING" />
-                    <PrintPill label="Registration Number" content="BS/BSC/10/0034" />
-                    <PrintPill label="Phone Number" content="BS/BSC/10/0034" />
-                    <PrintPill label="ASPIRANT CGPA" content="2.49" />
+                    <PrintPill label="Name" content={aspirant?.name} />
+                    <PrintPill label="Position" content={title?.toUpperCase()} />
+                    <PrintPill label="Hall of Affiliation" content={aspirant?.hallid} />
+                    <PrintPill label="Department" content={aspirant?.unitname} />
+                    <PrintPill label="Program of Study" content={aspirant?.descriptor} />
+                    <PrintPill label="Registration Number" content={aspirant?.regno} />
+                    <PrintPill label="Phone Number" content={aspirant?.cellphone} />
+                    <PrintPill label="ASPIRANT CGPA" content={aspirant?.cgpa} />
                  </div>
 
                  {/* Guarantor #1 */}
                  <div className="relative space-y-4 border-r-2 border-dashed print:space-y-2">
                     <legend className="my-4 px-4 py-2 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">GUARANTOR #1</legend>
                     <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
-                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=15666`)} alt="" fill/>
+                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1?.regno}`)} alt="" fill/>
                     </div>
-                    <PrintPill label="Name" content="EBENEZER KWABENA BLAY ACKAH" />
-                    <PrintPill label="Hall of Affiliation" content="ADEHYE HALL" />
-                    <PrintPill label="Department" content="DEPARTMENT OF RELIGION" />
-                    <PrintPill label="Program of Study" content="BSC. NURSING" />
-                    <PrintPill label="Registration Number" content="BS/BSC/10/0034" />
-                    <PrintPill label="Phone Number" content="BS/BSC/10/0034" />
+                    <PrintPill label="Name" content={guarantor1?.name} />
+                    <PrintPill label="Hall of Affiliation" content={guarantor1?.hallid} />
+                    <PrintPill label="Department" content={guarantor1?.unitname} />
+                    <PrintPill label="Program of Study" content={guarantor1?.descriptor} />
+                    <PrintPill label="Registration Number" content={guarantor1?.regno} />
+                    <PrintPill label="Phone Number" content={guarantor1?.cellphone} />
                 </div>
             </section>
             <section className="col-span-1 space-y-14">
+               { mate ?
                 <div className=" relative space-y-4 border-r-2 border-dashed print:space-y-2">
                     <legend className="my-4 px-4 py-2 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">RUNNNING MATE</legend>
                     <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
-                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=15666`)} alt="" fill/>
+                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${mate?.regno}`)} alt="" fill/>
                     </div>
-                    <PrintPill label="Name" content="EBENEZER KWABENA BLAY ACKAH" />
-                    <PrintPill label="Position" content="ADEHYE HALL PRESIDENT" />
-                    <PrintPill label="Hall of Affiliation" content="ADEHYE HALL" />
-                    <PrintPill label="Department" content="DEPARTMENT OF RELIGION" />
-                    <PrintPill label="Program of Study" content="BSC. NURSING" />
-                    <PrintPill label="Registration Number" content="BS/BSC/10/0034" />
-                    <PrintPill label="Phone Number" content="BS/BSC/10/0034" />
+                    <PrintPill label="Name" content={mate?.name} />
+                    <PrintPill label="Hall of Affiliation" content={mate?.hallid} />
+                    <PrintPill label="Department" content={mate?.unitname} />
+                    <PrintPill label="Program of Study" content={mate?.descriptor} />
+                    <PrintPill label="Registration Number" content={mate?.regno} />
+                    <PrintPill label="Phone Number" content={mate?.cellphone} />
                     <div className="flex flex-col space-y-1 -print:mt-10">
                       <label className="w-full font-serif text-lg tracking-wider">&nbsp;</label>
                       <span className="w-full rounded">&nbsp;</span>
                     </div>
                     
-                </div>
+                </div> : null 
+              }
 
                 {/* Guarantor #2 */}
                 <div className="relative space-y-4 border-r-2 border-dashed print:space-y-2">
                     <legend className="my-4 px-4 py-2 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">GUARANTOR #2</legend>
                     <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
-                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=15666`)} alt="" fill/>
+                      <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2?.regno}`)} alt="" fill/>
                     </div>
-                    <PrintPill label="Name" content="EBENEZER KWABENA BLAY ACKAH" />
-                    <PrintPill label="Hall of Affiliation" content="ADEHYE HALL" />
-                    <PrintPill label="Department" content="DEPARTMENT OF RELIGION" />
-                    <PrintPill label="Program of Study" content="BSC. NURSING" />
-                    <PrintPill label="Registration Number" content="BS/BSC/10/0034" />
-                    <PrintPill label="Phone Number" content="BS/BSC/10/0034" />
+                    <PrintPill label="Name" content={guarantor2?.name} />
+                    <PrintPill label="Hall of Affiliation" content={guarantor2?.hallid} />
+                    <PrintPill label="Department" content={guarantor2?.unitname} />
+                    <PrintPill label="Program of Study" content={guarantor2?.descriptor} />
+                    <PrintPill label="Registration Number" content={guarantor2?.regno} />
+                    <PrintPill label="Phone Number" content={guarantor2?.cellphone} />
                 </div>
             </section>
             

@@ -49,11 +49,22 @@ export const deleteNominee = async (serial: string) => {
 }
 
 
-// Helper Queries
+// Position Queries
 export const fetchPositions = async () => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e226d756c832acd9e')
     return res;
 }
+
+export const fetchPosition = async (id: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e226d756c832acd9e', [
+        Query.equal("$id", id),
+    ])
+    return res;
+}
+
+
+// Helper Queries
+
 
 export const fetchActiveSession = async () => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e225ed032debfe45e',[

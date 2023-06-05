@@ -4,10 +4,22 @@ import Logo from '../../../../../public/logo.png'
 import NominationForm from "@/components/NominationForm"
 import Link from "next/link"
 import PrintPill from "@/components/PrintPill"
+import { fetchNominee } from "@/utils/serverApi"
+import { getServerSession } from "next-auth"
+import { options } from "@/options"
 //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
 const IMAGE_URL = `https://ehub.ucc.edu.gh`;  
 
-export default function Page({ params}:{ params: { serial: string }}) {
+const getApplicant = async (serial: string) => {
+    const applicant = fetchNominee(serial);
+    console.log(applicant)
+}
+
+export default async function Page() {
+  const session:any = await getServerSession(options)
+  const serial = session.user.serial
+  // @ts-ignore
+  const data = await getApplicant(serial);
   
   return (
     <main className="flex-1 space-y-3 md:space-y-8">
@@ -22,7 +34,7 @@ export default function Page({ params}:{ params: { serial: string }}) {
         </div>
         
         <div className="my-3 md:my-6 md:px-6 px-3 md:py-2 py-1 w-fit -skew-x-6 ring-2 ring-[#153B50] print:ring-0 border-2 border-white print:border-slate-200 bg-[#153B50] print:bg-transparent text-white ">
-          <h2 className="text-xs md:text-lg tracking-widest font-bold print:text-slate-600">ADEHYE HALL PRESIDENT NOMINATION</h2>
+          <h2 className="text-xs md:text-lg tracking-widest font-bold print:text-slate-600">NOMINATION PRINTOUT</h2>
           <div className="hidden">
             <p>Please provide the requested information. Falsification of any information leads to automatic disqualification.</p>
             <p>Deadline for submission of Online Nomination is Friday, June 9, 2023 at 11:59 PM.</p>

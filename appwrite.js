@@ -1,12 +1,13 @@
-import { Client, Databases } from "node-appwrite";
+import { Client, Databases, Account, ID, Storage } from "node-appwrite";
 
-const { APPWRITE_API_KEY , APPWRITE_ENDPOINT, APPWRITE_PROJECT_ID, APPWRITE_DATABASE_ID } = process.env;
+const { NEXT_PUBLIC_APPWRITE_API_KEY , NEXT_PUBLIC_APPWRITE_ENDPOINT, NEXT_PUBLIC_APPWRITE_PROJECT_ID, NEXT_PUBLIC_APPWRITE_DATABASE_ID } = process.env;
 export const appwriteClient = new Client()
-    .setEndpoint(APPWRITE_ENDPOINT)
-    .setProject(APPWRITE_PROJECT_ID)
-    .setKey(APPWRITE_API_KEY);         //
+    .setEndpoint(NEXT_PUBLIC_APPWRITE_ENDPOINT)
+    .setProject(NEXT_PUBLIC_APPWRITE_PROJECT_ID)
+    .setKey(NEXT_PUBLIC_APPWRITE_API_KEY);         //
 
 export const appwriteDB = new Databases(appwriteClient);
+export { Account, ID, Storage }
 
 // appwriteDB.listDocuments('645b4e0308de0a08ebc3','[COLLECTION_ID]',
 //     [

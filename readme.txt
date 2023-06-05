@@ -11,7 +11,7 @@ SANITY MODELS
 APPWRITE MODELS
 ==================
 + voucher [ sessionId, groupId, serial, pin, visible ]
-+ session [ tag, title, visible ]
++ session [ tag, title, visible, deadline,]
 + position [ tag, title, groupIds ] { }
 + station [ tag, title, location, venue, ] { ...jcrc, online, local }
 + group  [ tag, title, logo, email, phone, stationId, visible ] { src-lnugs,grasag,jcrcs,uccabs,nusa,}
@@ -24,6 +24,14 @@ APPWRITE MODELS
 + sms_history [ regno, serial, message, sender, receipient, credit_cost, message_response ]
 + sms_topup  [ regno, serial, provider_name, provider_number, provider_response, order_date, paid, approved, credited  ]
 + sms_sender [ regno, serial, title, approved, visible ]
++ coalition [ sessionId, jcrc_data, src_data, combined_data, published, published_at ]
+
+{/*
+    + jcrc_data 
+      { tag: '', name: '', teaser: '', order_no: '', serial: '', votes: '', turnout: '  }  
+ 
+*/}
+
 
 
 ADMIN CRUD

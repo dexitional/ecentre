@@ -7,6 +7,8 @@ export default async function Page({ params}:{ params: { serial: string }}) {
   const applicant = await fetchNominee(params?.serial);
   const positions = await fetchPositions();
   const data:any = await Promise.all([applicant,positions])
+  // Deadline - add to 
+  // Session - [ deadline : datetime, ]
   
   return (
     <main className="flex-1 space-y-8">
@@ -15,13 +17,13 @@ export default async function Page({ params}:{ params: { serial: string }}) {
           <h2 className="text-lg md:text-xl">INSTRUCTIONS</h2>
           <div className="text-sm md:text-inherit space-y-3">
             <p>Please provide the requested information. Falsification of any information leads to automatic disqualification.</p>
-            <p className="italic text-sm md:text-inherit font-semibold">Deadline for submission of online Nomination is Friday, June 9 2023 @ 11:59 PM.</p>
+            {/* Set Dynamic active Nomination Deadline */}
+            <p className="italic text-sm md:text-inherit font-semibold">Deadline for submission of online Nomination is yet to be announced.</p>
           </div>
         </div>
         <div className="">
           <div className="grid md:grid-cols-3 gap-8">
             <NominationForm data={data} />
-            
           </div>
         </div>
     </main>

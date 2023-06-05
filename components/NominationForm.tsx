@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import Input from './Input';
 import Select from './Select';
@@ -8,6 +8,8 @@ import File from './File';
 import PhotoBox from './PhotoBox';
 import None from '../public/none.png'
 import { useSession } from 'next-auth/react';
+import uploadImage from '@/utils/uploadImage';
+import Notiflix from 'notiflix'
 
 export type Inputs = {
   aspirant_regno: string;
@@ -28,6 +30,8 @@ export type Inputs = {
 };
 
 function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
+
+  const [ picture, setPicture ] = useState('')
   const { data:session }:any = useSession()
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
   //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
@@ -38,19 +42,53 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   let portfolios = positions.documents?.filter((row: any) => row.groupId.includes(groupId))
   portfolios = portfolios?.map((row:any) => ({ label: row.title, value: row.$id }))
   
-  const { aspirant_regno, has_mate, mate_regno, guarantor1_regno, guarantor2_regno } = watch()
+  const { aspirant_regno, has_mate, mate_regno, guarantor1_regno, guarantor2_regno  } = watch()
+ 
   const onSubmit: SubmitHandler<Inputs> = async data => {
       try {
+        // Upload to Storage
+
+        // let file;
+        // if(data.photo && data.photo[0]){
+        //     // @ts-ignore
+        //     const fileUploaded = await uploadImage(data.photo[0])
+        //     console.log(fileUploaded)
+        //     if(fileUploaded){
+        //         file = {
+        //             bucketId: fileUploaded.bucketId,
+        //             fileId: fileUploaded.$id,
+        //         }
+        //     }
+        // }
+
+        // Add Extra data
+        const formData: any = {...data }
+        formData.serial = session.user.serial
+        
+
+        // Save to Database
         const resp = await fetch('/api/nominee',{
            method: 'POST',
-           body: JSON.stringify(data)
+           body: JSON.stringify(formData)
         })
         const response = await resp.json()
-        console.log(data)
-      } catch(e){
+        console.log(response)
+        if(response.success){
+            Notiflix.Notify.success('APPLICATION SUBMITTED !');
+        } else {
+            Notiflix.Notify.failure(response.msg.toUpperCase());
+        }
+
+      } catch(e:any){
+        Notiflix.Notify.failure(e.message);
+
 
       }
   }
+
+  const onChangePicture = (e: any) => {
+    setPicture(URL.createObjectURL(e.target.files[0]));
+  };
 
   return (
     <>
@@ -59,7 +97,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
             <Legend label="ASPIRANT" />
             <Input  register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" />
             <Input  register={register} label="Phone Number of Aspirant" name="aspirant_phone" placeholder="Phone Number of Aspirant" />
-            <Select register={register} label="Position Being Applied" name="position" placeholder="Choose Position" optionData={portfolios}/>
+            <Select register={register} label="Position Being Applied" name="positionId" placeholder="Choose Position" optionData={portfolios}/>
             <Select register={register} label="Add Running Mate ?" name="has_mate" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
             
             {/* <Input register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" /> */}
@@ -81,7 +119,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         <div className="space-y-4">
             <Legend label="ELECTION SETUP" />
             <Input register={register} label="Candidacy Teaser" name="teaser" placeholder="Teaser" />
-            <File register={register} label="Candidacy Photo Upload" name="photo" />
+            <File register={register} label="Candidacy Photo Upload" name="photo" onChange={onChangePicture} />
             <hr/>
             {/* <label id="agree-1" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
                 <input {...register("consent")} id="agree-1" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
@@ -94,16 +132,17 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
             </label>
             <hr/>
         </div>
-        <div className="grid md:grid-cols-2 gap-2 md:gap-4">
-            <button className="py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50]">SAVE & PRINT</button>
-            <button className="py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700">SUBMIT APPLICATION</button>
+        <div className="grid md:grid-cols-1 gap-2 md:gap-4">
+            <button className="py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700">SAVE APPLICATION</button>
+            {/* <button className="py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50]">SAVE & PRINT</button> */}
+            
         </div>
     </form>
     <section className="col-span-1 md:space-y-14 order-1 md:order-2">
         <div className="p-4 py-6 pb-10 flex-1 space-y-4 bg-gray-50 shadow-md shadow-gray-600/20 rounded-lg">
             <legend className="px-4 py-2 bg-slate-100 border text-[#153B50] text-center md:text-left font-semibold tracking-widest">ELECTORAL SETUP</legend>
             <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
-                <PhotoBox label="CANDIDACY PHOTO" image={aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`) : None } />
+                <PhotoBox label="CANDIDACY PHOTO" image={ picture ? picture : None } />
                 <PhotoBox label="ASPIRANT" image={aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`) : None } />
                 { has_mate && has_mate == '1' ? <PhotoBox label="RUNNING MATE" image={mate_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${mate_regno}`) : None } /> : null }
                 <PhotoBox label="GUARANTOR #1" image={guarantor1_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1_regno}`) : None } />

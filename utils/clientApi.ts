@@ -1,4 +1,4 @@
-import { appwriteDB as db } from "@/appwrite"
+import { databases as db } from "@/config/appwrite"
 import { Query, ID } from 'node-appwrite'
 import { Queue } from 'async-await-queue';
 
@@ -52,13 +52,6 @@ export const deleteNominee = async (serial: string) => {
 // Helper Queries
 export const fetchPositions = async () => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e226d756c832acd9e')
-    return res;
-}
-
-export const fetchActiveSession = async () => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e225ed032debfe45e',[
-        Query.equal("visible", true),
-    ])
     return res;
 }
 

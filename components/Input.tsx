@@ -8,18 +8,18 @@ type Props = {
     placeholder: string;
     msg?: string;
     defaultValue?: string;
-    register: any;
+    errors?: any;
 }
 
-function Input({ label, name, register, msg, placeholder, defaultValue }: Props) {
+function Input(props: Props) { //{ label, name, errors,msg, placeholder, defaultValue }
   //const { register } = useForm();
   
   return (
     <div>
-        <label className="w-full font-serif text-base md:text-lg tracking-wider">{label}</label>
-        { msg 
-        ? <input {...register(name, { required: msg })} defaultValue={defaultValue} className="w-full rounded" type="text" placeholder={placeholder} />
-        : <input {...register(name)} defaultValue={defaultValue} className="w-full rounded" type="text" placeholder={placeholder} />
+        <label className="w-full font-serif text-base md:text-lg tracking-wider">{props.label}</label>
+        { props.msg 
+        ? <input {...props} className="w-full rounded" type="text" placeholder={props.placeholder} />
+        : <input {...props} className="w-full rounded" type="text" placeholder={props.placeholder} />
         }
     </div>
   )

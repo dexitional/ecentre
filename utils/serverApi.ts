@@ -5,15 +5,40 @@ import { Queue } from 'async-await-queue';
 const mainQueue = new Queue(1, 100);
 const { NEXT_PUBLIC_APPWRITE_DATABASE_ID } = process.env;
 
-
+// Voucher Queries
 export const getVoucher = async (serial: string, pin: string) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
-      Query.equal("serial", serial.toString()),
-      Query.equal("pin", pin.toString()),
+      Query.equal("serial", serial.trim()),
+      Query.equal("pin", pin.trim()),
     ])
     return res;
 }
 
+export const fetchVouchers = async () => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041')
+    return res;
+}
+
+export const fetchVoucher = async (serial: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
+      Query.equal("serial", serial),
+    ])
+    return res;
+}
+
+
+// Session Queries
+export const fetchSessions = async () => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e225ed032debfe45e')
+    return res;
+}
+
+export const fetchSession = async (id: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e225ed032debfe45e', [
+        Query.equal("$id", id),
+    ])
+    return res;
+}
 
 // Nominees Queries
 export const fetchNominees = async () => {
@@ -48,7 +73,6 @@ export const deleteNominee = async (serial: string) => {
     return res;
 }
 
-
 // Position Queries
 export const fetchPositions = async () => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e226d756c832acd9e')
@@ -57,6 +81,14 @@ export const fetchPositions = async () => {
 
 export const fetchPosition = async (id: string) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e226d756c832acd9e', [
+       Query.equal("$id", id),
+    ])
+    return res;
+}
+
+// Group Queries
+export const fetchGroup = async (id: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e229e54af11d504cc', [
         Query.equal("$id", id),
     ])
     return res;

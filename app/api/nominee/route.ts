@@ -32,9 +32,8 @@ export async function POST(request: Request) {
     } else {
         resp = await postNominee(data);
     } 
-    console.log(resp)
     return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
-    
+
   } catch (error: any) {
     return new Response(JSON.stringify({ success: false, data: null, msg: error.message }), { status: 401 });
   }

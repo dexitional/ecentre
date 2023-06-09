@@ -1,41 +1,35 @@
 import { useState } from "react"
 import Image from 'next/image'
 import Logo from '../../../../../public/logo.png'
-import NominationForm from "@/components/NominationForm"
-import Link from "next/link"
 import PrintPill from "@/components/PrintPill"
-import { fetchNominee, fetchPosition } from "@/utils/serverApi"
-import { getServerSession } from "next-auth"
-import { options } from "@/options"
+import { fetchGroup, fetchNominee, fetchPosition, fetchVoucher } from "@/utils/serverApi"
 import { fetchRecord } from "@/utils/fetchRecord"
+import Print from "@/components/Print"
 //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
 const IMAGE_URL = `https://ehub.ucc.edu.gh`;  
 
 const getApplicant = async (serial: string) => {
     const applicant = await fetchNominee(serial);
-    const voucher = await fetchNominee(serial);
-    const row = applicant?.documents[0]
-    // @ts-ignore
+    const voucher = await fetchVoucher(serial);
+    const row:any = applicant?.documents[0]
+    const { groupId, sessionId }: any = voucher?.documents[0];
+    const group = await fetchGroup(groupId);
+    const { title : group_name }: any = group?.documents[0];
     const position = await fetchPosition(row.positionId);
     const { title }: any = position?.documents[0];
-    const { aspirant_regno, mate_regno, guarantor1_regno, guarantor2_regno }:any = row
-    const rowData:any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
+    const { aspirant_regno, mate_regno, guarantor1_regno, guarantor2_regno }: any = row
+    const rowData: any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
     const mapData: any = {};
     for(const r of Object.keys(rowData)){
       const newData = await fetchRecord(rowData[r])
       mapData[r] = rowData[r] && newData.success ? newData?.data[0]?.user : null;
     }
-
-    return { applicant, title, data: mapData }
-
-    //console.log(mapData)
+    return { applicant, title, group_name, data: mapData }
 }
 
-export default async function Page() {
-  const session:any = await getServerSession(options)
-  const serial = session.user.serial
-  const data = await getApplicant(serial);
-  const { applicant, title, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
+export default async function Page({ params}:{ params: { serial: string }}) {
+  const data = await getApplicant(params?.serial);
+  const { applicant, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
   
   return (
     <main className="flex-1 space-y-3 md:space-y-8">
@@ -50,7 +44,10 @@ export default async function Page() {
         </div>
         
         <div className="my-3 md:my-6 md:px-6 px-3 md:py-2 py-1 w-fit -skew-x-6 ring-2 ring-[#153B50] print:ring-0 border-2 border-white print:border-slate-200 bg-[#153B50] print:bg-transparent text-white ">
-          <h2 className="text-xs md:text-lg tracking-widest font-bold print:text-slate-600">NOMINATION PRINTOUT</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs md:text-lg tracking-widest font-bold print:text-slate-600">{ group_name?.toUpperCase() } NOMINATION</h2>
+            <Print />
+          </div>
           <div className="hidden">
             <p>Please provide the requested information. Falsification of any information leads to automatic disqualification.</p>
             <p>Deadline for submission of Online Nomination is Friday, June 9, 2023 at 11:59 PM.</p>

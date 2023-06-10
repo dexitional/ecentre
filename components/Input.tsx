@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 type Props = { 
     label: string;
     name: string;
-    placeholder: string;
+    placeholder?: string;
     msg?: string;
     defaultValue?: string;
     required?: any;

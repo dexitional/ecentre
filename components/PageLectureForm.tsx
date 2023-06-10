@@ -55,15 +55,15 @@ function PageLectureForm({ id }: Props) {
                     <div className="p-2 md:px-6 md:py-4 flex flex-col md:flex-row md:items-start space-y-3 md:space-y-0 md:space-x-6">
                         <div className="p-2 md:p-4 flex-1 flex flex-col space-y-2 rounded border border-blue-300/20 ">
                             <CourseInput label="Course" name="code" register={null} />
-                            <Select label="Course" name="code" register={null} data={[{ value:'1',label:'No' },{ value:'2',label:'Yes'}]} />
-                            <Select label="Day" name="day" register={null} data={days} />
-                            <Input label="Start Time" name="starttime" type="time" register={null} />
+                            <Select label="Course" name="code" optionData={[{ value:'1',label:'No' },{ value:'2',label:'Yes'}]} />
+                            <Select label="Day" name="day" optionData={days} />
+                            <Input label="Start Time" name="starttime" />
                             {/* <Textarea label="Constituency minger Box" name="name" register={null} /> */}
                         </div>
                         <div className="p-2 md:p-4  flex-1 flex flex-col space-y-2 rounded border border-blue-300/20 ">
-                            <Select label="Venue" name="name" register={null} data={[{ value:'1',label:'No' },{ value:'2',label:'Yes'}]} />
-                            <Input label="Group" name="group" type="text" register={null} />
-                            <Input label="End Time" name="endtime" type="time" register={null} />
+                            <Select label="Venue" name="name" optionData={[{ value:'1',label:'No' },{ value:'2',label:'Yes'}]} />
+                            <Input label="Group" name="group" />
+                            <Input label="End Time" name="endtime" />
                         </div>
                     </div>
                     <div className="px-2 pb-2 md:px-6 md:pb-4 flex flex-col md:flex-row md:items-start space-y-2 md:space-y-0 md:space-x-3">

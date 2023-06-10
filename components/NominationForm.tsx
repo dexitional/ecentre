@@ -53,7 +53,6 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
   const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      console.log(form)
       try {
         
         // Upload to Storage
@@ -61,22 +60,31 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         if(form?.photo){
             const fileUploaded = await uploadImage(form?.photo)
             console.log(fileUploaded)
-            if(fileUploaded) form.photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
+            if(fileUploaded) photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
         }
 
         if(form?.cv){
             const fileUploaded = await uploadImage(form?.cv)
             console.log(fileUploaded)
-            if(fileUploaded) form.cv = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
+            if(fileUploaded) cv = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
         }
 
         // Add Extra data
+
         form.consent = form.consent == 'on' ? true : false; 
+        const formData = {
+            ...form,
+            ...(photo && { photo: JSON.stringify(photo)}),
+            ...(cv && { cv: JSON.stringify(cv)})
+        }
+
+        console.log(formData)
+      
         
         // Save to Database
         const resp = await fetch('/api/nominee',{
            method: 'POST',
-           body: JSON.stringify(form)
+           body: JSON.stringify(formData)
         })
         
         const response = await resp.json()

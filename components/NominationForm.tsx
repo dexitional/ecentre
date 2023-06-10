@@ -30,11 +30,27 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
   const [ picture, setPicture ] = useState('')
   const [ cv, setCV ] = useState('')
-  const [ form, setForm ] = useState<Inputs | any>({})
+  const newData = applicant?.documents[0];
+  const [ form, setForm ] = useState<Inputs | any>({
+    photo: newData.photo,
+    cv: newData.cv,
+    positionId: newData.positionId,
+    has_mate: newData.has_mate,
+    mate_regno: newData.mate_regno,
+    guarantor1_regno: newData.guarantor1_regno,
+    guarantor2_regno: newData.guarantor2_regno,
+    teaser: newData.teaser,
+    consent: newData.consent,
+    form_submit: newData.form_submit,
+    serial: newData.serial,
+    aspirant_regno: newData.aspirant_regno,
+  })
+
   const { data:session }: any = useSession()
   //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
   const IMAGE_URL = `https://ehub.ucc.edu.gh`
-  
+  console.log(newData)
+
   // Activate Group or Category
   const groupId = session?.user?.groupId;
   let portfolios = positions.documents?.filter((row: any) => row.groupId.includes(groupId))
@@ -56,35 +72,39 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
       try {
         
         // Upload to Storage
-        let photo,cv;
-        if(form?.photo){
-            const fileUploaded = await uploadImage(form?.photo)
-            console.log(fileUploaded)
-            if(fileUploaded) photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-        }
+        // let photo,cv;
+        // if(form?.photo){
+        //     const fileUploaded = await uploadImage(form?.photo)
+        //     console.log(fileUploaded)
+        //     if(fileUploaded) photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
+        // }
 
-        if(form?.cv){
-            const fileUploaded = await uploadImage(form?.cv)
-            console.log(fileUploaded)
-            if(fileUploaded) cv = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-        }
+        // if(form?.cv){
+        //     const fileUploaded = await uploadImage(form?.cv)
+        //     console.log(fileUploaded)
+        //     if(fileUploaded) cv = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
+        // }
 
         // Add Extra data
 
         form.consent = form.consent == 'on' ? true : false; 
-        const formData = {
-            ...form,
-            ...(photo && { photo: JSON.stringify(photo)}),
-            ...(cv && { cv: JSON.stringify(cv)})
-        }
+        form.form_submit = form.form_submit || false; 
+        form.serial = form.serial || session?.user?.serial
+        form.$id = '';
+        // const formData = {
+        //     ...form,
+        //     ...(photo && { photo: JSON.stringify(photo)}),
+        //     ...(cv && { cv: JSON.stringify(cv)})
+        // }
 
-        console.log(formData)
+        //const formData = new FormData(form);
+        console.log(form)
       
         
         // Save to Database
         const resp = await fetch('/api/nominee',{
            method: 'POST',
-           body: JSON.stringify(formData)
+           body: JSON.stringify(form)
         })
         
         const response = await resp.json()
@@ -121,26 +141,26 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         <form className="md:col-span-2 space-y-6 md:space-y-14 order-2 md:order-1"  onSubmit={onSubmit}>
             <div className="space-y-4">
                 <Legend label="ASPIRANT" />
-                <Input name="aspirant_regno" onChange={onChange} required label="Registration Number of Aspirant" placeholder="Registration Number of Aspirant" />
-                <Select name="positionId" onChange={onChange} label="Position Being Applied" placeholder="Choose Position" optionData={portfolios}/>
-                <Select name="has_mate" onChange={onChange} label="Add Running Mate ?" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
+                <Input name="aspirant_regno" defaultValue={form.aspirant_regno} onChange={onChange} required label="Registration Number of Aspirant" placeholder="Registration Number of Aspirant" />
+                <Select name="positionId" defaultValue={form.positionId} value={form.positionId} onChange={onChange} label="Position Being Applied" placeholder="Choose Position" optionData={portfolios}/>
+                <Select name="has_mate" defaultValue={form.has_mate} onChange={onChange} label="Add Running Mate ?" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
                 
                 {/* <Input register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" /> */}
             </div>
             { form?.has_mate && form?.has_mate == '1' ?
             <div className="space-y-4">
                 <Legend label="RUNNING MATE" />
-                <Input name="mate_regno" onChange={onChange} required  label="Registration Number of Running-mate" placeholder="Registration Number of Running-mate" />
+                <Input name="mate_regno" defaultValue={form.mate_regno} onChange={onChange} required  label="Registration Number of Running-mate" placeholder="Registration Number of Running-mate" />
             </div> : null 
             }
             <div className="space-y-4">
                 <Legend label="GUARANTORS (ENDORSEMENT)" />
-                <Input name="guarantor1_regno" onChange={onChange} required label="Registration Number of First (1st) Guarantor" placeholder="Registration Number of 1st Guarantor" />
-                <Input name="guarantor2_regno" onChange={onChange} required label="Registration Number of Second (2nd) Guarantor" placeholder="Registration Number of 2nd Guarantor" />
+                <Input name="guarantor1_regno" defaultValue={form.guarantor1_regno} onChange={onChange} required label="Registration Number of First (1st) Guarantor" placeholder="Registration Number of 1st Guarantor" />
+                <Input name="guarantor2_regno" defaultValue={form.guarantor2_regno} onChange={onChange} required label="Registration Number of Second (2nd) Guarantor" placeholder="Registration Number of 2nd Guarantor" />
             </div>
             <div className="space-y-4">
                 <Legend label="ADDITIONAL INFORMATION" />
-                <Input name="teaser" onChange={onChange} required label="Candidacy Teaser" placeholder="Teaser" />
+                <Input name="teaser" defaultValue={form.teaser} onChange={onChange} required label="Candidacy Teaser" placeholder="Teaser" />
                 <hr/>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <File name="photo" label="Candidate Photo Upload" onChange={onChange} />   
@@ -153,9 +173,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 </label>
                 <hr/> */}
                 <label id="agree-2" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
-                    <input  name="consent" onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
-                    <input  name="serial" type="hidden"  value={ form?.serial || session?.user?.serial } />
-                    <input  name="form_submit" type="hidden"  value={ form?.form_submit || 0 } />
+                    <input  name="consent" defaultChecked={form.consent} onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                     <p className="w-full font-serif text-base tracking-wider">I hereby pledge to abide by all rules and regulations governing elections and students conduction on UCC campus during the electioneering and voting period, and that should I or any of my polling agents/supporters do contrary, I be disqualified from the elections.</p>
                 </label>
                 <hr/>

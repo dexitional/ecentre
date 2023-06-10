@@ -59,10 +59,8 @@ export const postNominee = async (body: object) => {
 }
 
 
-export const updateNominee = async (serial: string, body: object) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', [
-        Query.equal("serial", serial.toString()),
-    ])
+export const updateNominee = async (id: string, body: object) => {
+    const res = await db.updateDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', id , body)
     return res;
 }
 

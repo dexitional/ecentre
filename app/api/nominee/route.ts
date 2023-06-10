@@ -15,7 +15,10 @@ export async function GET(request: Request, { params}:{ params: { id: string }} 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log(body)
     delete body.photo
+    delete body.cv
+    delete body.$id
     // Fetch CGPA
     // Fetch Helper Data
     const session = await fetchActiveSession();
@@ -28,14 +31,15 @@ export async function POST(request: Request) {
 
     let resp
     if(applicant.total > 0){
-      resp = await updateNominee(body.serial,data);
+      console.log("TEST: ", applicant.total)
+      resp = await updateNominee(applicant?.documents[0]?.$id,data);
     } else {
-        resp = await postNominee(data);
+      resp = await postNominee(data);
     } 
     return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
 
   } catch (error: any) {
-    return new Response(JSON.stringify({ success: false, data: null, msg: error.message }), { status: 401 });
+    return new Response(JSON.stringify({ success: false, data: null, msg: error.message }), { status: 404 });
   }
 }
 

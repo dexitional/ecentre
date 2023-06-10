@@ -8,7 +8,8 @@ type Props = {
     placeholder: string;
     msg?: string;
     defaultValue?: string;
-    errors?: any;
+    required?: any;
+    onChange?: any
 }
 
 function Input(props: Props) { //{ label, name, errors,msg, placeholder, defaultValue }

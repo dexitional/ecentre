@@ -5,6 +5,7 @@ import { Inputs } from './NominationForm';
 
 type Props = {
     label: string;
+    name?: string;
     onChange?: (e: any) => void
  }
 

@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from 'react'
+import { useForm, SubmitHandler } from "react-hook-form";
 import Input from './Input';
 import Select from './Select';
 import Legend from './Legend';
@@ -29,9 +30,8 @@ export type Inputs = {
 function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
   const [ picture, setPicture ] = useState('')
-  const [ cv, setCV ] = useState('')
-  const [ form, setForm ] = useState<Inputs | any>({})
-  const { data:session }: any = useSession()
+  const { data:session }:any = useSession()
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
   //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
   const IMAGE_URL = `https://ehub.ucc.edu.gh`
   
@@ -40,64 +40,59 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   let portfolios = positions.documents?.filter((row: any) => row.groupId.includes(groupId))
   portfolios = portfolios?.map((row:any) => ({ label: row.title, value: row.$id }))
   
+  const { aspirant_regno, has_mate, mate_regno, guarantor1_regno, guarantor2_regno  } = watch()
+  
+  console.log(aspirant_regno,guarantor1_regno);
 
-
-  const onChange = (e:any) => {
-     if(e.target.name == 'photo') setPicture(URL.createObjectURL(e.target.files[0]));
-     if(e.target.name == 'cv') setCV(URL.createObjectURL(e.target.files[0]));
-     if(['photo','cv'].includes(e.target.name)) 
-       setForm({ ...form, [e.target.name] : e.target.files[0] })
-     else 
-       setForm({ ...form, [e.target.name] : e.target.value })
-  }
-
-  const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      console.log(form)
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+      alert(JSON.stringify(data))
       try {
-        
         // Upload to Storage
-        let photo,cv;
-        if(form?.photo){
-            const fileUploaded = await uploadImage(form?.photo)
-            console.log(fileUploaded)
-            if(fileUploaded) form.photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-        }
 
-        if(form?.cv){
-            const fileUploaded = await uploadImage(form?.cv)
-            console.log(fileUploaded)
-            if(fileUploaded) form.cv = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-        }
+        // let file;
+        // if(data.photo && data.photo[0]){
+        //     // @ts-ignore
+        //     const fileUploaded = await uploadImage(data.photo[0])
+        //     console.log(fileUploaded)
+        //     if(fileUploaded){
+        //         file = {
+        //             bucketId: fileUploaded.bucketId,
+        //             fileId: fileUploaded.$id,
+        //         }
+        //     }
+        // }
 
         // Add Extra data
-        form.consent = form.consent == 'on' ? true : false; 
+        const formData: any = {...data }
+        formData.serial = session.user.serial
         
+
         // Save to Database
-        const resp = await fetch('/api/nominee',{
-           method: 'POST',
-           body: JSON.stringify(form)
-        })
+        // const resp = await fetch('/api/nominee',{
+        //    method: 'POST',
+        //    body: JSON.stringify(formData)
+        // })
         
-        const response = await resp.json()
-        if(response.success){
-           Notiflix.Notify.success('APPLICATION SUBMITTED !');
-        } else {
-           Notiflix.Notify.failure(response.msg.toUpperCase());
-        }
+        // const response = await resp.json()
+        // if(response.success){
+        //   Notiflix.Notify.success('APPLICATION SUBMITTED !');
+        // } else {
+        //   Notiflix.Notify.failure(response.msg.toUpperCase());
+        // }
 
       } catch(e:any){
-          Notiflix.Notify.failure(e.message);
+        Notiflix.Notify.failure(e.message);
       }
   }
 
-//   const onChangePicture = (e: any) => {
-//     setPicture(URL.createObjectURL(e.target.files[0]));
-//   };
+  const onChangePicture = (e: any) => {
+    setPicture(URL.createObjectURL(e.target.files[0]));
+  };
 
   return (
     <div className="space-y-4"> 
-     {/* { errors ?
+     {aspirant_regno}
+     { errors ?
         <div className="p-2 md:px-6 md:py-2 rounded shadow shadow-red-300/60 bg-red-50/80 space-y-4">
             <div className="text-sm md:text-inherit space-y-3">
               { errors.aspirant_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide Aspirant Registration Number</p> : null }
@@ -108,35 +103,35 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
               { errors.consent ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Agree to the Terms & Conditions</p> : null }
             </div>
         </div> : null
-     } */}
+     }
     <div className="grid md:grid-cols-3 gap-8">
-        <form className="md:col-span-2 space-y-6 md:space-y-14 order-2 md:order-1"  onSubmit={onSubmit}>
+        <form className="md:col-span-2 space-y-6 md:space-y-14 order-2 md:order-1"  onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-4">
                 <Legend label="ASPIRANT" />
-                <Input name="aspirant_regno" onChange={onChange} required label="Registration Number of Aspirant" placeholder="Registration Number of Aspirant" />
-                <Select name="positionId" onChange={onChange} label="Position Being Applied" placeholder="Choose Position" optionData={portfolios}/>
-                <Select name="has_mate" onChange={onChange} label="Add Running Mate ?" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
+                <Input {...register("aspirant_regno", { required: true })} label="Registration Number of Aspirant" placeholder="Registration Number of Aspirant" />
+                <Select {...register("positionId", { required: true })} label="Position Being Applied" placeholder="Choose Position" optionData={portfolios}/>
+                <Select {...register("has_mate")} label="Add Running Mate ?" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
                 
                 {/* <Input register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" /> */}
             </div>
-            { form?.has_mate && form?.has_mate == '1' ?
+            { has_mate && has_mate == '1' ?
             <div className="space-y-4">
                 <Legend label="RUNNING MATE" />
-                <Input name="mate_regno" onChange={onChange} required  label="Registration Number of Running-mate" placeholder="Registration Number of Running-mate" />
+                <Input {...register("mate_regno", { required: true, maxLength: 15 })} label="Registration Number of Running-mate" placeholder="Registration Number of Running-mate" />
             </div> : null 
             }
             <div className="space-y-4">
                 <Legend label="GUARANTORS (ENDORSEMENT)" />
-                <Input name="guarantor1_regno" onChange={onChange} required label="Registration Number of First (1st) Guarantor" placeholder="Registration Number of 1st Guarantor" />
-                <Input name="guarantor2_regno" onChange={onChange} required label="Registration Number of Second (2nd) Guarantor" placeholder="Registration Number of 2nd Guarantor" />
+                <Input {...register("guarantor1_regno", { required: true, maxLength: 15 })} label="Registration Number of First (1st) Guarantor" placeholder="Registration Number of 1st Guarantor" />
+                <Input {...register("guarantor2_regno", { required: true, maxLength: 15 })} label="Registration Number of Second (2nd) Guarantor" placeholder="Registration Number of 2nd Guarantor" />
             </div>
             <div className="space-y-4">
                 <Legend label="ADDITIONAL INFORMATION" />
-                <Input name="teaser" onChange={onChange} required label="Candidacy Teaser" placeholder="Teaser" />
+                <Input {...register("teaser", { required: true, maxLength: 30 })} label="Candidacy Teaser" name="teaser" placeholder="Teaser" />
                 <hr/>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <File name="photo" label="Candidate Photo Upload" onChange={onChange} />   
-                    <File name="cv" label="Candidate Resume Upload" onChange={onChange} />
+                    <File {...register("photo", { required: true })} label="Candidate Photo Upload" onChange={onChangePicture} />   
+                    <File {...register("cv", { required: true })} label="Candidate Resume Upload" onChange={onChangePicture} />
                 </div>
                 <hr/>
                 {/* <label id="agree-1" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
@@ -145,9 +140,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 </label>
                 <hr/> */}
                 <label id="agree-2" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
-                    <input  name="consent" onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
-                    <input  name="serial" type="hidden"  value={ form?.serial || session?.user?.serial } />
-                    <input  name="form_submit" type="hidden"  value={ form?.form_submit || 0 } />
+                    <input {...register("consent", { required: true })} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                     <p className="w-full font-serif text-base tracking-wider">I hereby pledge to abide by all rules and regulations governing elections and students conduction on UCC campus during the electioneering and voting period, and that should I or any of my polling agents/supporters do contrary, I be disqualified from the elections.</p>
                 </label>
                 <hr/>
@@ -163,10 +156,10 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 <legend className="px-4 py-2 bg-slate-100 border text-[#153B50] text-center md:text-left font-semibold tracking-widest">ELECTORAL SETUP</legend>
                 <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
                     <PhotoBox label="CANDIDACY PHOTO" image={ picture ? picture : None } />
-                    <PhotoBox label="ASPIRANT" image={form?.aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.aspirant_regno}`) : None } />
-                    { form?.has_mate && form?.has_mate == '1' ? <PhotoBox label="RUNNING MATE" image={form?.mate_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.mate_regno}`) : None } /> : null }
-                    <PhotoBox label="GUARANTOR #1" image={form?.guarantor1_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.guarantor1_regno}`) : None } />
-                    <PhotoBox label="GUARANTOR #2" image={form?.guarantor2_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.guarantor2_regno}`) : None } />
+                    <PhotoBox label="ASPIRANT" image={aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${aspirant_regno}`) : None } />
+                    { has_mate && has_mate == '1' ? <PhotoBox label="RUNNING MATE" image={mate_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${mate_regno}`) : None } /> : null }
+                    <PhotoBox label="GUARANTOR #1" image={guarantor1_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1_regno}`) : None } />
+                    <PhotoBox label="GUARANTOR #2" image={guarantor2_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2_regno}`) : None } />
                 </div>
             </div>
         </section>

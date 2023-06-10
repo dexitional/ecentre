@@ -7,6 +7,8 @@ type Props = {
     placeholder: string;
     defaultValue?: string;
     optionData?: any;
+    name?: string;
+    onChange?: any;
 }
 
 function Select(props: Props) {

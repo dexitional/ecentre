@@ -1,17 +1,17 @@
 import NominationForm from "@/components/NominationForm"
+import { options } from "@/options";
 import { fetchNominee, fetchPositions, fetchSession, fetchVoucher } from "@/utils/serverApi";
 import moment from 'moment'
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params}:{ params: { serial: string }}) {
-  
+  const session:any = await getServerSession(options)
   const applicant = await fetchNominee(params?.serial);
   const positions = await fetchPositions();
-  const voucher = await fetchVoucher(params?.serial);
-  const { sessionId }: any = voucher?.documents[0];
-  const session = await fetchSession(sessionId);
-  const { end_date, title : session_name }: any = session?.documents[0];
   const data:any = await Promise.all([applicant,positions])
+  const sess = await fetchSession(session?.user?.sessionId);
+  const { end_date, title : session_name }: any = sess?.documents[0];
   
   if(moment().isAfter(end_date)) redirect(`/user/${params?.serial}/printout`)
   //console.log("moment Test: ", moment().isAfter(end_date))

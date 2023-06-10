@@ -1,24 +1,22 @@
-'use client';
-import SideBar from '@/components/SideBar'
-import React, { ReactElement } from 'react'
-import Header from '@/components/Header';
-import { Menu, Transition } from '@headlessui/react'
-import RelatedBox from '@/components/RelatedBox';
-import Connect from '@/components/Connect';
-import LatestBox from '@/components/LatestBox';
-import { HiOutlinePlusCircle } from 'react-icons/hi2';
-import FAQ from '@/components/FAQ';
-import MainSideBar from '@/components/MainSideBar';
+import React from 'react'
+import UserNav from '@/components/UserNav';
+import { getServerSession } from 'next-auth';
+import { options } from '@/options';
 
-function Layout({ children }: { children: React.ReactNode }) {
+async function Layout({ children }: { children: React.ReactNode }) {
+  
+  const session:any = await getServerSession(options)
+  
   return (
-    <div className="z-0 w-full bg-white">
-      <div className="py-10 px-10 mx-auto w-full max-w-6xl flex flex-col md:flex-row md:space-x-14 ">
-        <main className="flex-1">
-          {children}
-        </main>
-        <MainSideBar />
-      </div>
+    <div className="w-full">
+        <div className="my-10 md:mx-auto px-6 md:px-0 w-full md:max-w-6xl flex flex-col md:flex-row gap-6 md:gap-x-4">
+          {/* @ts-ignore */}
+          <UserNav session={session} />
+          <div className="p-4 print:p-0 rounded bg-slate-50/60 print:bg-transparent shadow print:shadow-none shadow-slate-300 flex-1">
+             { children }
+          </div>
+         
+        </div>
     </div>
   )
 }

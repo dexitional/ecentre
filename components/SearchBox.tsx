@@ -23,9 +23,9 @@ function SearchBox() {
 
   const onSubmit = (e: any) => {
     e.preventDefault()
-    const router = useRouter();
+    //const router = useRouter();
     //router.push(pathname + '?' + createQueryString('search', keyword))
-    router.push(`/john`)
+    //router.push(`/john`)
   }
 
   return (

@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       
       // Send SMS Reminders - [ Guarantors verification, Applicant Success Notice ]
       // Acknowledge Form Submission
-      // /api/verify?ua=413292&tp=g1
+      // /api/nominee/?action=verify&ua=413292&tp=g1
       
 
     } 

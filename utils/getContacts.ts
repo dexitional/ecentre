@@ -1,7 +1,7 @@
 import { sms } from "./sms";
 
 export const getContacts = async (data: any) => {
-    const { aspirant_regno, guarantor1_regno, guarantor2_regno } = data;
+    const { aspirant_regno, guarantor1_regno, guarantor2_regno,serial } = data;
     const rowData = [aspirant_regno, guarantor1_regno, guarantor2_regno];
     
     const res = await Promise.all(rowData.map( async (row: any, i: number) => {
@@ -16,9 +16,9 @@ export const getContacts = async (data: any) => {
             msg = `Hi, Your Nomination has been acknowledged. Thank you and follow-up on your endorsements !`
         } else {
             // Send Message - Aspirant
-            msg = `Hi, Please Click link to endorse Your Aspirant. ${process.env.NEXTAUTH_URL}/api/nominee?verify&ua=${aspirant_regno}&tp=g${i+1} .Thank you for your time !`
+            msg = `Hi, Please Click link to endorse Your Aspirant. ${process.env.NEXTAUTH_URL}/api/nominee?action=verify&ua=${serial}&tp=g${i} .Thank you for your time !`
         }
-        const asp_sms = sms('0558641826',msg);
+        const asp_sms = sms(phone,msg);
         return asp_sms;
     }))
 

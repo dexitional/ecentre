@@ -64,13 +64,9 @@ export async function POST(request: Request) {
       resp = await postNominee(data);
       
       // Send SMS Reminders - [ Guarantors verification, Applicant Success Notice ]
-      // Acknowledge Form Submission
-      // /api/nominee/?action=verify&ua=413292&tp=g1
-      
-
+     
     } 
     const broadcast = await getContacts(data)
-    console.log(broadcast)
     return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
 
   } catch (error: any) {
@@ -86,14 +82,28 @@ export async function POST(request: Request) {
 
 
 
-export async function GET(request: Request, { params}:{ params: { id: string }} ) {
-  const id = params.id;
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const action: any = searchParams.get("action")
+    const ua: any = searchParams.get("ua")
+    const tp: any = searchParams.get("tp")
+
+    if(action == 'verify'){
+        const applicant = await fetchNominee(ua);
+        const asp_res = await fetch(`https://ehub.ucc.edu.gh/api/sso/identity?search=${encodeURIComponent(applicant?.documents[0]?.aspirant_regno)}`)
+        const asp = await asp_res.json()
+        const user = asp?.data[0]?.user;
+        
+        const ups = await updateNominee(applicant.documents[0].$id, { [`${tp}_verified`] : true });
+        if(ups) return new Response(JSON.stringify({ message: `Thank you for Approving and Endorsement Aspirant, ${user?.name} !` }), { status: 200 });
+    }
+
   // ?action=form&serial=test ( Fetch for form population )
   // ?action=print&serial=test ( Fetch for Printview with 3rd party endpoints )
   
   // Fetch Application Data ( form, print )
   // Fetch Aspirant, Mate, Gurantor 1  & 2 - Biodata ( print )
-  return new Response(JSON.stringify({ id }), { status: 200 });
+  return new Response(JSON.stringify({ action }), { status: 200 });
 }
 
 export async function DELETE(request: Request, { params}:{ params: { id: string }} ) {

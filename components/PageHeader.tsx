@@ -15,10 +15,10 @@ type Props = {
 
 export default function PageHeader({ title, addUrl }: Props) {
   return (
-    <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between md:space-x-4 md:space-y-0 space-y-2">
+    <div className="mb-4 flex flex-col md:flex-row items-start md:items-center md:justify-between md:space-x-4 md:space-y-0 space-y-2">
         <div className="flex flex-col md:flex-row md:items-center md:space-x-4 md:space-y-0 space-y-2">
             <div className="w-full flex items-center justify-between md:justify-start space-x-4">
-                <div className="flex items-center space-x-2">
+                <div className="hidden items-center space-x-2">
                     <GoBack />
                     <GoForward />
                 </div>
@@ -31,7 +31,7 @@ export default function PageHeader({ title, addUrl }: Props) {
             <PageTitle title={title} />
         </div>
         <Link href={addUrl} className="hidden md:flex">
-            <ActionButton title="New Record" Icon={MdAdd} />
+            <ActionButton title="New" Icon={MdAdd} />
         </Link>
     </div>
   )

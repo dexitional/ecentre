@@ -15,13 +15,24 @@ export const getVoucher = async (serial: string, pin: string) => {
 }
 
 export const fetchVouchers = async () => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041')
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041',
+    [
+       Query.orderAsc("sessionId"),
+       Query.orderAsc("groupId")
+    ])
     return res;
 }
 
 export const fetchVoucher = async (serial: string) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
       Query.equal("serial", serial),
+    ])
+    return res;
+}
+
+export const fetchVoucherByGroup = async (groupId: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
+      Query.equal("groupId", groupId),
     ])
     return res;
 }

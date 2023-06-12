@@ -37,20 +37,20 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   const router = useRouter()
   const newData = applicant?.documents[0];
   const [ form, setForm ] = useState<Inputs | any>({
-    photo: newData.photo,
-    cv: newData.cv,
-    positionId: newData.positionId,
-    has_mate: newData.has_mate,
-    mate_regno: newData.mate_regno,
-    guarantor1_regno: newData.guarantor1_regno,
-    guarantor2_regno: newData.guarantor2_regno,
-    g1_verified: newData.g1_verified,
-    g2_verified: newData.g2_verified,
-    teaser: newData.teaser,
-    consent: newData.consent,
-    form_submit: newData.form_submit,
-    serial: newData.serial,
-    aspirant_regno: newData.aspirant_regno,
+    photo: newData?.photo || '',
+    cv: newData?.cv || '',
+    positionId: newData?.positionId || null,
+    has_mate: newData?.has_mate || '0',
+    mate_regno: newData?.mate_regno || '',
+    guarantor1_regno: newData?.guarantor1_regno || '',
+    guarantor2_regno: newData?.guarantor2_regno || '',
+    g1_verified: newData?.g1_verified || false,
+    g2_verified: newData?.g2_verified || false,
+    teaser: newData?.teaser || '',
+    consent: newData?.consent || false,
+    form_submit: newData?.form_submit || false,
+    serial: newData?.serial || '',
+    aspirant_regno: newData?.aspirant_regno || '',
   })
 
   const { data:session }: any = useSession()

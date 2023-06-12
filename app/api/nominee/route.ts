@@ -1,5 +1,6 @@
 
 import { storage } from "@/appwrite";
+import { getContacts } from "@/utils/getContacts";
 import { fetchActiveSession, fetchNominee, postNominee, updateNominee } from "@/utils/serverApi";
 import uploadImage from "@/utils/uploadImage";
 import { ID, InputFile } from "node-appwrite";
@@ -65,9 +66,10 @@ export async function POST(request: Request) {
       // Send SMS Reminders - [ Guarantors verification, Applicant Success Notice ]
       // Acknowledge Form Submission
       // /api/verify?ua=413292&tp=g1
+      
 
     } 
-
+    const broadcast = await getContacts(data)
     return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
 
   } catch (error: any) {

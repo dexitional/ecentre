@@ -130,7 +130,11 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         
         const response = await resp.json()
         if(response.success){
-           router.refresh()
+           if(form.form_status){
+             router.push(`/user/${form.serial}/printout`)
+           } else {
+             router.push('/')
+           }
            Notiflix.Notify.success('APPLICATION SUBMITTED !');
         } else {
            Notiflix.Notify.failure(response.msg.toUpperCase());

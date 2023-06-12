@@ -60,17 +60,17 @@ async function PageNominee() {
                         <span className="ml-3 md:m-0 font-bold text-xs tracking-wide">{row?.serial}</span>
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
-                        <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">PIN</span>
-                        <span className="ml-3 md:m-0">{row?.pin}</span>
+                        <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">APPLICANT</span>
+                        <span className="ml-3 md:m-0">{row?.aspirant_regno?.toUpperCase()}</span>
                     </td>
                     
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
-                        <span className="md:hidden py-0.5 px-3 rounded bg-blue-900/5 font-bold">GROUP</span>
-                        <span className="ml-3 md:m-0">{ row?.group?.title }</span>
+                        <span className="md:hidden py-0.5 px-3 rounded bg-blue-900/5 font-bold">POSITION</span>
+                        <span className="ml-3 md:m-0">{ row?.position?.title?.toUpperCase() }</span>
                         {/* <span className="ml-3 md:m-0">{group?.name?.toUpperCase()}</span> */}
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
-                        <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">SESSION</span>
+                        <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">GROUP</span>
                         <span className="ml-3 md:m-0">{row?.session?.title}</span>
                         {/* <span className="ml-3 md:m-0">{session?.name?.toUpperCase()}</span> */}
                         {/* <div className="ml-3 md:m-0">
@@ -79,7 +79,7 @@ async function PageNominee() {
                     </td>
                     <td className="px-6 py-3 border-b border-blue-900/10 flex md:justify-end">
                         <div className="md:px-2 w-fit flex items-center space-x-4">
-                            <BadgeIcon title="SELL" Icon={MdOutlineArticle}/>
+                            <BadgeIcon title="FORM" Icon={MdOutlineArticle}/>
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}
                             {/* <FiTrash className="w-3.5 h-3.5" /> */}
                         </div>

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Input from './Input';
 import Select from './Select';
 import Legend from './Legend';
@@ -9,6 +9,9 @@ import None from '../public/none.png'
 import { useSession } from 'next-auth/react';
 import uploadImage from '@/utils/uploadImage';
 import Notiflix from 'notiflix'
+import { useRouter } from 'next/navigation';
+import { objectToFormData } from '@/utils/objectToFormData';
+import { storage, ID } from '@/config/appwrite';
 
 export type Inputs = {
   aspirant_regno: string;
@@ -21,15 +24,17 @@ export type Inputs = {
   photo: string;
   cv: string;
   position: string;
-  consent: string;
+  consent: boolean;
   //is_candidate, vetscore, vettotal, 
   
 };
 
 function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
+  const formRef = useRef<any>(null)
   const [ picture, setPicture ] = useState('')
   const [ cv, setCV ] = useState('')
+  const router = useRouter()
   const newData = applicant?.documents[0];
   const [ form, setForm ] = useState<Inputs | any>({
     photo: newData.photo,
@@ -39,6 +44,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
     mate_regno: newData.mate_regno,
     guarantor1_regno: newData.guarantor1_regno,
     guarantor2_regno: newData.guarantor2_regno,
+    g1_verified: newData.g1_verified,
+    g2_verified: newData.g2_verified,
     teaser: newData.teaser,
     consent: newData.consent,
     form_submit: newData.form_submit,
@@ -49,8 +56,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   const { data:session }: any = useSession()
   //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
   const IMAGE_URL = `https://ehub.ucc.edu.gh`
-  console.log(newData)
-
+ 
   // Activate Group or Category
   const groupId = session?.user?.groupId;
   let portfolios = positions.documents?.filter((row: any) => row.groupId.includes(groupId))
@@ -63,18 +69,35 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
      if(e.target.name == 'cv') setCV(URL.createObjectURL(e.target.files[0]));
      if(['photo','cv'].includes(e.target.name)) 
        setForm({ ...form, [e.target.name] : e.target.files[0] })
+     else if(e.target.name == 'consent') 
+       setForm({ ...form, [e.target.name] : !form.consent })
      else 
        setForm({ ...form, [e.target.name] : e.target.value })
   }
 
+  const saveForm = (e: any) => {
+     //e.preventDefault()
+     setForm({ ...form, 'form_submit': false })
+  } 
+
+  const submitForm = (e: any) => {
+    //e.preventDefault()
+    setForm({ ...form, 'form_submit': true })
+  } 
+
   const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
+
+      const ok = window.confirm("DO YOU WANT COMMIT CHANGES AND PROCEED ?")
+      if(!ok) return
       try {
         
         // Upload to Storage
         // let photo,cv;
         // if(form?.photo){
-        //     const fileUploaded = await uploadImage(form?.photo)
+        //     //const fileUploaded = await uploadImage(form?.photo)
+        //     // @ts-ignore
+        //     const fileUploaded = await storage.createFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, ID.unique, form?.photo);
         //     console.log(fileUploaded)
         //     if(fileUploaded) photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
         // }
@@ -87,41 +110,38 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
         // Add Extra data
 
-        form.consent = form.consent == 'on' ? true : false; 
-        form.form_submit = form.form_submit || false; 
+        //form.consent = form.consent == 'on' ? true : false; 
+        //form.form_submit = form.form_submit || false; 
         form.serial = form.serial || session?.user?.serial
-        form.$id = '';
         // const formData = {
         //     ...form,
         //     ...(photo && { photo: JSON.stringify(photo)}),
         //     ...(cv && { cv: JSON.stringify(cv)})
         // }
-
-        //const formData = new FormData(form);
-        console.log(form)
-      
+        
+        const formData = objectToFormData(form);
+        console.log(formData)
         
         // Save to Database
         const resp = await fetch('/api/nominee',{
-           method: 'POST',
-           body: JSON.stringify(form)
+          method: 'POST',
+          body: formData
         })
         
         const response = await resp.json()
         if(response.success){
+           router.refresh()
            Notiflix.Notify.success('APPLICATION SUBMITTED !');
         } else {
            Notiflix.Notify.failure(response.msg.toUpperCase());
         }
 
       } catch(e:any){
+          console.log(e)
           Notiflix.Notify.failure(e.message);
       }
   }
 
-//   const onChangePicture = (e: any) => {
-//     setPicture(URL.createObjectURL(e.target.files[0]));
-//   };
 
   return (
     <div className="space-y-4"> 
@@ -138,7 +158,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         </div> : null
      } */}
     <div className="grid md:grid-cols-3 gap-8">
-        <form className="md:col-span-2 space-y-6 md:space-y-14 order-2 md:order-1"  onSubmit={onSubmit}>
+        <form ref={formRef} className="md:col-span-2 space-y-6 md:space-y-14 order-2 md:order-1"  onSubmit={onSubmit}>
             <div className="space-y-4">
                 <Legend label="ASPIRANT" />
                 <Input name="aspirant_regno" defaultValue={form.aspirant_regno} onChange={onChange} required label="Registration Number of Aspirant" placeholder="Registration Number of Aspirant" />
@@ -173,15 +193,14 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 </label>
                 <hr/> */}
                 <label id="agree-2" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
-                    <input  name="consent" defaultChecked={form.consent} onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
+                    <input name="consent" checked={form.consent} onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                     <p className="w-full font-serif text-base tracking-wider">I hereby pledge to abide by all rules and regulations governing elections and students conduction on UCC campus during the electioneering and voting period, and that should I or any of my polling agents/supporters do contrary, I be disqualified from the elections.</p>
                 </label>
                 <hr/>
             </div>
-            <div className="grid md:grid-cols-1 gap-2 md:gap-4">
-                <button className="py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700">SAVE APPLICATION</button>
-                {/* <button className="py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50]">SAVE & PRINT</button> */}
-                
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+                <button type="submit" disabled={!form?.consent} onClick={saveForm} className="py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50] disabled:bg-[#153B50]/20">SAVE & EXIT</button>
+                <button type="submit" disabled={!form?.consent} onClick={submitForm} className="py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700 disabled:bg-green-700/20 disabled:ring-green-700/20">SUBMIT NOMINATION</button>
             </div>
         </form>
         <section className="col-span-1 md:space-y-14 order-1 md:order-2">
@@ -191,8 +210,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                     <PhotoBox label="CANDIDACY PHOTO" image={ picture ? picture : None } />
                     <PhotoBox label="ASPIRANT" image={form?.aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.aspirant_regno}`) : None } />
                     { form?.has_mate && form?.has_mate == '1' ? <PhotoBox label="RUNNING MATE" image={form?.mate_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.mate_regno}`) : None } /> : null }
-                    <PhotoBox label="GUARANTOR #1" image={form?.guarantor1_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.guarantor1_regno}`) : None } />
-                    <PhotoBox label="GUARANTOR #2" image={form?.guarantor2_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.guarantor2_regno}`) : None } />
+                    <PhotoBox label="GUARANTOR #1" image={form?.guarantor1_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.guarantor1_regno}`) : None } verified={form?.g1_verified} submitted={form?.form_submit} />
+                    <PhotoBox label="GUARANTOR #2" image={form?.guarantor2_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${form?.guarantor2_regno}`) : None } verified={form?.g2_verified} submitted={form?.form_submit}/>
                 </div>
             </div>
         </section>

@@ -12,24 +12,24 @@ const getApplicant = async (serial: string) => {
     const applicant = await fetchNominee(serial);
     const voucher = await fetchVoucher(serial);
     const row:any = applicant?.documents[0]
-    const { groupId, sessionId }: any = voucher?.documents[0];
+    const { groupId }: any = voucher?.documents[0];
     const group = await fetchGroup(groupId);
     const { title : group_name }: any = group?.documents[0];
     const position = await fetchPosition(row.positionId);
     const { title }: any = position?.documents[0];
-    const { aspirant_regno, mate_regno, guarantor1_regno, guarantor2_regno }: any = row
+    const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, form_submit, guarantor1_regno, guarantor2_regno }: any = row
     const rowData: any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
     const mapData: any = {};
     for(const r of Object.keys(rowData)){
       const newData = await fetchRecord(rowData[r])
       mapData[r] = rowData[r] && newData.success ? newData?.data[0]?.user : null;
     }
-    return { applicant, title, group_name, data: mapData }
+    return { applicant, has_mate,g1_verified, g2_verified, form_submit, title, group_name, data: mapData }
 }
 
 export default async function Page({ params}:{ params: { serial: string }}) {
   const data = await getApplicant(params?.serial);
-  const { applicant, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
+  const { applicant, has_mate,g1_verified, g2_verified,form_submit, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
   
   return (
     <main className="flex-1 space-y-3 md:space-y-8">
@@ -73,7 +73,10 @@ export default async function Page({ params}:{ params: { serial: string }}) {
 
                  {/* Guarantor #1 */}
                  <div className="relative space-y-4 border-r-2 border-dashed print:space-y-2">
-                    <legend className="my-4 px-4 py-2 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">GUARANTOR #1</legend>
+                    <legend className="my-4 px-4 py-2 flex flex-col md:flex-row items-start md:items-center space-x-6 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">
+                        <span>GUARANTOR #1</span>
+                        { g1_verified ? <span className="py-0.5 px-3 border-2 border-green-700 rounded bg-white text-green-900 text-xs">VERIFIED</span>: null }
+                    </legend>
                     <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
                       <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1?.regno}`)} alt="" fill/>
                     </div>
@@ -86,7 +89,7 @@ export default async function Page({ params}:{ params: { serial: string }}) {
                 </div>
             </section>
             <section className="col-span-1 space-y-14">
-               { mate ?
+               { has_mate && has_mate == '1' ?
                 <div className=" relative space-y-4 border-r-2 border-dashed print:space-y-2">
                     <legend className="my-4 px-4 py-2 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">RUNNNING MATE</legend>
                     <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
@@ -108,8 +111,15 @@ export default async function Page({ params}:{ params: { serial: string }}) {
 
                 {/* Guarantor #2 */}
                 <div className="relative space-y-4 border-r-2 border-dashed print:space-y-2">
-                    <legend className="my-4 px-4 py-2 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">GUARANTOR #2</legend>
-                    <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
+                    <legend className="my-4 px-4 py-2 flex flex-col md:flex-row items-start md:items-center space-x-6 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">
+                        <span>GUARANTOR #2</span>
+                        { form_submit 
+                          ? g2_verified 
+                          ? <span className="py-0.5 px-3 border-2 border-green-700 rounded bg-white text-green-900 text-xs">VERIFIED</span>
+                          : <span className="py-0.5 px-3 border-2 border-red-700 rounded bg-white text-red-900 text-xs">PENDING</span>
+                          : null 
+                        }
+                    </legend><div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
                       <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2?.regno}`)} alt="" fill/>
                     </div>
                     <PrintPill label="Name" content={guarantor2?.name} />

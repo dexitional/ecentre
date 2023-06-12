@@ -14,7 +14,7 @@ export default async function Page({ params}:{ params: { serial: string }}) {
   const { end_date, title : session_name }: any = sess?.documents[0];
   
   if(moment().isAfter(end_date)) redirect(`/user/${params?.serial}/printout`)
-  //console.log("moment Test: ", moment().isAfter(end_date))
+  if(data[0]?.documents[0]?.form_submit) redirect(`/user/${params?.serial}/printout`)
   return (
     <main className="flex-1 space-y-8">
         <h1 className="px-4 py-2 text-lg md:text-3xl text-center font-bold tracking-wider rounded border-2 border-[#153B50] text-[#153B50]">{ session_name?.toUpperCase() } NOMINATION</h1>

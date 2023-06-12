@@ -89,7 +89,7 @@ export async function GET(request: Request) {
     const tp: any = searchParams.get("tp")
 
     if(action == 'verify'){
-        const applicant = await fetchNominee(ua);
+        const applicant:any = await fetchNominee(ua);
         const asp_res = await fetch(`https://ehub.ucc.edu.gh/api/sso/identity?search=${encodeURIComponent(applicant?.documents[0]?.aspirant_regno)}`)
         const asp = await asp_res.json()
         const user = asp?.data[0]?.user;

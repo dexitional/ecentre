@@ -70,6 +70,7 @@ export async function POST(request: Request) {
 
     } 
     const broadcast = await getContacts(data)
+    console.log(broadcast)
     return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
 
   } catch (error: any) {

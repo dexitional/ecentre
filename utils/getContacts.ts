@@ -16,10 +16,11 @@ export const getContacts = async (data: any) => {
             msg = `Hi, Your Nomination has been acknowledged. Thank you and follow-up on your endorsements !`
         } else {
             // Send Message - Aspirant
-            msg = `Hi, Please Click link to endorse Your Aspirant. ${process.env.NEXTAUTH_URL}/api/nominee?action=verify&ua=${aspirant_regno}&tp=g${i+1} .Thank you for your time !`
+            msg = `Hi, Please Click link to endorse Your Aspirant. ${process.env.NEXTAUTH_URL}/api/nominee?verify&ua=${aspirant_regno}&tp=g${i+1} .Thank you for your time !`
         }
-        const asp_sms = sms(phone,msg);
+        const asp_sms = sms('0558641826',msg);
         return asp_sms;
     }))
+
     return res
 }

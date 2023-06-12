@@ -5,13 +5,6 @@ import uploadImage from "@/utils/uploadImage";
 import { ID, InputFile } from "node-appwrite";
 
 
-
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-}
-
 export async function POST(request: Request) {
  
   try {
@@ -70,6 +63,7 @@ export async function POST(request: Request) {
       resp = await postNominee(data);
       
       // Send SMS Reminders - [ Guarantors verification, Applicant Success Notice ]
+      // Acknowledge Form Submission
       // /api/verify?ua=413292&tp=g1
 
     } 

@@ -3,10 +3,12 @@ import UserNav from '@/components/UserNav';
 import { getServerSession } from 'next-auth';
 import { options } from '@/options';
 import AdminUserNav from '@/components/AdminUserNav';
+import { redirect } from 'next/navigation';
 
 async function Layout({ children }: { children: React.ReactNode }) {
   
   const session:any = await getServerSession(options)
+  if(!session) redirect('/')
   
   return (
     <div className="w-full">

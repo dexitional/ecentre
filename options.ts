@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getVoucher } from "./utils/serverApi";
+import GoogleProvider from 'next-auth/providers/google';
+import { fetchUserByEmail, fetchUsers, getVoucher } from "./utils/serverApi";
 export const options: NextAuthOptions = {
     session: {
       strategy: "jwt",
@@ -9,6 +10,18 @@ export const options: NextAuthOptions = {
       secret: process.env.NEXTAUTH_SECRET
     },
     providers: [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_ID!,
+        clientSecret: process.env.GOOGLE_SECRET!,
+        authorization: {
+          params: {
+            prompt: "consent",
+            access_type: "offline",
+            response_type: "code"
+          }
+        }
+      }),
+
       CredentialsProvider({
         id: "credentials",
         name: "Nomination Voucher",
@@ -22,12 +35,10 @@ export const options: NextAuthOptions = {
           if(!pin) throw new Error("Pin field empty !")
           
           const resp = await getVoucher(serial,pin);
-          console.log(resp)
           if(resp.total > 0){
              const user:any = resp.documents[0];
              return user
           }
-
           throw new Error("Invalid details")
         },
       }),
@@ -41,6 +52,12 @@ export const options: NextAuthOptions = {
             // Send properties to the client, like an access_token from a provider.
             session.user = token;
             return session;
+        },
+        async signIn({ account, profile }: any) {
+          if (account?.provider === "google") {
+           return profile?.email_verified && profile?.email.endsWith("@ucc.edu.gh")
+          }
+          return true // Do different verification for other providers that don't have `email_verified`
         },
     },
     

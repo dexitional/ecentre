@@ -11,19 +11,19 @@ export default async function Page({ params}:{ params: { serial: string }}) {
   const positions = await fetchPositions();
   const data:any = await Promise.all([applicant,positions])
   const sess = await fetchSession(session?.user?.sessionId);
-  const { end_date, title : session_name }: any = sess?.documents[0];
+  const sess_res:any =  await sess?.documents[0];
   
-  if(moment().isAfter(end_date)) redirect(`/user/${params?.serial}/printout`)
+  if(moment().isAfter(sess_res?.end_date)) redirect(`/user/${params?.serial}/printout`)
   if(data[0]?.documents[0]?.form_submit) redirect(`/user/${params?.serial}/printout`)
   return (
     <main className="flex-1 space-y-8">
-        <h1 className="px-4 py-2 text-lg md:text-3xl text-center font-bold tracking-wider rounded border-2 border-[#153B50] text-[#153B50]">{ session_name?.toUpperCase() } NOMINATION</h1>
+        <h1 className="px-4 py-2 text-lg md:text-3xl text-center font-bold tracking-wider rounded border-2 border-[#153B50] text-[#153B50]">{ sess_res?.title?.toUpperCase() } NOMINATION</h1>
         <div className="p-4 md:px-10 md:py-6 rounded shadow shadow-blue-300/50 bg-blue-50/80 space-y-4">
           <h2 className="text-lg md:text-xl font-semibold text-[#153B50]">INSTRUCTIONS</h2>
           <div className="text-sm md:text-inherit space-y-3">
             <p>Please provide the requested information. Falsification of any information leads to automatic disqualification.</p>
             {/* Set Dynamic active Nomination Deadline */}
-            <p className="italic text-sm md:text-inherit font-semibold text-[#153B50]">Deadline for submission of online Nomination is { moment(end_date).format('LLL')}.</p>
+            <p className="italic text-sm md:text-inherit font-semibold text-[#153B50]">Deadline for submission of online Nomination is { moment(sess_res?.end_date).format('LLL')}.</p>
           </div>
         </div>
         <div className="">

@@ -1,9 +1,12 @@
 // import { useSearchParams } from 'next/navigation';
-import { fetchGroup, fetchSession, fetchVouchers } from '@/utils/serverApi';
+import { fetchGroup, fetchSession, fetchUsers, fetchVoucherOffsetById, fetchVouchers, fetchVouchersOffset } from '@/utils/serverApi';
 import React from 'react'
-import { FiEdit3 } from 'react-icons/fi';
 import BadgeIcon from './BadgeIcon';
 import { MdOutlineArticle } from 'react-icons/md';
+import { getUserDetail } from '@/utils/getUserDetail';
+import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { options } from '@/options';
 
 // async function getData(kw:string, pg:number) {
 //     const res = await fetch(kw 
@@ -23,7 +26,18 @@ const getHelper = async( sessionId: string, groupId: string) => {
     return { group, session }
 }
 
+const getGroup = async( groupId: string ) => {
+    const group_res = await fetchGroup(groupId)
+    const group = group_res?.documents[0]
+    return { ...group }
+}
+
+
+
 async function PageVoucher() {
+
+    const session:any = await getServerSession(options)
+    console.log("USER", session?.user)
    //console.log(data)
 //    const searchParams = useSearchParams()
 //    const keyword = searchParams.get('search') || ''
@@ -31,16 +45,29 @@ async function PageVoucher() {
 //    console.log(searchParams.get('search'))
 //    const data = await getData(keyword,+page);
     // const data:any = { documents: [] }
-    const dt = await fetchVouchers();
-    const data:any = await Promise.all(dt?.documents?.map(async (row: any) => {
-          const { group, session } = await getHelper(row.sessionId, row.groupId);
-          return { ...row, group, session }
-    }))
 
-    console.log(data);
+    // let dt:any = [];
+    // let pass = 0;
+    // while(true){
+    //     console.log(pass)
+    //     const sl = await fetchVouchersWithOffset(pass);
+    //     if(sl.total < 100) break;
+    //     dt.push(sl.documents);
+    //     pass++;
+    // }
+
+    const userDetail:any = await getUserDetail(session?.user?.email);
+    const group:any = await getGroup(userDetail?.groupId)
+
+    const dt = userDetail?.groupId ? await fetchVoucherOffsetById(userDetail?.groupId,0) : await fetchVouchersOffset(0);
+    const data:any = await Promise.all(dt?.documents?.map(async (row: any) => {
+        const { group, session } = await getHelper(row.sessionId, row.groupId);
+        return { ...row, group, session }
+    }))
 
    return (
     <div className="pb-12 overflow-y-scroll scrollbar-hide">
+        <h1 className="my-4 md:my-6 p-1 md:px-6 md:py-2 font-bold text-base md:text-2xl- tracking-widest rounded border md:border-2 border-blue-950/60 text-blue-950">{ group?.title?.toUpperCase() || 'ADMINISTRATOR' }</h1>
         <table className="w-full border-separate border-spacing-0 border border-blue-900/30 rounded text-[0.83rem] text-blue-900/80 font-medium">
             <tr className="hidden md:grid md:grid-cols-5 bg-blue-900/5 text-blue-900 text-[0.86rem] font-inter font-bold tracking-wider">
               <td className="px-6 py-3 md:border-b border-blue-900/20">Serial</td>
@@ -77,7 +104,7 @@ async function PageVoucher() {
                     </td>
                     <td className="px-6 py-3 border-b border-blue-900/10 flex md:justify-end">
                         <div className="md:px-2 w-fit flex items-center space-x-4">
-                            <BadgeIcon title="SELL" Icon={MdOutlineArticle}/>
+                            <Link href={`/vouchers/${row.$id}/view`}><BadgeIcon title="SELL" Icon={MdOutlineArticle}/></Link>
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}
                             {/* <FiTrash className="w-3.5 h-3.5" /> */}
                         </div>

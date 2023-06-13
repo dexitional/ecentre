@@ -3,11 +3,11 @@ import { Query, ID } from 'node-appwrite'
 import { Queue } from 'async-await-queue';
 
 const mainQueue = new Queue(1, 100);
-const { NEXT_PUBLIC_APPWRITE_DATABASE_ID } = process.env;
+const { NEXT_PUBLIC_APPWRITE_DATABASE_ID, COLLECTION_VOUCHER, COLLECTION_SESSION, COLLECTION_USER, COLLECTION_APPLICATION, COLLECTION_POSITION,COLLECTION_GROUP } = process.env;
 
 // Voucher Queries
 export const getVoucher = async (serial: string, pin: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!, [
       Query.equal("serial", serial.trim()),
       Query.equal("pin", pin.trim()),
     ])
@@ -15,68 +15,132 @@ export const getVoucher = async (serial: string, pin: string) => {
 }
 
 export const fetchVouchers = async () => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041',
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!,
     [
        Query.orderAsc("sessionId"),
-       Query.orderAsc("groupId")
+       Query.orderAsc("groupId"),
+       Query.limit(100)
+    ])
+    return res;
+}
+
+export const fetchVouchersOffset = async (pass: number) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!,
+    [
+       Query.orderAsc("sessionId"),
+       Query.orderAsc("groupId"),
+       Query.limit(100),
+       //Query.offset(pass*100)
+    ])
+    return res;
+}
+
+export const fetchVoucherOffsetById = async (groupId: string, pass: number) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!,
+    [
+       Query.equal("groupId", groupId),
+       Query.orderDesc("sessionId"),
+       Query.limit(100),
+       //Query.offset(pass*100)
     ])
     return res;
 }
 
 export const fetchVoucher = async (serial: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!, [
       Query.equal("serial", serial),
     ])
     return res;
 }
 
+export const fetchVoucherById = async (id: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!, [
+      Query.equal("$id", id),
+    ])
+    return res;
+}
+
 export const fetchVoucherByGroup = async (groupId: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e2249de49cf858041', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!, [
       Query.equal("groupId", groupId),
     ])
     return res;
 }
 
 
+export const postVoucher = async (body: object) => {
+    const res = await db.createDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!, ID.unique(), body);
+    return res;
+}
+
+
+export const updateVoucher = async (id: string, body: object) => {
+    const res = await db.updateDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_VOUCHER!, id , body)
+    return res;
+}
+
+
 // Session Queries
 export const fetchSessions = async () => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e225ed032debfe45e')
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_SESSION!)
     return res;
 }
 
 export const fetchSession = async (id: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e225ed032debfe45e', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_SESSION!, [
         Query.equal("$id", id),
     ])
     return res;
 }
 
+
+// Users Queries
+export const fetchUsers = async () => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_USER!)
+    return res;
+}
+
+export const fetchUser = async (id: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_USER!, [
+        Query.equal("$id", id),
+    ])
+    return res;
+}
+
+export const fetchUserByEmail = async (email: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_USER!, [
+        Query.equal("email", email),
+    ])
+    return res;
+}
+
+
 // Nominees Queries
 export const fetchNominees = async () => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1')
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!)
     return res;
 }
 
 export const fetchNominee = async (serial: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, [
         Query.equal("serial", serial),
     ])
     return res;
 }
 
 export const postNominee = async (body: object) => {
-    const res = await db.createDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', ID.unique(), body);
+    const res = await db.createDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, ID.unique(), body);
     return res;
 }
 
 
 export const updateNominee = async (id: string, body: object) => {
-    const res = await db.updateDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', id , body)
+    const res = await db.updateDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, id , body)
     return res;
 }
 
 export const deleteNominee = async (serial: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e22bb12afd9600cb1', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, [
         Query.equal("serial", serial.toString()),
     ])
     return res;
@@ -84,20 +148,26 @@ export const deleteNominee = async (serial: string) => {
 
 // Position Queries
 export const fetchPositions = async () => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e226d756c832acd9e')
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_POSITION!)
     return res;
 }
 
 export const fetchPosition = async (id: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e226d756c832acd9e', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_POSITION!, [
        Query.equal("$id", id),
     ])
     return res;
 }
 
 // Group Queries
+
+export const fetchGroups = async () => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_GROUP!)
+    return res;
+}
+
 export const fetchGroup = async (id: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e229e54af11d504cc', [
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_GROUP!, [
         Query.equal("$id", id),
     ])
     return res;
@@ -108,7 +178,7 @@ export const fetchGroup = async (id: string) => {
 
 
 export const fetchActiveSession = async () => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, '646e225ed032debfe45e',[
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_SESSION!,[
         Query.equal("visible", true),
     ])
     return res;

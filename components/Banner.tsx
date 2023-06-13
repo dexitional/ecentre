@@ -2,10 +2,7 @@
 import React, { useState } from 'react'
 import { BsArrowDownRightCircle } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
-import { cookies } from 'next/headers';
-import { getVoucher } from '@/utils/serverApi';
-import { revalidatePath } from 'next/cache';
-import { redirect,useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { signIn,useSession } from "next-auth/react"
 
 type Props = {
@@ -15,8 +12,9 @@ type Props = {
 
 function Banner() {
 
-  const { data:session } = useSession()
+  const { data:session, status } = useSession()
   const [ form, setForm ] = useState<Props>({ serial:'', pin: '' })
+  const router = useRouter()
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
 
@@ -36,8 +34,9 @@ function Banner() {
   const adminSignin = async (e: any) => {
       e.preventDefault()
       try {
-        const resp = await signIn('google', { redirect: false, callbackUrl: `/user/${form?.serial}/application`, serial: form?.serial, pin: form.pin })
-        //const resp = await signIn('credentials', { redirect: false, serial: form?.serial, pin: form.pin })
+        const resp = await signIn('google', { redirect: false, callbackUrl: `/vouchers` })
+        console.log(resp)
+        router.push('/vouchers')
       } catch(e){
         console.log(e)
       }
@@ -68,8 +67,18 @@ function Banner() {
                    <input name="pin" onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })} className="px-6 py-1 md:py-3 rounded-lg text-white placeholder:tracking-[0.2em] placeholder:text-white bg-blue-950/70 border-2 focus:ring-0 focus:border-white border-white col-span-1" type="text" placeholder="PIN" />
                 </div>
                 <button type="submit" className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-slate-100 border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
-                    <span className="text-base md:text-xl tracking-widest font-extrabold text-blue-950">ENTER</span>
-                    <BsArrowDownRightCircle className="h-5 w-5 md:h-7 md:w-7 text-blue-950"/>
+                    { status == 'loading' ?
+                      <>
+                        <span className="text-sm md:text-lg tracking-widest font-bold text-blue-950 animate-pulse">Authenticating ...</span>
+                        {/* <BsArrowDownRightCircle className="h-5 w-5 md:h-7 md:w-7 text-blue-950"/> */}
+                      </> :
+                      status == 'unauthenticated' ?
+                      <>
+                        <span className="text-base md:text-xl tracking-widest font-extrabold text-blue-950">ENTER</span>
+                        <BsArrowDownRightCircle className="h-5 w-5 md:h-7 md:w-7 text-blue-950"/>
+                      </> : null
+                    }
+                    
                 </button>
                 <button type="button" onClick={adminSignin} className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-yellow-100 border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
                     <FcGoogle className="h-8 w-8 text-blue-950"/>

@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -28,27 +27,11 @@ const cvsRef = ref(storage, 'cvs');
 const picturesRef = ref(storage, 'pictures');
 
 // id is a unique identifier for the file
-export function uploadCv(file: File, id: string) {
-    // TODO: picture extension
-    return uploadBytes(ref(cvsRef, `${id}.pdf`), file).then((snapshot) => {
-        console.log('Uploaded a cv!',snapshot);
-    });
+export function uploadCv(file: File, serial: string) {
+  return uploadBytes(ref(cvsRef, `${serial}.pdf`), file).then((snapshot) => getDownloadURL(snapshot.ref).then(url => url));
 }
 
-export function uploadPicture(file: File, id: string) {
-    return uploadBytes(ref(picturesRef,  `${id}.jpg`), file).then((snapshot) => {
-        console.log('Uploaded a picture!');
-    });
+export function uploadPicture(file: File, serial: string) {
+   return uploadBytes(ref(picturesRef, `${serial}.jpg`), file).then((snapshot) => getDownloadURL(snapshot.ref).then(url => url));
 }
 
-export function downloadPicture(id: string) {
-    getDownloadURL(ref(picturesRef,  `${id}.jpg`)).then((url) => {
-        // TODO: download picture from $url
-    });
-}
-
-export function downloadCv(id: string) {
-    getDownloadURL(ref(cvsRef, `${id}.pdf`)).then((url) => {
-        // TODO: download cv from $url
-    })
-}

@@ -69,7 +69,7 @@ function Banner() {
                 <button type="submit" className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-slate-100 border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
                     { status == 'loading' ?
                       <>
-                        <span className="text-sm md:text-lg tracking-widest font-bold text-blue-950 animate-pulse">Authenticating ...</span>
+                        <span className="text-sm md:text-lg tracking-widest font-bold text-blue-950 animate-pulse">LOADING ...</span>
                         {/* <BsArrowDownRightCircle className="h-5 w-5 md:h-7 md:w-7 text-blue-950"/> */}
                       </> :
                       status == 'unauthenticated' ?

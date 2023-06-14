@@ -30,7 +30,7 @@ export const fetchVouchersOffset = async (pass: number) => {
        Query.orderAsc("sessionId"),
        Query.orderAsc("groupId"),
        Query.limit(100),
-       //Query.offset(pass*100)
+       //Query.offset(pass)
     ])
     return res;
 }
@@ -41,7 +41,7 @@ export const fetchVoucherOffsetById = async (groupId: string, pass: number) => {
        Query.equal("groupId", groupId),
        Query.orderDesc("sessionId"),
        Query.limit(100),
-       //Query.offset(pass*100)
+       //Query.offset(pass)
     ])
     return res;
 }
@@ -124,6 +124,30 @@ export const fetchNominees = async () => {
 export const fetchNominee = async (serial: string) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, [
         Query.equal("serial", serial),
+    ])
+    return res;
+}
+
+export const fetchNomineeOffset = async (pass: number) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!,
+    [
+       Query.orderDesc("sessionId"),
+       Query.orderAsc("groupId"),
+       //Query.orderAsc("positionId"),
+       Query.limit(100),
+       //Query.offset(pass)
+    ])
+    return res;
+}
+
+export const fetchNomineeOffsetById = async (groupId: string, pass: number) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!,
+    [
+       Query.equal("groupId", groupId),
+       //Query.orderDesc("sessionId"),
+       //Query.orderAsc("positionId"),
+       Query.limit(100),
+       //Query.offset(pass)
     ])
     return res;
 }

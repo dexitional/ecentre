@@ -1,7 +1,7 @@
 
 import { storage } from "@/appwrite";
 import { getContacts } from "@/utils/getContacts";
-import { fetchActiveSession, fetchNominee, postNominee, updateNominee } from "@/utils/serverApi";
+import { fetchActiveSession, fetchCgpa, fetchNominee, postNominee, updateNominee } from "@/utils/serverApi";
 import uploadImage from "@/utils/uploadImage";
 import { ID, InputFile } from "node-appwrite";
 
@@ -23,51 +23,35 @@ export async function POST(request: Request) {
     // Checks & Validations [ Guarantors - assigned, Applicants & Guarantors registered ]
 
     // Fetch CGPA
+    const cgpa = await fetchCgpa(body?.aspirant_regno)
+    if(cgpa && ((cgpa.toString().toLowerCase() == 'pass') || (parseFloat(cgpa) >= 2.5))){ 
+       
+        // Fetch Helper Data
+        const session = await fetchActiveSession();
+        const applicant = await fetchNominee(body.serial);
+        
 
-    // Fetch Helper Data
-    const session = await fetchActiveSession();
-    const applicant = await fetchNominee(body.serial);
-    
-    // Upload Files
-    // let photo,cv;
-    // if(body.photo){
-    //   const file = await InputFile.fromBlob(body.photo, body.photo.name)
-    //   console.log(file)
-    //   const fileUploaded = await uploadImage(file)
-    //   //const fileUploaded = await storage.createFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, ID.unique, InputFile.fromBlob(body.photo, body.photo.name));
-    //   console.log(fileUploaded)
-    //   console.log("PHOTO: ", fileUploaded)
-    //     if(fileUploaded) photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-    // }
-
-    // if(body?.cv){
-    //     const fileUploaded = await uploadImage(InputFile.fromBlob(body?.cv, `${body.serial}.pdf`))
-    //     console.log("CV: ", fileUploaded)
-    //     if(fileUploaded) cv = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-    // }
-
-    // Condition Data & Insert
-    const data = {
-      ...body,
-      sessionId: session?.documents[0].$id,
-      ...(body.consent && { consent: JSON.parse(body.consent)}),
-      ...(body.form_submit && { form_submit: JSON.parse(body.form_submit)}),
-        // ...(photo && { photo: JSON.stringify(photo)}),
-        //     ...(cv && { cv: JSON.stringify(cv)})
-    }
-    console.log(data)
-
-    let resp
-    if(applicant.total > 0){
-      resp = await updateNominee(applicant?.documents[0]?.$id, data);
-    } else {
-      resp = await postNominee(data);
+        // Condition Data & Insert
+        const data = {
+          ...body,
+          sessionId: session?.documents[0].$id,
+          ...(body.consent && { consent: JSON.parse(body.consent)}),
+          ...(body.form_submit && { form_submit: JSON.parse(body.form_submit)}),
+          ...(cgpa && { cgpa }),
+        }
       
-      // Send SMS Reminders - [ Guarantors verification, Applicant Success Notice ]
-     
-    } 
-    const broadcast = await getContacts(data)
-    return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
+        let resp
+        if(applicant.total > 0){
+          resp = await updateNominee(applicant?.documents[0]?.$id, data);
+        } else {
+          resp = await postNominee(data);
+        } 
+        const broadcast = await getContacts(data)
+        return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
+
+    } else {
+        return new Response(JSON.stringify({ success: false, data: null, msg: 'CGPA dont meet requirement!' }), { status: 404 });
+    }
 
   } catch (error: any) {
     console.log(error)

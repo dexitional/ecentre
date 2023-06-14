@@ -7,37 +7,15 @@ import { getUserDetail } from '@/utils/getUserDetail';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { options } from '@/options';
-
-// async function getData(kw:string, pg:number) {
-//     const res = await fetch(kw 
-//         ? `http://localhost:3000/api/lecture?keyword=${encodeURI(kw)}&page=${pg}` 
-//         : `http://localhost:3000/api/lecture?page=${pg}`,{ cache: 'no-store' });
-//     if (!res.ok) throw new Error('Failed to fetch data');
-//     const resp = await res.json()
-//     return resp.data;
-// }
-
-
-const getHelper = async( sessionId: string, groupId: string) => {
-    const session_res:any = await fetchSession(sessionId)
-    const session =  session_res?.documents[0]
-    const group_res = await fetchGroup(groupId)
-    const group = group_res?.documents[0]
-    return { group, session }
-}
-
-const getGroup = async( groupId: string ) => {
-    const group_res = await fetchGroup(groupId)
-    const group = group_res?.documents[0]
-    return { ...group }
-}
-
-
+import { Queue } from 'async-await-queue';
+import { getHelper } from '@/utils/getHelper';
+import { getGroup } from '@/utils/getGroup';
+import BadgeIconSuccess from './BadgeIconSuccess';
+const myq = new Queue(1, 100);
 
 async function PageVoucher() {
-
+    
     const session:any = await getServerSession(options)
-    console.log("USER", session?.user)
    //console.log(data)
 //    const searchParams = useSearchParams()
 //    const keyword = searchParams.get('search') || ''
@@ -46,15 +24,23 @@ async function PageVoucher() {
 //    const data = await getData(keyword,+page);
     // const data:any = { documents: [] }
 
-    // let dt:any = [];
+    // let dm:any = [];
     // let pass = 0;
-    // while(true){
+    // let check: boolean = true;
+    // while(check){
     //     console.log(pass)
-    //     const sl = await fetchVouchersWithOffset(pass);
-    //     if(sl.total < 100) break;
-    //     dt.push(sl.documents);
-    //     pass++;
+        
+    //     const sl = await fetchVouchersOffset(pass);
+    //     await myq.wait(sl, -1);
+    //     console.log('sl: ', sl);
+    //     dm = [ ...dm, ...sl.documents ];
+    //     if(sl.total < 100) check=false;
+    //     pass = pass+1;
     // }
+    // console.log("COUNT: ",dm)
+
+    //  serial: 'hgdbbeyy',
+    //  pin: '3727',
 
     const userDetail:any = await getUserDetail(session?.user?.email);
     const group:any = await getGroup(userDetail?.groupId)
@@ -82,11 +68,11 @@ async function PageVoucher() {
                 <tr key={row.code} className="grid grid-cols-1 md:grid-cols-5 text-left ">
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">SERIAL</span>
-                        <span className="ml-3 md:m-0 font-bold text-xs tracking-wide">{row?.serial}</span>
+                        <span className="ml-3 md:m-0 font-bold text-sm tracking-wide">{row?.serial}</span>
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">PIN</span>
-                        <span className="ml-3 md:m-0">{row?.pin}</span>
+                        <span className="ml-3 md:m-0 font-bold">{row?.pin}</span>
                     </td>
                     
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
@@ -104,7 +90,11 @@ async function PageVoucher() {
                     </td>
                     <td className="px-6 py-3 border-b border-blue-900/10 flex md:justify-end">
                         <div className="md:px-2 w-fit flex items-center space-x-4">
-                            <Link href={`/vouchers/${row.$id}/view`}><BadgeIcon title="SELL" Icon={MdOutlineArticle}/></Link>
+                            { !row.sold
+                              ? <Link href={`/vouchers/${row.$id}/view`}><BadgeIcon title="SELL" Icon={MdOutlineArticle}/></Link>
+                              : <BadgeIconSuccess title="SOLD" Icon={MdOutlineArticle}/>
+                            }
+                            
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}
                             {/* <FiTrash className="w-3.5 h-3.5" /> */}
                         </div>

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import Notiflix from 'notiflix'
 import React,{ useState } from 'react'
 
-function page({ params }:{ params: { id: string }}) {
+function Page({ params }:{ params: { id: string }}) {
    const router = useRouter()
    const [ print, setPrint ] = useState<any>(null)
 
@@ -66,5 +66,4 @@ function page({ params }:{ params: { id: string }}) {
   )
 }
 
-export default page
-
+export default Page

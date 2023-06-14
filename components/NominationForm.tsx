@@ -12,6 +12,7 @@ import Notiflix from 'notiflix'
 import { useRouter } from 'next/navigation';
 import { objectToFormData } from '@/utils/objectToFormData';
 import { storage, ID } from '@/config/appwrite';
+import { uploadCv, uploadPicture } from '@/firabase';
 
 export type Inputs = {
   aspirant_regno: string;
@@ -92,27 +93,28 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
       if(!ok) return
       try {
         
-        // Upload to Storage
-        // let photo,cv;
-        // if(form?.photo){
-        //     //const fileUploaded = await uploadImage(form?.photo)
-        //     // @ts-ignore
-        //     const fileUploaded = await storage.createFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, ID.unique, form?.photo);
-        //     console.log(fileUploaded)
-        //     if(fileUploaded) photo = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-        // }
+        form.serial = form.serial || session?.user?.serial
+        form.groupId = form.groupId || session?.user?.groupId
 
-        // if(form?.cv){
-        //     const fileUploaded = await uploadImage(form?.cv)
-        //     console.log(fileUploaded)
-        //     if(fileUploaded) cv = { bucketId: fileUploaded.bucketId, fileId: fileUploaded.$id }
-        // }
+        // Upload to Storage
+        if(form?.photo){
+          form.photo = await uploadPicture(form?.photo, form?.serial)
+          console.log(form.photo)
+        }
+
+        if(form?.cv){
+          form.cv = await uploadCv(form?.cv, form?.serial)
+          console.log(form.cv)
+        }
+        //TODO: update photo and cv url on form
+        //TODO: work on pagination
+        //TODO: medical school check (sm/sms, sm/gem)
+        //TODO: 
 
         // Add Extra data
 
         //form.consent = form.consent == 'on' ? true : false; 
         //form.form_submit = form.form_submit || false; 
-        form.serial = form.serial || session?.user?.serial
         // const formData = {
         //     ...form,
         //     ...(photo && { photo: JSON.stringify(photo)}),

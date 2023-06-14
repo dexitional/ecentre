@@ -38,19 +38,20 @@ export const options: NextAuthOptions = {
           if(resp.total > 0){
              const user:any = resp.documents[0];
              return user
-          }
-          throw new Error("Invalid details")
-        },
+          }  throw new Error("Invalid details")
+        },   
       }),
     ],
 
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, profile, account }) {
             return { ...token, ...user };
         },
-        async session({ session, token, user }) {
+        async session({ session, token, user }: any) {
             // Send properties to the client, like an access_token from a provider.
-            session.user = token;
+            console.log("In Session: ", token, user, session)
+            session.user = { ...token, isAdmin: session?.user?.email };
+            console.log("NEW SESSION: ", session)
             return session;
         },
         async signIn({ account, profile }: any) {

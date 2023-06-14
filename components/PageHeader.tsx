@@ -24,15 +24,21 @@ export default function PageHeader({ title, addUrl }: Props) {
                 </div>
                 
                 <SearchBox />
+                { addUrl ? 
                 <Link href={addUrl} className="md:hidden">
                     <ActionButton title="" Icon={MdAdd} />
                 </Link>
+                : null 
+                }
             </div>
             <PageTitle title={title} />
         </div>
+        { addUrl ? 
         <Link href={addUrl} className="hidden md:flex">
             <ActionButton title="New" Icon={MdAdd} />
         </Link>
+        : null 
+        }
     </div>
   )
 }

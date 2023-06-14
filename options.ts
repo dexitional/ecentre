@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from 'next-auth/providers/google';
-import { fetchUserByEmail, fetchUsers, getVoucher } from "./utils/serverApi";
+import { fetchUserByEmail, fetchUsers, getVoucher, verifyAdmin } from "./utils/serverApi";
 export const options: NextAuthOptions = {
     session: {
       strategy: "jwt",
@@ -35,6 +35,26 @@ export const options: NextAuthOptions = {
           if(!pin) throw new Error("Pin field empty !")
           
           const resp = await getVoucher(serial,pin);
+          if(resp.total > 0){
+             const user:any = resp.documents[0];
+             return user
+          }  throw new Error("Invalid details")
+        },   
+      }),
+
+      CredentialsProvider({
+        id: "adminsignin",
+        name: "Administrator Signin",
+        credentials: {
+          username: { label: "STAFF NUMBER", type: "text"  },
+          password:    { label: "PASSWORD", type: "password" },
+        },
+        async authorize(credentials) {
+          const { username, password }: any = credentials;
+          if(!username) throw new Error("Username field empty !")
+          if(!password) throw new Error("Password field empty !")
+          
+          const resp = await verifyAdmin(username,password);
           if(resp.total > 0){
              const user:any = resp.documents[0];
              return user

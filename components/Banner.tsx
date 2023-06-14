@@ -4,6 +4,7 @@ import { BsArrowDownRightCircle } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
 import { useSearchParams, useRouter } from 'next/navigation';
 import { signIn,useSession } from "next-auth/react"
+import { BiLock } from 'react-icons/bi';
 
 type Props = {
   serial: string;
@@ -34,9 +35,16 @@ function Banner() {
   const adminSignin = async (e: any) => {
       e.preventDefault()
       try {
-        const resp = await signIn('google', { redirect: false, callbackUrl: `/vouchers` })
-        console.log(resp)
-        router.push('/vouchers')
+        const tag = window.prompt(" Enter Staff Number !");
+        if(tag && tag != ''){
+          const pass = window.prompt("Enter Password !");
+           if(tag && pass){
+            const resp = await signIn('adminsignin', { callbackUrl: `/vouchers`, username: tag, password: pass })
+            console.log(resp)
+            router.push('/vouchers')
+          }
+          return
+        } 
       } catch(e){
         console.log(e)
       }
@@ -81,8 +89,8 @@ function Banner() {
                     
                 </button>
                 <button type="button" onClick={adminSignin} className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-yellow-100 border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
-                    <FcGoogle className="h-8 w-8 text-blue-950"/>
-                    <span className="text-xs md:text-base tracking-widest font-bold text-blue-950">ADMINISTRATOR SIGN-IN</span>
+                    <BiLock className="h-8 w-8 text-blue-950"/>
+                    <span className="text-xs md:text-base tracking-widest font-bold text-blue-950">ADMINISTRATOR LOGIN</span>
                 </button>
             </form>
         </div>

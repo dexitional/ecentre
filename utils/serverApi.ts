@@ -114,6 +114,16 @@ export const fetchUserByEmail = async (email: string) => {
     return res;
 }
 
+export const verifyAdmin = async (username: string, password: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_USER!, [
+      Query.equal("tag", username),
+      Query.equal("password", password),
+    ])
+    return res;
+}
+
+
+
 
 // Nominees Queries
 export const fetchNominees = async () => {

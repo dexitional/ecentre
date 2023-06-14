@@ -43,7 +43,7 @@ async function PageVoucher() {
     //  pin: '3727',
 
     const userDetail:any = await getUserDetail(session?.user?.email);
-    const group:any = await getGroup(userDetail?.groupId)
+    const group:any = userDetail?.groupId ? await getGroup(userDetail?.groupId) : {}
 
     const dt = userDetail?.groupId ? await fetchVoucherOffsetById(userDetail?.groupId,0) : await fetchVouchersOffset(0);
     const data:any = await Promise.all(dt?.documents?.map(async (row: any) => {

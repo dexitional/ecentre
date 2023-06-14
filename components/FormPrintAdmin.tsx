@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Image from 'next/image'
-import Logo from '../../../../../public/logo.png'
+import Logo from '@/public/logo.png'
 import PrintPill from "@/components/PrintPill"
 import { fetchGroup, fetchNominee, fetchPosition, fetchVoucher } from "@/utils/serverApi"
 import { fetchRecord } from "@/utils/fetchRecord"
@@ -12,23 +12,23 @@ const getApplicant = async (serial: string) => {
     const applicant = await fetchNominee(serial);
     const voucher = await fetchVoucher(serial);
     const row:any = applicant?.documents[0]
-    const { groupId }: any = voucher?.documents[0];
-    const group = await fetchGroup(groupId);
-    const { title : group_name }: any = group?.documents[0];
-    const position = await fetchPosition(row.positionId);
-    const { title }: any = position?.documents[0];
-    const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, form_submit, guarantor1_regno, guarantor2_regno }: any = row
+    const vouch: any = voucher?.documents[0];
+    const group = await fetchGroup(vouch?.groupId);
+    const gres: any = group?.documents[0];
+    const position = await fetchPosition(row?.positionId);
+    const pos: any = position?.documents[0];
+    const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, form_submit, guarantor1_regno, guarantor2_regno }: any = row!
     const rowData: any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
     const mapData: any = {};
     for(const r of Object.keys(rowData)){
       const newData = await fetchRecord(rowData[r])
       mapData[r] = rowData[r] && newData.success ? newData?.data[0]?.user : null;
     }
-    return { applicant, has_mate,g1_verified, g2_verified, form_submit, title, group_name, data: mapData }
+    return { applicant, has_mate,g1_verified, g2_verified, form_submit, title: pos?.title, group_name: gres?.title, data: mapData }
 }
 
-export default async function Page({ params}:{ params: { serial: string }}) {
-  const data = await getApplicant(params?.serial);
+export default async function FormPrint(serial: string) {
+  const data = await getApplicant(serial);
   const { applicant, has_mate,g1_verified, g2_verified,form_submit, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
   
   return (

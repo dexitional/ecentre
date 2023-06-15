@@ -77,7 +77,7 @@ async function PageVoucher() {
                     
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-blue-900/5 font-bold">GROUP</span>
-                        <span className="ml-3 md:m-0">{ row?.group?.title }</span>
+                        <span className="ml-3 md:m-0">{ row?.group?.title }<br/>{row?.buyer_phone ? <span className="text-xs font-bold">( BUYER: { row?.buyer_phone } )</span> : null }</span>
                         {/* <span className="ml-3 md:m-0">{group?.name?.toUpperCase()}</span> */}
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
@@ -92,7 +92,7 @@ async function PageVoucher() {
                         <div className="md:px-2 w-fit flex items-center space-x-4">
                             { !row.sold
                               ? <Link href={`/vouchers/${row.$id}/view`}><BadgeIcon title="SELL" Icon={MdOutlineArticle}/></Link>
-                              : <BadgeIconSuccess title="SOLD" Icon={MdOutlineArticle}/>
+                              : <Link href={`/vouchers/${row.$id}/view`}><BadgeIconSuccess title="SOLD" Icon={MdOutlineArticle}/></Link>
                             }
                             
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}

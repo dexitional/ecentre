@@ -48,7 +48,7 @@ function Page({ params }:{ params: { id: string }}) {
                 </div>
                 <div className="px-4 flex items-center justify-between">
                     <button className="print:hidden text-sm italic" onClick={()=> router.push('/vouchers')}>{`<< `}GO BACK</button>
-                    <button className="print:hidden text-sm italic" onClick={()=> router.push('/vouchers')}>PRINT VOUCHER</button>
+                    <button className="print:hidden text-sm italic" onClick={()=> window.print() }>PRINT VOUCHER</button>
                 </div>
                 
                 

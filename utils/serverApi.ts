@@ -220,10 +220,10 @@ export const fetchActiveSession = async () => {
 
 export const fetchCgpa = async (tag: string) => {
     try {
-    //   const resp = await fetch(`${process.env.NEXT_PUBLIC_IMAGE_URL}/api/sso/identity?search=${encodeURIComponent(tag)}`)
-    //   const response = await resp.json()
-    //   return response;
-      return '3.5'
+       const resp = await fetch(`${process.env.NEXT_PUBLIC_IMAGE_URL}/zeus/getcgpa?tag=${encodeURIComponent(tag)}`)
+       const response = await resp.json()
+       return response;
+      //return '3.5'
     } catch (error) {
       console.log(error)
       return null

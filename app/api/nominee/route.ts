@@ -14,8 +14,8 @@ export async function POST(request: Request) {
     console.log(body)
     //const body = await request.json();
     
-    delete body.photo
-    delete body.cv
+    //delete body.photo
+    //delete body.cv
     delete body.$id
     delete body.g1_verified
     delete body.g2_verified
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
 
     // Fetch CGPA
     const cgpa = await fetchCgpa(body?.aspirant_regno)
+    console.log("CGPA:", cgpa)
     if(cgpa && ((cgpa.toString().toLowerCase() == 'pass') || (parseFloat(cgpa) >= 2.5))){ 
        
         // Fetch Helper Data
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
           sessionId: session?.documents[0].$id,
           ...(body.consent && { consent: JSON.parse(body.consent)}),
           ...(body.form_submit && { form_submit: JSON.parse(body.form_submit)}),
-          ...(cgpa && { cgpa }),
+          ...({ cgpa: cgpa.toString() }),
         }
       
         let resp

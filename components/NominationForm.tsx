@@ -11,7 +11,6 @@ import uploadImage from '@/utils/uploadImage';
 import Notiflix from 'notiflix'
 import { useRouter } from 'next/navigation';
 import { objectToFormData } from '@/utils/objectToFormData';
-import { storage, ID } from '@/config/appwrite';
 import { uploadCv, uploadPicture } from '@/firabase';
 
 export type Inputs = {
@@ -35,6 +34,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   const formRef = useRef<any>(null)
   const [ picture, setPicture ] = useState('')
   const [ cv, setCV ] = useState('')
+  const [ photoUrl, setPhotoUrl ] = useState('')
+  const [ cvUrl, setCvUrl ] = useState('')
   const router = useRouter()
   const { data:session }: any = useSession()
   const newData = applicant?.documents[0];
@@ -61,14 +62,28 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
  
   // Activate Group or Category
   const groupId = session?.user?.groupId;
+  const serial = session?.user?.serial;
+
   let portfolios = positions.documents?.filter((row: any) => row.groupId.includes(groupId))
   portfolios = portfolios?.map((row:any) => ({ label: row.title, value: row.$id }))
   
 
 
-  const onChange = (e:any) => {
-     if(e.target.name == 'photo') setPicture(URL.createObjectURL(e.target.files[0]));
-     if(e.target.name == 'cv') setCV(URL.createObjectURL(e.target.files[0]));
+  const onChange = async (e:any) => {
+     if(e.target.name == 'photo'){
+        setPicture(URL.createObjectURL(e.target.files[0]));
+        const photo = await uploadPicture(e.target.files[0], serial)
+        setPhotoUrl(photo)
+        console.log(photoUrl)
+     }
+
+     if(e.target.name == 'cv'){
+        setCV(URL.createObjectURL(e.target.files[0]));
+        const cv = await uploadCv(e.target.files[0], serial)
+        setCvUrl(cv)
+        console.log(cvUrl)
+     }
+
      if(['photo','cv'].includes(e.target.name)) 
        setForm({ ...form, [e.target.name] : e.target.files[0] })
      else if(e.target.name == 'consent') 
@@ -102,16 +117,16 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         if(!form.guarantor2_regno) throw new Error("Please Second Guarantor!")
 
         // Upload to Storage
-        let photo,cv
-        if(form?.photo){
-          photo = await uploadPicture(form?.photo, form?.serial)
-          console.log(photo)
-        }
+        // var photo,cv
+        // if(form?.photo){
+        //   photo = await uploadPicture(form?.photo, form?.serial)
+        //   console.log(photo)
+        // }
 
-        if(form?.cv){
-          cv = await uploadCv(form?.cv, form?.serial)
-          console.log(cv)
-        }
+        // if(form?.cv){
+        //   cv = await uploadCv(form?.cv, form?.serial)
+        //   console.log(cv)
+        // }
 
         // TODO: Work on pagination
         // TODO: Medical school check (sm/sms, sm/gem)
@@ -122,9 +137,11 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
           ...form,
           ...(session?.user?.serial && { serial: session?.user?.serial}),
           ...(session?.user?.groupId && { groupId: session?.user?.groupId}),
-          ...(photo && { photo }),
-          ...(cv && { cv })
+          ...(photoUrl && { photo: photoUrl }),
+          ...(cvUrl && { cv: cvUrl })
         }
+
+        console.log("NEWFORM: ", newForm)
 
         const formData = objectToFormData(newForm);
         console.log(formData)

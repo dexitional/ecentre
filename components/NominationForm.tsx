@@ -119,7 +119,9 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
         // Add Extra data
         const newForm: any = { 
-          ...form ,
+          ...form,
+          ...(session?.user?.serial && { serial: session?.user?.serial}),
+          ...(session?.user?.groupId && { groupId: session?.user?.groupId}),
           ...(photo && { photo }),
           ...(cv && { cv })
         }

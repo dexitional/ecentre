@@ -5,17 +5,20 @@ import PrintPill from "@/components/PrintPill"
 import { fetchGroup, fetchNominee, fetchPosition, fetchVoucher } from "@/utils/serverApi"
 import { fetchRecord } from "@/utils/fetchRecord"
 import Print from "@/components/Print"
+import { redirect } from "next/navigation"
 //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
 const IMAGE_URL = `https://ehub.ucc.edu.gh`;  
 
 const getApplicant = async (serial: string) => {
     const applicant = await fetchNominee(serial);
+    if(applicant.total <= 0) return null;
+
     const voucher = await fetchVoucher(serial);
     const row:any = applicant?.documents[0]
     const { groupId }: any = voucher?.documents[0];
     const group = await fetchGroup(groupId);
     const { title : group_name }: any = group?.documents[0];
-    const position = await fetchPosition(row.positionId);
+    const position = await fetchPosition(row?.positionId);
     const { title }: any = position?.documents[0];
     const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, form_submit, guarantor1_regno, guarantor2_regno }: any = row
     const rowData: any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
@@ -28,7 +31,10 @@ const getApplicant = async (serial: string) => {
 }
 
 export default async function Page({ params}:{ params: { serial: string }}) {
+  
   const data = await getApplicant(params?.serial);
+  if(!data) redirect(`/user/${params.serial}/application`)
+
   const { applicant, has_mate,g1_verified, g2_verified,form_submit, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
   
   return (

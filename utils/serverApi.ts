@@ -360,3 +360,17 @@ export const fetchTest = async () => {
 }
 
 
+/*
+ 
+ISSUES
+ -- CGPA not working
+ -- Lock dropdown Select ( Disabled or set Default value ) - Position, Running Mate
+ -- Serial  ( Undefined Check before Insert or Update )
+ -- GroupId ( Undefined Check before Insert or Update )
+ -- Check Guarantors whether not verfied -- and send again by trigger
+
+
+ czsjvgwk  || 4902
+
+ 
+*/

@@ -22,8 +22,11 @@ export default async function Page({ params}:{ params: { serial: string }}) {
           <h2 className="text-lg md:text-xl font-semibold text-[#153B50]">INSTRUCTIONS</h2>
           <div className="text-sm md:text-inherit space-y-3">
             <p>Please provide the requested information. Falsification of any information leads to automatic disqualification.</p>
+            <p><b>**</b> <b>All Guarantors</b> must be <b>registered students</b> for current academic session!</p>
+            <p><b>**</b> <b>Guarantors for Halls or JCRC Portfolios</b> must be Hall affiliates of the <b>Aspirant</b>!</p>
+            <p><b>**</b> Minimum <b>CGPA</b> requirement is <b>"2.5"</b> and <b>"Pass"</b> for Medical students only!</p>
             {/* Set Dynamic active Nomination Deadline */}
-            <p className="italic text-sm md:text-inherit font-semibold text-[#153B50]">Deadline for submission of online Nomination is { moment(sess_res?.end_date).format('LLL')}.</p>
+            <p className="italic text-sm md:text-inherit font-semibold text-[#153B50]">Deadline for submission of online Nomination is extended to { moment(sess_res?.end_date).format('LLL')}.</p>
           </div>
         </div>
         <div className="">

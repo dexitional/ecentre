@@ -10,6 +10,7 @@ type Props = {
     name?: string;
     onChange?: any;
     value?: string;
+    required?: any;
 }
 
 function Select(props: Props) {
@@ -19,7 +20,7 @@ function Select(props: Props) {
     <div>
       <label className="w-full font-serif text-base mxd:text-lg tracking-wider">{props.label}</label>
       <select {...props} className="w-full rounded">
-        <option>-- {props.placeholder} --</option>
+        <option disabled selected>-- {props.placeholder} --</option>
         { props.optionData?.map( (row:any) => <option key={row.label} value={row?.value} selected={props?.value == row?.value}>{row?.label?.toUpperCase()}</option> ) }
       </select>
     </div>

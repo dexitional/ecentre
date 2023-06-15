@@ -36,6 +36,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   const [ picture, setPicture ] = useState('')
   const [ cv, setCV ] = useState('')
   const router = useRouter()
+  const { data:session }: any = useSession()
   const newData = applicant?.documents[0];
   const [ form, setForm ] = useState<Inputs | any>({
     photo: newData?.photo || '',
@@ -50,11 +51,11 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
     teaser: newData?.teaser || '',
     consent: newData?.consent || false,
     form_submit: newData?.form_submit || false,
-    serial: newData?.serial || '',
+    serial: newData?.serial || session?.user?.serial,
+    groupId: newData?.groupId || session?.user?.groupId,
     aspirant_regno: newData?.aspirant_regno || '',
   })
 
-  const { data:session }: any = useSession()
   //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env
   const IMAGE_URL = `https://ehub.ucc.edu.gh`
  
@@ -93,35 +94,37 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
       if(!ok) return
       try {
         
-        form.serial = form.serial || session?.user?.serial
-        form.groupId = form.groupId || session?.user?.groupId
+        // Validations
+        if(!form.aspirant_regno) throw new Error("Please Aspirant Registration Number!")
+        if(!form.positionId) throw new Error("Please Choose Position!")
+        if(!form.teaser) throw new Error("Please Provide Teaser!")
+        if(!form.guarantor1_regno) throw new Error("Please First Guarantor!")
+        if(!form.guarantor2_regno) throw new Error("Please Second Guarantor!")
 
         // Upload to Storage
+        let photo,cv
         if(form?.photo){
-          form.photo = await uploadPicture(form?.photo, form?.serial)
-          console.log(form.photo)
+          photo = await uploadPicture(form?.photo, form?.serial)
+          console.log(photo)
         }
 
         if(form?.cv){
-          form.cv = await uploadCv(form?.cv, form?.serial)
-          console.log(form.cv)
+          cv = await uploadCv(form?.cv, form?.serial)
+          console.log(cv)
         }
-        //TODO: update photo and cv url on form
-        //TODO: work on pagination
-        //TODO: medical school check (sm/sms, sm/gem)
-        //TODO: 
+
+        // TODO: Work on pagination
+        // TODO: Medical school check (sm/sms, sm/gem)
+        // TODO: 
 
         // Add Extra data
+        const newForm: any = { 
+          ...form ,
+          ...(photo && { photo }),
+          ...(cv && { cv })
+        }
 
-        //form.consent = form.consent == 'on' ? true : false; 
-        //form.form_submit = form.form_submit || false; 
-        // const formData = {
-        //     ...form,
-        //     ...(photo && { photo: JSON.stringify(photo)}),
-        //     ...(cv && { cv: JSON.stringify(cv)})
-        // }
-        
-        const formData = objectToFormData(form);
+        const formData = objectToFormData(newForm);
         console.log(formData)
         
         // Save to Database
@@ -139,12 +142,12 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
            }
            Notiflix.Notify.success('APPLICATION SUBMITTED !');
         } else {
-           Notiflix.Notify.failure(response.msg.toUpperCase());
+           Notiflix.Notify.failure(response?.msg?.toUpperCase());
         }
 
       } catch(e:any){
           console.log(e)
-          Notiflix.Notify.failure(e.message);
+          Notiflix.Notify.failure(e.message?.toUpperCase());
       }
   }
 
@@ -168,7 +171,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
             <div className="space-y-4">
                 <Legend label="ASPIRANT" />
                 <Input name="aspirant_regno" defaultValue={form.aspirant_regno} onChange={onChange} required label="Registration Number of Aspirant" placeholder="Registration Number of Aspirant" />
-                <Select name="positionId" defaultValue={form.positionId} value={form.positionId} onChange={onChange} label="Position Being Applied" placeholder="Choose Position" optionData={portfolios}/>
+                <Select name="positionId" defaultValue={form.positionId} value={form.positionId} onChange={onChange} required label="Position Being Applied" placeholder="Choose Position" optionData={portfolios}/>
                 <Select name="has_mate" defaultValue={form.has_mate} onChange={onChange} label="Add Running Mate ?" placeholder="Add Running Mate" optionData={[{ label:'YES', value:'1' },{ label:'NO', value:'0' }]} />
                 
                 {/* <Input register={register} label="Registration Number of Aspirant" name="aspirant_regno" placeholder="Registration Number of Aspirant" /> */}

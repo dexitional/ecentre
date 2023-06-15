@@ -10,8 +10,9 @@ function TopNav() {
            <div className="hidden md:flex flex-col md:flex-row md:space-x-12">
                <div className="text-xs font-medium">Transparency. Fairness. Integrity</div>
                <div className="flex items-center flex-col md:flex-row space-x-16">
-                  <TopNavPill title="ec@ucc.edu.gh" Icon={MdMail} />
-                  <TopNavPill title="+233 (0) 20 355 6742" Icon={MdOutlineWhatsapp} />
+                  {/* <TopNavPill title="ec@ucc.edu.gh" Icon={MdMail} /> */}
+                  <TopNavPill title="+233 (0) 24 408 7163" Icon={MdOutlineWhatsapp} />
+                  <TopNavPill title="+233 (0) 55 910 0608" Icon={MdOutlineWhatsapp} />
                </div>
            </div>
            <div className="md:pr-8">

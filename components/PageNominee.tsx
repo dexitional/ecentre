@@ -80,7 +80,7 @@ async function PageNominee() {
                     </td>
                     <td className="px-6 py-3 border-b border-blue-900/10 flex md:justify-end">
                         <div className="md:px-2 w-fit flex items-center space-x-4">
-                            <BadgeIcon title="FORM" Icon={MdOutlineArticle}/>
+                            {/* <BadgeIcon title="FORM" Icon={MdOutlineArticle}/> */}
                             <Link href={`/nominees/${row?.serial}/view`}><BadgeIcon title="FORM" Icon={MdOutlineArticle}/></Link>
                             
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}

@@ -17,19 +17,19 @@ const getApplicant = async (serial: string) => {
     const gres: any = group?.documents[0];
     const position = await fetchPosition(row?.positionId);
     const pos: any = position?.documents[0];
-    const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, form_submit, guarantor1_regno, guarantor2_regno }: any = row!
+    const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, cgpa, form_submit, guarantor1_regno, guarantor2_regno }: any = row!
     const rowData: any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
     const mapData: any = {};
     for(const r of Object.keys(rowData)){
       const newData = await fetchRecord(rowData[r])
       mapData[r] = rowData[r] && newData.success ? newData?.data[0]?.user : null;
     }
-    return { applicant, has_mate,g1_verified, g2_verified, form_submit, title: pos?.title, group_name: gres?.title, data: mapData }
+    return { applicant, has_mate,g1_verified, g2_verified, cgpa, form_submit, title: pos?.title, group_name: gres?.title, data: mapData }
 }
 
-export default async function FormPrint(serial: string) {
+export default async function FormPrintAdmin({ serial }: { serial:string }) {
   const data = await getApplicant(serial);
-  const { applicant, has_mate,g1_verified, g2_verified,form_submit, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
+  const { applicant, has_mate,g1_verified, g2_verified, cgpa, form_submit, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
   
   return (
     <main className="flex-1 space-y-3 md:space-y-8">
@@ -68,7 +68,7 @@ export default async function FormPrint(serial: string) {
                     <PrintPill label="Program of Study" content={aspirant?.descriptor} />
                     <PrintPill label="Registration Number" content={aspirant?.regno} />
                     <PrintPill label="Phone Number" content={aspirant?.cellphone} />
-                    <PrintPill label="ASPIRANT CGPA" content={aspirant?.cgpa} />
+                    <PrintPill label="ASPIRANT CGPA" content={cgpa?.toString()} />
                  </div>
 
                  {/* Guarantor #1 */}

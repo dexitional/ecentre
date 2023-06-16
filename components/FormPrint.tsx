@@ -12,22 +12,22 @@ const getApplicant = async (serial: string) => {
     const applicant = await fetchNominee(serial);
     const voucher = await fetchVoucher(serial);
     const row:any = applicant?.documents[0]
-    const { groupId }: any = voucher?.documents[0];
-    const group = await fetchGroup(groupId);
-    const { title : group_name }: any = group?.documents[0];
-    const position = await fetchPosition(row.positionId);
-    const { title }: any = position?.documents[0];
-    const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, form_submit, guarantor1_regno, guarantor2_regno }: any = row
-    const rowData: any = { aspirant: aspirant_regno, mate: mate_regno, guarantor1: guarantor1_regno, guarantor2: guarantor2_regno }
+    const vouch_res: any = voucher?.documents[0];
+    const group:any = await fetchGroup(vouch_res?.groupId);
+    const group_res: any = group?.documents[0];
+    const position = await fetchPosition(row?.positionId);
+    const post_res: any = position?.documents[0];
+    //const { aspirant_regno, has_mate, mate_regno, g1_verified, g2_verified, form_submit, guarantor1_regno, guarantor2_regno }: any = row
+    const rowData: any = { aspirant: row?.aspirant_regno, mate: row?.mate_regno, guarantor1: row?.guarantor1_regno, guarantor2: row?.guarantor2_regno }
     const mapData: any = {};
     for(const r of Object.keys(rowData)){
       const newData = await fetchRecord(rowData[r])
       mapData[r] = rowData[r] && newData.success ? newData?.data[0]?.user : null;
     }
-    return { applicant, has_mate,g1_verified, g2_verified, form_submit, title, group_name, data: mapData }
+    return { applicant, has_mate: row?.has_mate,g1_verified:row?.guarantor1_regno, g2_verified:row?.guarantor2_regno, form_submit: row?.form_submit, title: post_res?.title, group_name:group_res?.title, data: mapData }
 }
 
-export default async function FormPrint(serial: string) {
+export default async function FormPrint({ serial }: { serial:string }) {
   const data = await getApplicant(serial);
   const { applicant, has_mate,g1_verified, g2_verified,form_submit, title, group_name, data: { aspirant, mate, guarantor1, guarantor2 }} :any = data
   

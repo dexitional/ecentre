@@ -15,7 +15,7 @@ export default function Home() {
        {/* @ts-ignore */}
        <UserBanner /> <AdminBanner />
        {/* @ts-ignore */}
-       <Statistics />
+       <Statistics />     
        <BreakNews />
        <QuickGuide />
        <ElectionSection />

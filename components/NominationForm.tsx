@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { CgClose, CgCloseO } from 'react-icons/cg';
 import PhotoCard from './PhotoCard';
 import PdfCard from './PdfCard';
+import { BiLoaderCircle } from 'react-icons/bi';
 
 export type Inputs = {
   aspirant_regno: string;
@@ -41,6 +42,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   const newData = applicant?.documents[0];
   const [ picture, setPicture ] = useState(newData?.photo)
   const [ cv, setCV ] = useState(newData?.photo)
+  const [ loading, setLoading ] = useState(false)
   const [ photoUrl, setPhotoUrl ] = useState('')
   const [ cvUrl, setCvUrl ] = useState('')
   const [ form, setForm ] = useState<Inputs | any>({
@@ -112,7 +114,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
       const ok = window.confirm("DO YOU WANT COMMIT CHANGES AND PROCEED ?")
       if(!ok) return
       try {
-        
+        setLoading(true)
         // Validations
         if(!form.aspirant_regno) throw new Error("Please Aspirant Registration Number!")
         if(!form.positionId) throw new Error("Please Choose Position!")
@@ -133,9 +135,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         // }
 
         // TODO: Work on pagination
-        // TODO: Medical school check (sm/sms, sm/gem)
-        // TODO: 
-
+        
         // Add Extra data
         const newForm: any = { 
           ...form,
@@ -144,11 +144,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
           ...(photoUrl && { photo: photoUrl }),
           ...(cvUrl && { cv: cvUrl })
         }
-
-        console.log("NEWFORM: ", newForm)
-
+        
         const formData = objectToFormData(newForm);
-        console.log(formData)
         
         // Save to Database
         const resp = await fetch('/api/nominee',{
@@ -163,13 +160,16 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
            } else {
              router.push('/')
            }
+           setLoading(false)
            Notiflix.Notify.success('APPLICATION SUBMITTED !');
         } else {
+          setLoading(false)
            Notiflix.Notify.failure(response?.msg?.toUpperCase());
         }
 
       } catch(e:any){
           console.log(e)
+          setLoading(false)
           Notiflix.Notify.failure(e.message?.toUpperCase());
       }
   }
@@ -237,10 +237,16 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 </label>
                 <hr/>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-                <button type="submit" disabled={!form?.consent} onClick={saveForm} className="py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50] disabled:bg-[#153B50]/20">SAVE & EXIT</button>
-                <button type="submit" disabled={!form?.consent} onClick={submitForm} className="py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700 disabled:bg-green-700/20 disabled:ring-green-700/20">SUBMIT NOMINATION</button>
-            </div>
+            <div className="relative p-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+                { loading ?
+                  <div className="z-20 absolute w-full h-full flex items-center space-x-4 justify-center rounded-lg bg-white bg-opacity-80 backdrop-blur-sm">
+                      <BiLoaderCircle className="text-[#153B50] rounded-full h-8 w-8 animate-spin"/>
+                      <span className="text-[#153B50] text-lg tracking-widest font-poppins font-bold animate-pulse">PROCESSING ...</span>
+                  </div> : null
+                }
+                  <button type="submit" disabled={!form?.consent} onClick={saveForm} className="z-10 py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50] disabled:bg-[#153B50]/20">SAVE & EXIT</button>
+                  <button type="submit" disabled={!form?.consent} onClick={submitForm} className="z-10 py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700 disabled:bg-green-700/20 disabled:ring-green-700/20">SUBMIT NOMINATION</button>
+                </div>
         </form>
         <section className="col-span-1 md:space-y-14 order-1 md:order-2">
             <div className="p-4 py-6 pb-10 flex-1 space-y-4 bg-gray-50 shadow-md shadow-gray-600/20 rounded-lg">

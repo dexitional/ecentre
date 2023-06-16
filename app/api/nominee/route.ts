@@ -45,7 +45,8 @@ export async function POST(request: Request) {
         } else {
           resp = await postNominee(data);
         } 
-        const broadcast = await getContacts(data)
+
+        if(data.form_submit) await getContacts(data); // Send Acknowledgement only after final submission
         return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
 
     // } else {

@@ -44,7 +44,8 @@ function PageVoucherForm({ data }: Props) {
         
         const response = await resp.json()
         if(response.success){
-           router.push('/vouchers')
+           router.replace('/vouchers')
+          //  window.location.href = '/vouchers'
            Notiflix.Notify.success('NEW VOUCHERS ADDED !');
         } else {
            Notiflix.Notify.failure(response.msg.toUpperCase());

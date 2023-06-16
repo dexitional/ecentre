@@ -15,6 +15,7 @@ function Banner() {
 
   const { data:session, status } = useSession()
   const [ form, setForm ] = useState<Props>({ serial:'', pin: '' })
+  const [ isLoading, setIsLoading ] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
@@ -35,17 +36,25 @@ function Banner() {
   const adminSignin = async (e: any) => {
       e.preventDefault()
       try {
-        const tag = window.prompt(" Enter Staff Number !");
-        if(tag && tag != ''){
-          const pass = window.prompt("Enter Password !");
-           if(tag && pass){
-            const resp = await signIn('adminsignin', { callbackUrl: `/vouchers`, username: tag, password: pass })
-            console.log(resp)
-            router.push('/vouchers')
-          }
-          return
-        } 
+          const tag = window.prompt(" Enter Staff Number !");
+          if(tag && tag != ''){
+            const pass = window.prompt("Enter Password !");
+            if(tag && pass){
+              setIsLoading(true)
+              const resp:any = await signIn('adminsignin', { redirect: false, callbackUrl: `/vouchers`, username: tag, password: pass })
+              console.log(resp)
+              if(resp?.url){
+                router.push(resp?.url)
+                setIsLoading(false)
+              } else {
+                setIsLoading(false)
+              }
+              console.log(resp)
+            } return
+          } 
+       
       } catch(e){
+        setIsLoading(false)
         console.log(e)
       }
   }
@@ -90,7 +99,10 @@ function Banner() {
                 </button>
                 <button type="button" onClick={adminSignin} className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-yellow-100 border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
                     <BiLock className="h-8 w-8 text-blue-950"/>
-                    <span className="text-xs md:text-base tracking-widest font-bold text-blue-950">ADMINISTRATOR LOGIN</span>
+                    { isLoading 
+                      ? <span className="text-xs md:text-base tracking-widest font-bold text-blue-950 animate-pulse">AUTHENTICATING ...</span>
+                      : <span className="text-xs md:text-base tracking-widest font-bold text-blue-950">ADMINISTRATOR LOGIN</span>
+                    }
                 </button>
             </form>
         </div>

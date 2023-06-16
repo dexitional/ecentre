@@ -12,6 +12,10 @@ import Notiflix from 'notiflix'
 import { useRouter } from 'next/navigation';
 import { objectToFormData } from '@/utils/objectToFormData';
 import { uploadCv, uploadPicture } from '@/firabase';
+import Image from 'next/image';
+import { CgClose, CgCloseO } from 'react-icons/cg';
+import PhotoCard from './PhotoCard';
+import PdfCard from './PdfCard';
 
 export type Inputs = {
   aspirant_regno: string;
@@ -32,13 +36,13 @@ export type Inputs = {
 function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
   const formRef = useRef<any>(null)
-  const [ picture, setPicture ] = useState('')
-  const [ cv, setCV ] = useState('')
-  const [ photoUrl, setPhotoUrl ] = useState('')
-  const [ cvUrl, setCvUrl ] = useState('')
   const router = useRouter()
   const { data:session }: any = useSession()
   const newData = applicant?.documents[0];
+  const [ picture, setPicture ] = useState(newData?.photo)
+  const [ cv, setCV ] = useState(newData?.photo)
+  const [ photoUrl, setPhotoUrl ] = useState('')
+  const [ cvUrl, setCvUrl ] = useState('')
   const [ form, setForm ] = useState<Inputs | any>({
     photo: newData?.photo || '',
     cv: newData?.cv || '',
@@ -211,8 +215,15 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 <Input name="teaser" defaultValue={form.teaser} onChange={onChange} required label="Candidacy Teaser" placeholder="Teaser" />
                 <hr/>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <File name="photo" label="Candidate Photo Upload" onChange={onChange} />   
-                    <File name="cv" label="Candidate Resume Upload" onChange={onChange} />
+                   { picture
+                    ? <PhotoCard src={picture} label="Candidate Photo" onClick={() => setPicture(null)} />
+                    : <File name="photo" label="Candidate Photo Upload" onChange={onChange} />
+                   }
+
+                   { cv
+                    ? <PdfCard src={picture} label="Curriculum Vitae (CV)" onClick={() => setCV(null)} />
+                    : <File name="cv" label="Candidate Resume Upload" onChange={onChange} />
+                   }
                 </div>
                 <hr/>
                 {/* <label id="agree-1" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">

@@ -4,10 +4,8 @@ import Banner from "@/components/Banner";
 import BreakNews from "@/components/BreakNews";
 import QuickGuide from "@/components/QuickGuide";
 import ElectionSection from "@/components/ElectionSection";
-import EventSection from "@/components/EventSection";
-import NewsLetterBox from "@/components/NewsLetterBox";
-import UpcomingSection from "@/components/UpcomingSection";
 import UserBanner from "@/components/UserBanner";
+import AdminBanner from "@/components/AdminBanner";
 
 export default function Home() {
 
@@ -15,14 +13,11 @@ export default function Home() {
     <main className="w-full">
        <Banner />
        {/* @ts-ignore */}
-       <UserBanner />
+       <UserBanner /> <AdminBanner />
        <Statistics />
        <BreakNews />
        <QuickGuide />
        <ElectionSection />
-       {/* <EventSection /> */}
-       {/* <UpcomingSection /> */}
-       {/* <NewsLetterBox /> */}
     </main>
   )
 }

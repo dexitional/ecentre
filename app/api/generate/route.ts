@@ -62,14 +62,23 @@ export async function GET(request: Request) {
     }
 
     if(action == 'print'){
-      const ups:any = await fetchVoucherById(id);
-      console.log(ups)
-      if(ups){ 
-        // Send SMS to Buyer
-        const message = `Hi! Your Voucher, SERIAL: ${ups.serial} , PIN: ${ups.pin} , Please follow link to https://ec.ucc.edu.gh to file nomination`
-        const sms_res = await sms(phone,message);
-        return new Response(JSON.stringify({ success: true, data: ups, sms_status: sms_res, msg: `Voucher Sold to , ${phone} !` }), { status: 200 });
-      }
+        const ups:any = await fetchVoucherById(id);
+        console.log(ups)
+        if(ups.total > 0){ 
+          return new Response(JSON.stringify({ success: true, data: ups, msg: null }), { status: 200 });
+        }
+    }
+
+    if(action == 'send'){
+        const ups:any = await fetchVoucherById(id);
+        console.log(ups)
+        if(ups.total > 0){ 
+          // Send SMS to Buyer
+          const phone = ups.documents[0].buyer_phone;
+          const message = `Hi! Your Voucher, SERIAL: ${ups.documents[0].serial} , PIN: ${ups.documents[0].pin} , Please follow link to https://ec.ucc.edu.gh to file nomination`
+          const sms_res = await sms(phone,message);
+          return new Response(JSON.stringify({ success: true, data: ups, sms_status: sms_res, msg: `Voucher Sold to , ${phone} !` }), { status: 200 });
+        }
     }
 
     // ?action=form&serial=test ( Fetch for form population )

@@ -13,6 +13,8 @@ import { getGroup } from '@/utils/getGroup';
 import BadgeIconSuccess from './BadgeIconSuccess';
 const myq = new Queue(1, 100);
 
+export const revalidate = 0;
+
 async function PageVoucher() {
     
     const session:any = await getServerSession(options)

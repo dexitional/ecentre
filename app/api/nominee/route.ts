@@ -11,8 +11,7 @@ export async function POST(request: Request) {
   try {
     const formData  = await request.formData()
     const body:any = Object.fromEntries(formData)
-    console.log(body)
-    //const body = await request.json();
+    // const body = await request.json();
     
     //delete body.photo
     //delete body.cv
@@ -24,8 +23,7 @@ export async function POST(request: Request) {
 
     // Fetch CGPA
     const cgpa = await fetchCgpa(body?.aspirant_regno)
-    console.log("CGPA:", cgpa)
-    if(cgpa && ((cgpa.toString().toLowerCase() == 'pass') || (parseFloat(cgpa) >= 2.5))){ 
+    // if(cgpa && ((cgpa.toString().toLowerCase() == 'pass') || (parseFloat(cgpa) >= 2.5))){ 
        
         // Fetch Helper Data
         const session = await fetchActiveSession();
@@ -50,9 +48,9 @@ export async function POST(request: Request) {
         const broadcast = await getContacts(data)
         return new Response(JSON.stringify({ success: true, data: resp }), { status: 200 });
 
-    } else {
-        return new Response(JSON.stringify({ success: false, data: null, msg: 'CGPA dont meet requirement!' }), { status: 404 });
-    }
+    // } else {
+    //     return new Response(JSON.stringify({ success: false, data: null, msg: 'CGPA dont meet requirement!' }), { status: 404 });
+    // }
 
   } catch (error: any) {
     console.log(error)

@@ -58,11 +58,11 @@ async function PageNominee() {
                 <tr key={row.code} className="grid grid-cols-1 md:grid-cols-5 text-left ">
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">SERIAL</span>
-                        <span className="ml-3 md:m-0 font-bold text-xs tracking-wide">{row?.serial}</span>
+                        <span className="ml-3 md:m-0 font-bold text-sm tracking-wide">{row?.serial}</span>
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">APPLICANT</span>
-                        <span className="ml-3 md:m-0">{row?.aspirant_regno?.toUpperCase()}</span>
+                        <span className="ml-3 md:m-0">{row?.aspirant_regno?.toUpperCase()}<br/><span className="italic text-xs font-bold">-- CGPA: {row?.cgpa} </span></span>
                     </td>
                     
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">

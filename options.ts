@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from 'next-auth/providers/google';
-import { fetchUserByEmail, fetchUsers, getVoucher, verifyAdmin } from "./utils/serverApi";
+import { getVoucher, verifyAdmin } from "./utils/serverApi";
 export const options: NextAuthOptions = {
     session: {
       strategy: "jwt",
@@ -37,7 +37,7 @@ export const options: NextAuthOptions = {
           const resp = await getVoucher(serial,pin);
           if(resp.total > 0){
              const user:any = resp.documents[0];
-             return user
+             return { ...user, gid: 1 }
           }  throw new Error("Invalid details")
         },   
       }),
@@ -57,7 +57,7 @@ export const options: NextAuthOptions = {
           const resp = await verifyAdmin(username,password);
           if(resp.total > 0){
              const user:any = resp.documents[0];
-             return user
+             return { ...user, gid: 2 }
           }  throw new Error("Invalid details")
         },   
       }),

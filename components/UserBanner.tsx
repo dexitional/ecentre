@@ -21,7 +21,7 @@ async function UserBanner() {
   console.log(session?.user)
   return (
     
-    session?.user ?
+    session?.user?.gid == 1 ?
 
     <div className="w-full h-80 bg-red-200 bg-[url('../public/bg3.jpg')] bg-center">
         <div className="mx-auto h-full w-full md:max-w-6xl grid place-content-center">

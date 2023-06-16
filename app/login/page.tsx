@@ -13,6 +13,7 @@ export default function Home() {
   return (
     <main className="w-full">
        <Banner />
+       {/* @ts-ignore */}
        <Statistics />
        <BreakNews />
        <QuickGuide />

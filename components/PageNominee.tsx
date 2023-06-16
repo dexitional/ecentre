@@ -3,7 +3,8 @@ import { fetchGroup, fetchNomineeOffset, fetchNomineeOffsetById, fetchNominees, 
 import React from 'react'
 import { FiEdit3 } from 'react-icons/fi';
 import BadgeIcon from './BadgeIcon';
-import { MdOutlineArticle } from 'react-icons/md';
+import { MdOutlineArticle,MdPending,MdVerified } from 'react-icons/md';
+import { GrDocumentVerified } from 'react-icons/gr';
 import Link from 'next/link';
 import { getGroup } from '@/utils/getGroup';
 import { getUserDetail } from '@/utils/getUserDetail';
@@ -62,12 +63,21 @@ async function PageNominee() {
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">APPLICANT</span>
-                        <span className="ml-3 md:m-0">{row?.aspirant_regno?.toUpperCase()}<br/><span className="italic text-xs font-bold">-- CGPA: {row?.cgpa} </span></span>
+                        <span className="ml-3 md:m-0 font-semibold">
+                           <div className="flex items-center space-x-2">
+                             { row?.form_submit 
+                              ? <MdVerified className="h-4 w-4 text-green-500 mr-2" /> 
+                              : <MdPending className="h-4 w-4 text-yellow-500 mr-2" /> 
+                             }
+                             {row?.aspirant_regno?.toUpperCase()}
+                            </div>
+                            <span className="italic text-xs font-bold">-- CGPA: {row?.cgpa} </span>
+                        </span>
                     </td>
                     
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-blue-900/5 font-bold">POSITION</span>
-                        <span className="ml-3 md:m-0">{ row?.position?.title?.toUpperCase() }</span>
+                        <span className="ml-3 md:m-0 font-semibold">{ row?.position?.title?.toUpperCase() }</span>
                         {/* <span className="ml-3 md:m-0">{group?.name?.toUpperCase()}</span> */}
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">

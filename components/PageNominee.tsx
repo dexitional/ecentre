@@ -41,7 +41,7 @@ async function PageNominee({ slug }: any) {
     <div className="pb-12 overflow-y-scroll scrollbar-hide">
         <h1 className="my-4 md:my-6 pl-3 px-1 py-1 md:px-6 md:py-2 flex items-center justify-between font-bold text-base md:text-2xl- tracking-widest rounded border md:border-2 border-blue-950/60 text-blue-950">
            <span>{ group?.title?.toUpperCase() || 'ADMINISTRATOR' }</span> 
-           <span className="px-3 py-0.5 rounded border border-slate-300 bg-slate-100 text-xs text-slate-700">PAGE {page}</span>
+           <span className="px-3 py-0.5 rounded border border-slate-300 bg-slate-100 text-xs text-slate-700">PAGE {page+1}</span>
         </h1>
         <table className="w-full border-separate border-spacing-0 border border-blue-900/30 rounded text-[0.83rem] text-blue-900/80 font-medium">
             <tr className="hidden md:grid md:grid-cols-5 bg-blue-900/5 text-blue-900 text-[0.86rem] font-inter font-bold tracking-wider">

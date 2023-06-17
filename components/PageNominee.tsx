@@ -24,7 +24,7 @@ const getHelper = async( sessionId: string, positionId: string) => {
 
 async function PageNominee({ slug }: any) {
     const session:any = await getServerSession(options)
-    const limit = 25;
+    const limit = 15;
     const page = +slug?.page-1 || 0;
    
     const userDetail:any = await getUserDetail(session?.user?.email);
@@ -89,7 +89,7 @@ async function PageNominee({ slug }: any) {
                     <td className="px-6 py-3 border-b border-blue-900/10 flex md:justify-end">
                         <div className="md:px-2 w-fit flex items-center space-x-4">
                             {/* <BadgeIcon title="FORM" Icon={MdOutlineArticle}/> */}
-                            <Link href={`/nominees/${row?.serial}/view`}><BadgeIcon title="FORM" Icon={MdOutlineArticle}/></Link>
+                            <Link href={`/nominees/${row?.serial}/view?returnpage=${page+1}`}><BadgeIcon title="FORM" Icon={MdOutlineArticle}/></Link>
                             
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}
                             {/* <FiTrash className="w-3.5 h-3.5" /> */}

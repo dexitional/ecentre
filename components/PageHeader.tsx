@@ -18,7 +18,7 @@ export default function PageHeader({ title, addUrl }: Props) {
     <div className="mb-4 flex flex-col md:flex-row items-start md:items-center md:justify-between md:space-x-4 md:space-y-0 space-y-2">
         <div className="flex flex-col md:flex-row md:items-center md:space-x-4 md:space-y-0 space-y-2">
             <div className="w-full flex items-center justify-between md:justify-start space-x-4">
-                <div className="hidden items-center space-x-2">
+                <div className="flex items-center space-x-2">
                     <GoBack />
                     <GoForward />
                 </div>

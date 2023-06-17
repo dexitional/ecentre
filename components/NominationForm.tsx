@@ -207,8 +207,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
             }
             <div className="space-y-4">
                 <Legend label="GUARANTORS (ENDORSEMENT)" />
-                <Input name="guarantor1_regno" defaultValue={form.guarantor1_regno} onChange={onChange} required label="Registration Number of First (1st) Guarantor" placeholder="Registration Number of 1st Guarantor" />
-                <Input name="guarantor2_regno" defaultValue={form.guarantor2_regno} onChange={onChange} required label="Registration Number of Second (2nd) Guarantor" placeholder="Registration Number of 2nd Guarantor" />
+                <Input name="guarantor1_regno" defaultValue={form.guarantor1_regno} onChange={onChange} required readOnly={form.g1_verified} label="Registration Number of First (1st) Guarantor" placeholder="Registration Number of 1st Guarantor" />
+                <Input name="guarantor2_regno" defaultValue={form.guarantor2_regno} onChange={onChange} required readOnly={form.g2_verified} label="Registration Number of Second (2nd) Guarantor" placeholder="Registration Number of 2nd Guarantor" />
             </div>
             <div className="space-y-4">
                 <Legend label="ADDITIONAL INFORMATION" />

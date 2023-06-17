@@ -138,14 +138,14 @@ export const fetchNominee = async (serial: string) => {
     return res;
 }
 
-export const fetchNomineeOffset = async (pass: number) => {
+export const fetchNomineeOffset = async (pass: number, limit: number) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!,
     [
       // Query.orderDesc("sessionId"),
-      // Query.orderAsc("groupId"),
-       //Query.orderAsc("positionId"),
-       Query.limit(100),
-       //Query.offset(pass)
+       Query.orderAsc("groupId"),
+       Query.orderAsc("positionId"),
+       Query.limit(limit),
+       Query.offset(pass*limit)
     ])
     return res;
 }
@@ -155,7 +155,7 @@ export const fetchNomineeOffsetById = async (groupId: string, pass: number) => {
     [
        Query.equal("groupId", groupId),
        //Query.orderDesc("sessionId"),
-       //Query.orderAsc("positionId"),
+       Query.orderDesc("positionId"),
        Query.limit(100),
        //Query.offset(pass)
     ])

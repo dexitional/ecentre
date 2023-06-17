@@ -1,10 +1,10 @@
 import PgNominee from '@/components/PgNominee'
 import React from 'react'
 
-function Dashboard() {
+function Dashboard({searchParams}: any) {
   return (
     // @ts-ignore
-    <PgNominee />
+    <PgNominee slug={searchParams}/>
   )
 }
 

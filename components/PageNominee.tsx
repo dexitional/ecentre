@@ -22,20 +22,15 @@ const getHelper = async( sessionId: string, positionId: string) => {
     return { position, session }
 }
 
-async function PageNominee() {
+async function PageNominee({ slug }: any) {
     const session:any = await getServerSession(options)
-   //console.log(data)
-//    const searchParams = useSearchParams()
-//    const keyword = searchParams.get('search') || ''
-//    const page = searchParams.get('page') || 1;
-//    console.log(searchParams.get('search'))
-//    const data = await getData(keyword,+page);
-    // const data:any = { documents: [] }
-
+    const limit = 25;
+    const page = +slug?.page-1 || 0;
+   
     const userDetail:any = await getUserDetail(session?.user?.email);
     const group:any = userDetail?.groupId ? await getGroup(userDetail?.groupId) : {};
 
-    const dt = userDetail?.groupId ? await fetchNomineeOffsetById(userDetail?.groupId,0) : await fetchNomineeOffset(0);
+    const dt = userDetail?.groupId ? await fetchNomineeOffsetById(userDetail?.groupId,0) : await fetchNomineeOffset(page,limit);
     
     const data:any = await Promise.all(dt?.documents?.map(async (row: any) => {
           const { position, session } = await getHelper(row.sessionId, row.positionId);
@@ -44,7 +39,10 @@ async function PageNominee() {
 
    return (
     <div className="pb-12 overflow-y-scroll scrollbar-hide">
-        <h1 className="my-4 md:my-6 p-1 md:px-6 md:py-2 font-bold text-base md:text-2xl- tracking-widest rounded border md:border-2 border-blue-950/60 text-blue-950">{ group?.title?.toUpperCase() || 'ADMINISTRATOR' }</h1>
+        <h1 className="my-4 md:my-6 pl-3 px-1 py-1 md:px-6 md:py-2 flex items-center justify-between font-bold text-base md:text-2xl- tracking-widest rounded border md:border-2 border-blue-950/60 text-blue-950">
+           <span>{ group?.title?.toUpperCase() || 'ADMINISTRATOR' }</span> 
+           <span className="px-3 py-0.5 rounded border border-slate-300 bg-slate-100 text-xs text-slate-700">PAGE {page}</span>
+        </h1>
         <table className="w-full border-separate border-spacing-0 border border-blue-900/30 rounded text-[0.83rem] text-blue-900/80 font-medium">
             <tr className="hidden md:grid md:grid-cols-5 bg-blue-900/5 text-blue-900 text-[0.86rem] font-inter font-bold tracking-wider">
               <td className="px-6 py-3 md:border-b border-blue-900/20">Serial</td>

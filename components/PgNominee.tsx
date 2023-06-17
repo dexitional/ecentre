@@ -1,15 +1,13 @@
-import React, { useState,useEffect } from 'react'
+import React from 'react'
 import PageHeader from './PageHeader';
-import PageLecture from './PageVoucher';
 import PageNominee from './PageNominee';
 
-async function PgNominee() {
-    
+async function PgNominee({slug}:any) {
     return (
         <>
             <PageHeader title="Nominations" addUrl=""  />
             {/* @ts-ignore */}
-            <PageNominee />
+            <PageNominee slug={slug} />
         </>
     )
 }

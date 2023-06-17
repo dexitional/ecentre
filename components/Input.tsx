@@ -9,7 +9,8 @@ type Props = {
     msg?: string;
     defaultValue?: string;
     required?: any;
-    onChange?: any
+    readOnly?: any;
+    onChange?: any;
 }
 
 function Input(props: Props) { //{ label, name, errors,msg, placeholder, defaultValue }

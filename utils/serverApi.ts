@@ -138,12 +138,13 @@ export const fetchNominee = async (serial: string) => {
     return res;
 }
 
-export const fetchNomineeOffset = async (pass: number, limit: number) => {
+export const fetchNomineeOffset = async (keyword: string, pass: number, limit: number) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!,
     [
-      // Query.orderDesc("sessionId"),
-       Query.orderAsc("groupId"),
-       Query.orderAsc("positionId"),
+          Query.search("aspirant_regno",keyword),
+    //    Query.orderDesc("sessionId"),
+    //    Query.orderAsc("groupId"),
+    //    Query.orderAsc("positionId"),
        Query.limit(limit),
        Query.offset(pass*limit)
     ])

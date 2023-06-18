@@ -26,11 +26,12 @@ async function PageNominee({ slug }: any) {
     const session:any = await getServerSession(options)
     const limit = 15;
     const page = +slug?.page-1 || 0;
+    const search = slug?.search || '';
    
     const userDetail:any = await getUserDetail(session?.user?.email);
     const group:any = userDetail?.groupId ? await getGroup(userDetail?.groupId) : {};
 
-    const dt = userDetail?.groupId ? await fetchNomineeOffsetById(userDetail?.groupId,0) : await fetchNomineeOffset(page,limit);
+    const dt = userDetail?.groupId ? await fetchNomineeOffsetById(userDetail?.groupId,0) : await fetchNomineeOffset(search,page,limit);
     
     const data:any = await Promise.all(dt?.documents?.map(async (row: any) => {
           const { position, session } = await getHelper(row.sessionId, row.positionId);

@@ -13,7 +13,7 @@ export default async function Page({ params}:{ params: { serial: string }}) {
   const sess = await fetchSession(session?.user?.sessionId);
   const sess_res:any =  await sess?.documents[0];
   
-  if(moment().isAfter(sess_res?.end_date)) redirect(`/user/${params?.serial}/printout`)
+  //if(moment().isAfter(sess_res?.end_date)) redirect(`/user/${params?.serial}/printout`)
   if(data[0]?.documents[0]?.form_submit) redirect(`/user/${params?.serial}/printout`)
   return (
     <main className="flex-1 space-y-8">

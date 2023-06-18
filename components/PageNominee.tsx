@@ -71,6 +71,9 @@ async function PageNominee({ slug }: any) {
                              {row?.aspirant_regno?.toUpperCase()}
                             </div>
                             <span className="italic text-xs font-bold">-- CGPA: {row?.cgpa} </span>
+                            <div className="italic text-xs font-bold">-- Endorsers 
+                                <span className="flex items-center space-x-1 text-red-900/90"> G1: { row?.g1_verified ? <MdVerified className="h-4 w-4 text-green-500 mr-2" />  : <MdPending className="h-4 w-4 text-yellow-500 mr-2" /> }  G2: { row?.g2_verified ? <MdVerified className="h-4 w-4 text-green-500 mr-2" />  : <MdPending className="h-4 w-4 text-yellow-500 mr-2" /> }</span>
+                            </div>
                         </span>
                     </td>
                     

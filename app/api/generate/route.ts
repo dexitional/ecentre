@@ -1,4 +1,6 @@
-import { fetchActiveSession, fetchVoucher, fetchVoucherById, postVoucher, updateVoucher } from "@/utils/serverApi";
+import { getVerification } from "@/utils/getVerification";
+import { sendMessageByRegNo } from "@/utils/sendMessageByRegNo";
+import { fetchActiveSession, fetchNominee, fetchNomineeOffset, fetchVoucher, fetchVoucherById, postVoucher, updateNominee, updateVoucher } from "@/utils/serverApi";
 import { sms } from "@/utils/sms";
 import { customAlphabet } from 'nanoid'
 const serialGen = customAlphabet('abcdefghijklmnopqrstuvwxyz',8)
@@ -80,6 +82,32 @@ export async function GET(request: Request) {
           return new Response(JSON.stringify({ success: true, data: ups, sms_status: sms_res, msg: `Voucher Sold to , ${phone} !` }), { status: 200 });
         }
     }
+
+    if(action == 'unlock'){
+      const applicant:any = await fetchNominee(id);
+      if(applicant.total > 0){ 
+        const data = applicant?.documents[0]
+        // Update Form Submit Status
+        const ups = await updateNominee(data?.$id, { form_submit: false })
+        // Send SMS to Buyer
+        const message = `Hi! Your Nomination Form is unlocked for editting. Feel free to do corrections. Thank you!`
+        const sms_res = await sendMessageByRegNo(data.aspirant_regno,message)
+        return new Response(JSON.stringify({ success: true, data: ups, sms_status: sms_res, msg: `Voucher Sold to , ${phone} !` }), { status: 200 });
+      }
+    }
+
+
+    if(action == 'endorse'){
+      const applicant:any = await fetchNominee(id);
+      if(applicant.total > 0){
+        const data = applicant?.documents[0]
+        const sm = await getVerification(data);
+        return new Response(JSON.stringify({ success: true, data: sm, msg: `Endorsements sent !` }), { status: 200 });
+      }
+      return new Response(JSON.stringify({ success: false, data: null, msg: `Link could not be sent !` }), { status: 200 });
+    }
+
+
 
     // ?action=form&serial=test ( Fetch for form population )
     // ?action=print&serial=test ( Fetch for Printview with 3rd party endpoints )

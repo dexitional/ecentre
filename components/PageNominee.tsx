@@ -10,6 +10,8 @@ import { getGroup } from '@/utils/getGroup';
 import { getUserDetail } from '@/utils/getUserDetail';
 import { getServerSession } from 'next-auth';
 import { options } from '@/options';
+import { BsFilePdf } from 'react-icons/bs';
+import Image from 'next/image';
 
 
 const getHelper = async( sessionId: string, positionId: string) => {
@@ -58,7 +60,10 @@ async function PageNominee({ slug }: any) {
                 <tr key={row.code} className="grid grid-cols-1 md:grid-cols-5 text-left ">
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">SERIAL</span>
-                        <span className="ml-3 md:m-0 font-bold text-sm tracking-wide">{row?.serial}</span>
+                        <span className="ml-3 md:m-0 font-bold text-sm tracking-wide">
+                            <span className="px-1.5 py-0.5 rounded border border-slate-200">{row?.serial}</span>
+                            { row.photo ? <Image src={row?.photo} alt="Candidate Photo" height={50} width={50} className="block my-1 h-20 w-20 object-contain" /> : null }
+                        </span>
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">APPLICANT</span>
@@ -94,6 +99,7 @@ async function PageNominee({ slug }: any) {
                         <div className="md:px-2 w-fit flex items-center space-x-4">
                             {/* <BadgeIcon title="FORM" Icon={MdOutlineArticle}/> */}
                             <Link href={`/nominees/${row?.serial}/view?returnpage=${page+1}`}><BadgeIcon title="FORM" Icon={MdOutlineArticle}/></Link>
+                            { row.cv ? <Link href={row?.cv}><BadgeIcon title="CV" Icon={BsFilePdf}/></Link> : null }
                             
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}
                             {/* <FiTrash className="w-3.5 h-3.5" /> */}

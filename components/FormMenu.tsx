@@ -52,13 +52,13 @@ function FormMenu({ page, serial }: Props) {
     const ok = window.confirm("VIEW UPLOADED CV !")
     if(ok){
         try {
-            const resp = await fetch(`/api/generate?action=endorse&id=${serial}`)
-            const response = await resp.json()
-            if(response.success){
-               Notiflix.Notify.success('VERIFICATION SENT !');
-            } else {
-               Notiflix.Notify.failure(response?.msg);
-            }
+            // const resp = await fetch(`/api/generate?action=endorse&id=${serial}`)
+            // const response = await resp.json()
+            // if(response.success){
+            //    Notiflix.Notify.success('VERIFICATION SENT !');
+            // } else {
+            //    Notiflix.Notify.failure(response?.msg);
+            // }
         } catch (error: any) {
             console.log(error)
         // Notiflix.Notify.failure(error);
@@ -70,9 +70,9 @@ function FormMenu({ page, serial }: Props) {
   return (
     <div className="print:hidden flex">
         {/* Go Back */}
-        <Link href={`/nominees?page=${page || 1}`} className="px-6 py-2 flex-1 border-blue-950 bg-slate-100 text-blue-950 text-center font-extrabold print:hidden">GO BACK</Link>
-        <button onClick={viewCV} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">VIEW CURRICULUM VITAE</button>
-        <button onClick={resetForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">RESET SUBMISSION</button>
+        <Link href={`/nominees?page=${page || 1}`} className="px-6 py-2 flex-1 flex items-center justify-center border-blue-950 bg-slate-100 text-blue-950 text-center font-extrabold print:hidden">GO BACK</Link>
+        <button onClick={viewCV} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">VIEW CV</button>
+        <button onClick={resetForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">RESET FORM</button>
         <button onClick={verifyForm} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">RESEND VERIFICATION</button>
     </div>
   )

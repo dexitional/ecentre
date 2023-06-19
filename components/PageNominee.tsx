@@ -62,7 +62,7 @@ async function PageNominee({ slug }: any) {
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">SERIAL</span>
                         <span className="ml-3 md:m-0 font-bold text-sm tracking-wide">
                             <span className="px-1.5 py-0.5 rounded border border-slate-200">{row?.serial}</span>
-                            { row.photo ? <Image src={row?.photo} alt="Candidate Photo" height={50} width={50} className="block my-1 h-20 w-20 object-contain" /> : null }
+                            {/* { row.photo ? <Image src={row?.photo} alt="Candidate Photo" height={50} width={50} className="block my-1 h-12 w-12 object-cover" /> : null } */}
                         </span>
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">

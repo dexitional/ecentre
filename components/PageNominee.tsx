@@ -99,7 +99,7 @@ async function PageNominee({ slug }: any) {
                         <div className="md:px-2 w-fit flex items-center space-x-4">
                             {/* <BadgeIcon title="FORM" Icon={MdOutlineArticle}/> */}
                             <Link href={`/nominees/${row?.serial}/view?returnpage=${page+1}`}><BadgeIcon title="FORM" Icon={MdOutlineArticle}/></Link>
-                            { row.cv ? <Link href={row?.cv}><BadgeIcon title="CV" Icon={BsFilePdf}/></Link> : null }
+                            { row.cv ? <Link href={row?.cv} target='_blank'><BadgeIcon title="CV" Icon={BsFilePdf}/></Link> : null }
                             
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}
                             {/* <FiTrash className="w-3.5 h-3.5" /> */}

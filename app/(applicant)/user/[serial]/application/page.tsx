@@ -18,7 +18,7 @@ export default async function Page({ params}:{ params: { serial: string }}) {
   const IMAGE_URL = `https://ehub.ucc.edu.gh`
  
   //if(moment().isAfter(sess_res?.end_date)) redirect(`/user/${params?.serial}/printout`)
-  if(data[0]?.documents[0]?.form_submit) redirect(`/user/${params?.serial}/printout`)
+  if(data[0]?.documents[0]?.form_submit && !moment().isAfter(sess_res?.end_date)) redirect(`/user/${params?.serial}/printout`)
   return (
     <main className="flex-1 space-y-8">
         <h1 className="px-4 py-2 text-lg md:text-3xl text-center font-bold tracking-wider rounded border-2 border-[#153B50] text-[#153B50]">{ sess_res?.title?.toUpperCase() } NOMINATION</h1>

@@ -38,16 +38,19 @@ export default async function Page({ params}:{ params: { serial: string }}) {
         <div className="">
           { !moment().isAfter(sess_res?.end_date) 
             ? <NominationForm data={data} />
-            : <div className="mx-auto my-4 w-full max-w-sm rounded border-2 border-[#153B50]"> 
+            : <div className="mx-auto my-4 w-full max-w-sm rounded border-2 border-[#153B50] bg-blue-50/80 "> 
                  <div className="flex-1 flex items-center justify-between overflow-hidden">
-                    <Image src={applicant?.documents[0]?.aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${applicant?.documents[0]?.aspirant_regno}`) : None } alt="Candidate" width={100} height={100} className="h-20 w-20 object-cover"/>
+                    <Image src={applicant?.documents[0]?.aspirant_regno ? encodeURI(`${IMAGE_URL}/api/photos/?tag=${applicant?.documents[0]?.aspirant_regno}`) : None } alt="Candidate" width={100} height={100} className="m-2 rounded border border-[#153B50]/60 h-20 w-20 object-cover"/>
                     <div className="md:px-6 px-2 p">
                          <h1 className="font-mono font-extrabold">ASPIRANT: {applicant?.documents[0]?.aspirant_regno}</h1>
                          <h3 className="font-mono font-bold text-sm">SERIAL: <span>{applicant?.documents[0]?.serial}</span></h3>
                          <h4 className="font-mono font-bold text-sm">GUARANTOR #1: <span>{applicant?.documents[0]?.guarantor1_regno}</span></h4>
                          <h4 className="font-mono font-bold text-sm">GUARANTOR #2: <span>{applicant?.documents[0]?.guarantor2_regno}</span></h4>
-                         {/* <h4 className="font-mono font-bold text-sm">GUARANTOR #1: <span>{applicant?.documents[0]?.guarantor1_regno}</span></h4> */}
                     </div>
+                 </div>
+                 <div className="px-14 py-2 flex-1 flex items-center justify-between overflow-hidden bg-blue-50">
+                    <h4 className="font-mono font-bold text-sm">CV: <span>{applicant?.documents[0]?.cv ? 'UPLOADED': 'NOT UPLOADED'}</span></h4>
+                    <h4 className="font-mono font-bold text-sm">FLYER: <span>{applicant?.documents[0]?.photo ? 'UPLOADED': 'NOT UPLOADED'}</span></h4>
                  </div>
               </div>
           }

@@ -18,3 +18,4 @@ function Page({ searchParams, params }:{ searchParams:any, params: { id: string,
 }
 
 export default Page
+ 

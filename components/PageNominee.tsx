@@ -12,6 +12,7 @@ import { getServerSession } from 'next-auth';
 import { options } from '@/options';
 import { BsFilePdf } from 'react-icons/bs';
 import Image from 'next/image';
+import { BiPhotoAlbum } from 'react-icons/bi';
 
 
 const getHelper = async( sessionId: string, positionId: string) => {
@@ -96,17 +97,21 @@ async function PageNominee({ slug }: any) {
                         </div> */}
                     </td>
                     <td className="px-6 py-3 border-b border-blue-900/10 flex md:justify-end">
-                        <div className="md:px-2 w-fit flex items-center space-x-4">
+                        <div className="md:px-2 w-fit flex flex-wrap items-center justify-center">
                             {/* <BadgeIcon title="FORM" Icon={MdOutlineArticle}/> */}
                             <Link href={`/nominees/${row?.serial}/view?returnpage=${page+1}`}><BadgeIcon title="FORM" Icon={MdOutlineArticle}/></Link>
                             { row.cv ? <Link href={row?.cv} target='_blank'><BadgeIcon title="CV" Icon={BsFilePdf}/></Link> : null }
+                            { row.photo ? <Link href={row?.photo} target='_blank' className="block"><BadgeIcon title="FLYER" Icon={BiPhotoAlbum}/></Link> : null }
                             
                             {/* <FiEdit3 className="w-3.5 h-3.5" /> */}
                             {/* <FiTrash className="w-3.5 h-3.5" /> */}
                         </div>
                     </td>
                 </tr>
-            )})}
+            )}) ||
+             (
+                <div>Inner Loading ....</div>
+             )}
 
         </table>
     </div>

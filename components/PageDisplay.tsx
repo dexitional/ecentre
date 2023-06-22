@@ -18,14 +18,13 @@ const getData = async (groupId: string) => {
       const post:any = await fetchPosition(d.positionId);
       if(post.total > 0){
         if(hash.has(post?.documents[0]?.title)){
-            const dm = hash.get(post?.documents[0]?.title)
-            hash.set(post?.documents[0]?.title, [ ...dm, {...d} ])
+          const dm = hash.get(post?.documents[0]?.title)
+          hash.set(post?.documents[0]?.title, [ ...dm, {...d} ])
         } else{
-            hash.set(post?.documents[0]?.title, [{...d}])
+          hash.set(post?.documents[0]?.title, [{...d}])
         }
       }
-   }
-   return Object.fromEntries(hash)
+   }  return Object.fromEntries(hash)
 }
 
 async function PageDisplay({}: Props) {
@@ -53,7 +52,7 @@ async function PageDisplay({}: Props) {
                     <div className="grid grid-cols-2 gap-4 place-content-center">
                      { value?.map( (aspirant: any) => {
                         // @ts-ignore
-                        return (<AspirantCard data={aspirant} />)
+                        return (<AspirantCard key={aspirant.aspirant_regno} data={aspirant} />)
                      })}
                        
                     </div>

@@ -163,6 +163,18 @@ export const fetchNomineeOffsetById = async (groupId: string, pass: number) => {
     return res;
 }
 
+export const fetchNomineesDisplay = async (groupId: string) => {
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!,
+    [
+        Query.equal("groupId", groupId),
+        //Query.equal("is_candidate", true),
+        Query.orderAsc("positionId"),
+        Query.orderAsc("ballot_no"),
+        Query.limit(100),
+    ])
+    return res;
+}
+
 export const postNominee = async (body: object) => {
     const res = await db.createDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, ID.unique(), body);
     return res;

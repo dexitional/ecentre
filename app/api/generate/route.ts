@@ -129,6 +129,12 @@ export async function GET(request: Request) {
                const send =  await sendMessageByRegNo(row?.aspirant_regno,message);
                return send
             }
+
+            if(row?.aspirant_regno.toUpperCase() == 'SB/PCM/20/0155' ){
+              const message = `Hi Edusei! Please upload new Candidate Flyer/Photo to complete portfolio. Deadline is 10:00 PM, June 23, 2023`
+              const send =  await sendMessageByRegNo(row?.aspirant_regno,message);
+              return send
+           }
             
             //  Update CGPA
             //const resp = await updateNominee(row?.documents[0]?.$id, dt);

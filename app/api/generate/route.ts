@@ -1,5 +1,6 @@
 import { getVerification } from "@/utils/getVerification";
 import { sendMessageByRegNo } from "@/utils/sendMessageByRegNo";
+import { sendPhotoReminder } from "@/utils/sendPhotoReminder";
 import { fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNominees, fetchVoucher, fetchVoucherById, postVoucher, updateNominee, updateVoucher } from "@/utils/serverApi";
 import { sms } from "@/utils/sms";
 import { customAlphabet } from 'nanoid'
@@ -113,27 +114,29 @@ export async function GET(request: Request) {
         const data = applicant?.documents
         const sd = await Promise.all(data.map( async (row: any) => {
             //  Get CGPA from database
-            const cgpa = await fetchCgpa(row?.aspirant_regno)
-            const messages = []
-            let dt = { cgpa: cgpa.toString() }
+            // const cgpa = await fetchCgpa(row?.aspirant_regno)
+           
+            // const messages = []
+            // let dt = { cgpa: cgpa.toString() }
+            let dt = {  }
+            
             // Send Message for For Reprint of since update CGPAs
-            if(cgpa.toString() != row?.aspirant_regno) messages.push(`Hi! CGPA value has been updated prior to the close of nominations, Please confirm and refresh browser for a Form Printout.`)
+            // if(cgpa.toString() != row?.aspirant_regno) messages.push(`Hi! CGPA value has been updated prior to the close of nominations, Please confirm and refresh browser for a Form Printout.`)
+           
             // Conditional Message for CV Uploaded and Candidate Photos
-            if(!row.cv) messages.push(`Hi! Please upload your CV and Candidate Photo to complete form. Deadline is 10:00 PM, June 19, 2023`)
+            if(!row?.photo){
+               const message = `Hi! Please upload your CV and Candidate Flyer/Photo to complete nomination. Deadline is 10:00 PM, June 22, 2023`
+               const send =  await sendMessageByRegNo(row?.aspirant_regno,message);
+               return send
+            }
+            
             //  Update CGPA
-            const resp = await updateNominee(row?.documents[0]?.$id, dt);
+            //const resp = await updateNominee(row?.documents[0]?.$id, dt);
           
         }))
-        
-        
-        //const sm = await getVerification(data);
-
-
-
-        // return new Response(JSON.stringify({ success: true, data: sm, msg: `Endorsements sent !` }), { status: 200 });
+        return new Response(JSON.stringify({ success: true, data: sd, msg: `Endorsements sent !` }), { status: 200 });
       }
-
-
+      
       return new Response(JSON.stringify({ success: false, data: null, msg: `Link could not be sent !` }), { status: 200 });
     }
 

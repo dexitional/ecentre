@@ -125,7 +125,7 @@ export async function GET(request: Request) {
            
             // Conditional Message for CV Uploaded and Candidate Photos
             if(!row?.photo){
-               const message = `Hi! Please upload your CV and Candidate Flyer/Photo to complete nomination. Deadline is 10:00 PM, June 22, 2023`
+               const message = `Hi! Please upload your CV and Candidate Flyer/Photo to complete portfolio. Deadline is 10:00 PM, June 23, 2023`
                const send =  await sendMessageByRegNo(row?.aspirant_regno,message);
                return send
             }

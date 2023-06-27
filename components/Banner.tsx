@@ -41,7 +41,7 @@ function Banner() {
             const pass = window.prompt("Enter Password !");
             if(tag && pass){
               setIsLoading(true)
-              const resp:any = await signIn('adminsignin', { redirect: false, callbackUrl: `/vouchers`, username: tag, password: pass })
+              const resp:any = await signIn('adminsignin', { callbackUrl: `/vouchers`, username: tag, password: pass })
               console.log(resp)
               if(resp?.url){
                 router.push(resp?.url)
@@ -83,7 +83,7 @@ function Banner() {
                    <input name="serial" onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })} className="px-6 py-1 md:py-3 rounded-lg text-white placeholder:tracking-[0.2em] placeholder:text-white bg-blue-950/70 border-2 focus:ring-0 focus:border-white border-white col-span-1" type="text" placeholder="SERIAL" />
                    <input name="pin" onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })} className="px-6 py-1 md:py-3 rounded-lg text-white placeholder:tracking-[0.2em] placeholder:text-white bg-blue-950/70 border-2 focus:ring-0 focus:border-white border-white col-span-1" type="text" placeholder="PIN" />
                 </div>
-                <button type="submit" disabled className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-slate-100 disabled:bg-opacity-50 disabled:cursor-wait border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
+                <button type="submit" className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-slate-100 disabled:bg-opacity-50 disabled:cursor-wait border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
                     { status == 'loading' ?
                       <>
                         <span className="text-sm md:text-lg tracking-widest font-bold text-blue-950 animate-pulse">LOADING ...</span>
@@ -97,7 +97,7 @@ function Banner() {
                     }
                     
                 </button>
-                <button type="button" disabled onClick={adminSignin} className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-yellow-100 disabled:bg-opacity-50 disabled:cursor-wait border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
+                <button type="button" onClick={adminSignin} className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-yellow-100 disabled:bg-opacity-50 disabled:cursor-wait border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
                     <BiLock className="h-8 w-8 text-blue-950"/>
                     { isLoading 
                       ? <span className="text-xs md:text-base tracking-widest font-bold text-blue-950 animate-pulse">AUTHENTICATING ...</span>

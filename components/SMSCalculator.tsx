@@ -17,7 +17,7 @@ function SMSCalculator() {
         <div className="rounded bg-slate-50 shadow-xl shadow-slate-200 overflow-hidden flex flex-col space-y-2">
             <h1 className="px-2 py-1 bg-blue-950 text-xs font-bold text-center text-white tracking-wider">SMS CALCULATOR</h1>
             <div className="px-4 py-4 space-y-2">
-               <p className="px-2 py-1 font-mono font-semibold text-sm">SMS RATE <span className="p-0.5 block rounded bg-blue-50  text-center text-lg font-bold italic tracking-wider">0.04</span> per SMS</p>
+               <p className="px-2 py-1 font-mono font-semibold text-sm">SMS RATE <sub className="p-0.5 bg-blue-50 rounded">Per SMS</sub><span className="p-0.5 block rounded bg-blue-50  text-center text-lg font-bold italic tracking-wider">0.04</span> per SMS</p>
                <input className="px-4 py-1 w-full rounded border " onChange={onChange} placeholder="SMS Amount" />
                <p className="p-0.5 py-1 block rounded bg-blue-100 text-blue-950 text-center text-lg font-bold font-mono">₵ {charge } </p>
             </div>

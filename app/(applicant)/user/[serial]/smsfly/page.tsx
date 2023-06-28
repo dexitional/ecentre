@@ -1,19 +1,12 @@
 
 "use client"
+import SMSCalculator from "@/components/SMSCalculator";
 import { useRef, useState } from "react";
 
 
 export default async function Page({ params}:{ params: { serial: string }}) {
 
-const calRef = useRef<any>(null)
-const [ charge,setCharge ] = useState<any>('0')
-const [ value,setValue ] = useState<any>(null)
 
-const onChange  = (e: any) => {
-   setValue(e.target.value);
-   setCharge((parseFloat(e.target.value) * 0.04).toFixed(2).toString());
-}
-  
 
  
   //if(moment().isAfter(sess_res?.end_date)) redirect(`/user/${params?.serial}/printout`)
@@ -57,8 +50,11 @@ const onChange  = (e: any) => {
                     </div>
                  </div>
             </form>
+            <SMSCalculator />
             
          </section>
     </main>
   )
 }
+
+

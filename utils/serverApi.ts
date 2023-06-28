@@ -131,6 +131,33 @@ export const fetchNominees = async () => {
     return res;
 }
 
+export const fetchNomineesAll = async () => {
+    const limit = 100
+    var pass = 0;
+    var data = []
+    
+    // while(true){
+    //   const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, [
+    //      Query.limit(limit),
+    //      Query.offset(pass*limit)
+    //   ])
+    //   console.log("PASS: ", pass, "OFFSET: ", (pass*limit), "LIMIT: ", limit)
+    //   // console.log(res)
+    //   pass++
+    //   data = [...res.documents!]
+    //   if(res?.documents?.length < limit) break
+    // }
+
+    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, [
+        Query.limit(limit),
+        Query.offset(pass*limit)
+    ])
+
+    data = [...res.documents!]
+    
+    return data;
+}
+
 export const fetchNominee = async (serial: string) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, [
         Query.equal("serial", serial),
@@ -217,6 +244,12 @@ export const fetchGroup = async (id: string) => {
     const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_GROUP!, [
         Query.equal("$id", id),
     ])
+    return res;
+}
+
+
+export const updateGroup = async (id: string, body: object) => {
+    const res = await db.updateDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_GROUP!, id , body)
     return res;
 }
 

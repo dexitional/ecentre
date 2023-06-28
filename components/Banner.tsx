@@ -16,6 +16,7 @@ function Banner() {
   const { data:session, status } = useSession()
   const [ form, setForm ] = useState<Props>({ serial:'', pin: '' })
   const [ isLoading, setIsLoading ] = useState(false)
+  const [ isUserLoading, setIsUserLoading ] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
@@ -23,11 +24,31 @@ function Banner() {
 
   const authenticate = async (e: any) => {
       e.preventDefault()
+      setIsUserLoading(true)
+        
       try {
-        const resp = await signIn('credentials', { callbackUrl: `/user/${form?.serial}/application`, serial: form?.serial, pin: form.pin })
+        if(form?.serial.trim() == ''){
+          alert(`Please Type in your SERIAL !`)
+          setIsUserLoading(false)
+          return
+        }
+        if(form?.pin.trim() == ''){
+          alert(`Please Type in your PIN !`)
+          setIsUserLoading(false)
+          return
+        }
+
+        const resp = await signIn('credentials', { callbackUrl: `/user/${form?.serial.trim()}/application`, serial: form?.serial?.trim(), pin: form?.pin?.trim() })
         //const resp = await signIn('credentials', { redirect: false, callbackUrl: `/user/${form?.serial}/application`, serial: form?.serial, pin: form.pin })
+        // if(resp?.url){
+        //   router.push(resp?.url)
+        //   setIsUserLoading(false)
+        // } else {
+        //   setIsUserLoading(false)
+        // }
         console.log(resp)
       } catch(e){
+        setIsUserLoading(false)
         console.log(e)
       }
       
@@ -41,8 +62,7 @@ function Banner() {
             const pass = window.prompt("Enter Password !");
             if(tag && pass){
               setIsLoading(true)
-              const resp:any = await signIn('adminsignin', { callbackUrl: `/vouchers`, username: tag, password: pass })
-              console.log(resp)
+              const resp:any = await signIn('adminsignin', { callbackUrl: `/vouchers`, username: tag?.trim(), password: pass?.trim() })
               if(resp?.url){
                 router.push(resp?.url)
                 setIsLoading(false)
@@ -84,10 +104,23 @@ function Banner() {
                    <input name="pin" onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })} className="px-6 py-1 md:py-3 rounded-lg text-white placeholder:tracking-[0.2em] placeholder:text-white bg-blue-950/70 border-2 focus:ring-0 focus:border-white border-white col-span-1" type="text" placeholder="PIN" />
                 </div>
                 <button type="submit" className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-slate-100 disabled:bg-opacity-50 disabled:cursor-wait border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
-                    { status == 'loading' ?
+                    { isUserLoading ?
+                      <>
+                        <span className="text-sm md:text-lg tracking-widest font-bold text-blue-950 animate-pulse">VERIFYING ...</span>
+                        {/* <BsArrowDownRightCircle className="h-5 w-5 md:h-7 md:w-7 text-blue-950"/> */}
+                      </> :
+                      <>
+                        <span className="text-base md:text-xl tracking-widest font-extrabold text-blue-950">ENTER</span>
+                        <BsArrowDownRightCircle className="h-5 w-5 md:h-7 md:w-7 text-blue-950"/>
+                      </> 
+                    }
+                    
+                </button>
+
+                {/* <button type="submit" className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-slate-100 disabled:bg-opacity-50 disabled:cursor-wait border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
+                    { status == 'loading' || isUserLoading ?
                       <>
                         <span className="text-sm md:text-lg tracking-widest font-bold text-blue-950 animate-pulse">LOADING ...</span>
-                        {/* <BsArrowDownRightCircle className="h-5 w-5 md:h-7 md:w-7 text-blue-950"/> */}
                       </> :
                       status == 'unauthenticated' ?
                       <>
@@ -96,7 +129,8 @@ function Banner() {
                       </> : null
                     }
                     
-                </button>
+                </button> */}
+
                 <button type="button" onClick={adminSignin} className="px-6 py-2 h-10 md:h-14 min-w-md rounded-lg bg-yellow-100 disabled:bg-opacity-50 disabled:cursor-wait border-b border-blue-950 text-blue-950 font-semibold flex items-center justify-center space-x-4">
                     <BiLock className="h-8 w-8 text-blue-950"/>
                     { isLoading 

@@ -19,7 +19,7 @@ function SMSCalculator() {
             <h1 className="px-2 py-1 bg-blue-950 text-xs font-bold text-center text-white tracking-wider">SMS CALCULATOR</h1>
             <p className="px-2 py-1 font-mono font-semibold text-sm">SMS RATE: <span className="p-0.5 bg-gray-100/50 text-lg font-bold tracking-wider">₵ 0.04</span></p>
             <input onChange={onChange} placeholder="SMS Amount" />
-            <p>CHARGE {charge} </p>
+            <p>CHARGE {charge} {!Number.isNaN(charge) ? charge.toFixed(2) : 0.0 } </p>
         </div>
 
         {/* <form className="w-full flex items-center justify-between space-x-2">

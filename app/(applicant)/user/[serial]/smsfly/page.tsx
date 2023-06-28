@@ -57,23 +57,7 @@ const onChange  = (e: any) => {
                     </div>
                  </div>
             </form>
-            <div className="p-4 w-48 flex flex-col">
-                 <div className=" rounded bg-slate-50 shadow-xl shadow-slate-200 overflow-hidden">
-                    <h1 className="px-2 py-1 bg-blue-950 text-xs font-bold text-center text-white tracking-wider">SMS CALCULATOR</h1>
-                    <div className="p-2">
-                        <p className="font-mono font-semibold text-sm">SMS RATE: <code className="p-0.5 bg-gray-100/50 text-lg font-bold tracking-wider">₵{Intl.NumberFormat("GHC").format(0.04).toString()}</code></p>
-                    </div>
-                    <form>
-                       <input value={value} onChange={onChange}  />
-                       <p>CHARGE {charge} </p>
-                    </form>
-                 </div>
-
-                 {/* <form className="w-full flex items-center justify-between space-x-2">
-                    <input className="flex-1 w-36 placeholder:text-sm" type="text" maxLength={10} placeholder="Sender ID" />
-                    <button className="px-4 py-4 w-10 bg-blue-950 font-bold text-white text-xs text-center rounded">ADD</button>
-                 </form> */}
-            </div>
+            
          </section>
     </main>
   )

@@ -4,7 +4,7 @@ import { getContacts } from "@/utils/getContacts";
 import { getGroup } from "@/utils/getGroup";
 import { getHelper, getHelperWithPost } from "@/utils/getHelper";
 import { getUserDetail } from "@/utils/getUserDetail";
-import { fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, postNominee, updateNominee } from "@/utils/serverApi";
+import { deleteNominee, fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, postNominee, updateNominee } from "@/utils/serverApi";
 import { getServerSession } from "next-auth";
 
 
@@ -101,12 +101,20 @@ export async function GET(request: Request) {
         if(data) return new Response(JSON.stringify({ success: true, data }), { status: 200 });
     }
 
+    if(action == 'delete'){
+      const serial: any = searchParams.get("serial")
+      const applicant:any = await fetchNominee(serial);
+      const del = await deleteNominee(applicant.documents[0].$id)
+      console.log(del)
+      if(del) return new Response(JSON.stringify({ success: true, data:null, message: `Nomination Form Deleted!` }), { status: 200 });
+    }
+
   // ?action=form&serial=test ( Fetch for form population )
   // ?action=print&serial=test ( Fetch for Printview with 3rd party endpoints )
   
   // Fetch Application Data ( form, print )
   // Fetch Aspirant, Mate, Gurantor 1  & 2 - Biodata ( print )
-  return new Response(JSON.stringify({ action }), { status: 200 });
+    return new Response(JSON.stringify({ action }), { status: 200 });
 }
 
 export async function DELETE(request: Request, { params}:{ params: { id: string }} ) {

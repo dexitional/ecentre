@@ -1,17 +1,14 @@
 // import { useSearchParams } from 'next/navigation';
-import { fetchGroup, fetchNomineeOffset, fetchNomineeOffsetById, fetchNominees, fetchPosition, fetchSession, fetchVouchers } from '@/utils/serverApi';
+import { fetchNomineeOffset, fetchNomineeOffsetById, fetchPosition, fetchSession } from '@/utils/serverApi';
 import React from 'react'
-import { FiEdit3 } from 'react-icons/fi';
 import BadgeIcon from './BadgeIcon';
 import { MdOutlineArticle,MdPending,MdVerified } from 'react-icons/md';
-import { GrDocumentVerified } from 'react-icons/gr';
 import Link from 'next/link';
 import { getGroup } from '@/utils/getGroup';
 import { getUserDetail } from '@/utils/getUserDetail';
 import { getServerSession } from 'next-auth';
 import { options } from '@/options';
 import { BsFilePdf } from 'react-icons/bs';
-import Image from 'next/image';
 import { BiPhotoAlbum } from 'react-icons/bi';
 
 
@@ -58,7 +55,7 @@ async function PageNominee({ slug }: any) {
             { data?.map((row:any,i:React.Key) => {
                
                 return (
-                <tr key={row.code} className="grid grid-cols-1 md:grid-cols-5 text-left ">
+                <tr key={row?.serial} className="grid grid-cols-1 md:grid-cols-5 text-left ">
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">SERIAL</span>
                         <span className="ml-3 md:m-0 font-bold text-sm tracking-wide">

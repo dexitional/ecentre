@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import UserNav from '@/components/UserNav';
 import { getServerSession } from 'next-auth';
 import { options } from '@/options';
 import AdminUserNav from '@/components/AdminUserNav';
 import { redirect } from 'next/navigation';
 
-async function Layout({ children }: { children: React.ReactNode }) {
+async function Layout({ searchParams,children }: { searchParams: any, children: React.ReactNode }) {
   
   const session:any = await getServerSession(options)
   if(!session) redirect('/')
@@ -16,7 +16,10 @@ async function Layout({ children }: { children: React.ReactNode }) {
           {/* @ts-ignore */}
           <AdminUserNav session={session} />
           <div className="p-4 print:p-0 rounded bg-slate-50/60 print:bg-transparent shadow print:shadow-none shadow-slate-300 flex-1">
-             { children }
+             <Suspense key={searchParams} fallback={<div className="font-bold">Loading Main Page</div>}>
+              { children }
+             </Suspense>
+             
           </div>
          
         </div>

@@ -172,6 +172,8 @@ export const fetchNomineeOffset = async (keyword: string, pass: number, limit: n
        Query.orderDesc("sessionId"),
        Query.orderAsc("groupId"),
        Query.orderAsc("positionId"),
+       //Query.orderAsc("aspirant_regno"),
+       
        Query.limit(limit),
        Query.offset(pass*limit)
     ])
@@ -213,10 +215,8 @@ export const updateNominee = async (id: string, body: object) => {
     return res;
 }
 
-export const deleteNominee = async (serial: string) => {
-    const res = await db.listDocuments(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, [
-        Query.equal("serial", serial.toString()),
-    ])
+export const deleteNominee = async (id: string) => {
+    const res = await db.deleteDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, id)
     return res;
 }
 

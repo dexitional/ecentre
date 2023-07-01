@@ -1,9 +1,11 @@
 
-import { storage } from "@/appwrite";
+import { options } from "@/options";
 import { getContacts } from "@/utils/getContacts";
-import { fetchActiveSession, fetchCgpa, fetchNominee, postNominee, updateNominee } from "@/utils/serverApi";
-import uploadImage from "@/utils/uploadImage";
-import { ID, InputFile } from "node-appwrite";
+import { getGroup } from "@/utils/getGroup";
+import { getHelper, getHelperWithPost } from "@/utils/getHelper";
+import { getUserDetail } from "@/utils/getUserDetail";
+import { fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, postNominee, updateNominee } from "@/utils/serverApi";
+import { getServerSession } from "next-auth";
 
 
 export async function POST(request: Request) {
@@ -63,12 +65,15 @@ export async function POST(request: Request) {
 
 
 export async function GET(request: Request) {
+    
+    const session:any = await getServerSession(options)
     const { searchParams } = new URL(request.url);
     const action: any = searchParams.get("action")
-    const ua: any = searchParams.get("ua")
-    const tp: any = searchParams.get("tp")
+    
 
     if(action == 'verify'){
+        const ua: any = searchParams.get("ua")
+        const tp: any = searchParams.get("tp")
         const applicant:any = await fetchNominee(ua);
         const asp_res = await fetch(`https://ehub.ucc.edu.gh/api/sso/identity?search=${encodeURIComponent(applicant?.documents[0]?.aspirant_regno)}`)
         const asp = await asp_res.json()
@@ -76,6 +81,24 @@ export async function GET(request: Request) {
         
         const ups = await updateNominee(applicant.documents[0].$id, { [`${tp}_verified`] : true });
         if(ups) return new Response(JSON.stringify({ message: `Thank you for Approving and Endorsement Aspirant, ${user?.name} !` }), { status: 200 });
+    }
+
+    if(action == 'load'){
+        const search: any = searchParams.get("search")
+        const page: any = searchParams.get("page")
+        const limit: any = searchParams.get("limit")
+        
+        const userDetail:any = await getUserDetail(session?.user?.email);
+        const group:any = userDetail?.groupId ? await getGroup(userDetail?.groupId) : {};
+
+        const dt = userDetail?.groupId ? await fetchNomineeOffsetById(userDetail?.groupId,0) : await fetchNomineeOffset(search,page,limit);
+      
+        const data:any = await Promise.all(dt?.documents?.map(async (row: any) => {
+            const { position, session } = await getHelperWithPost(row.sessionId, row.positionId);
+            return { ...row, position, session }
+        }))
+
+        if(data) return new Response(JSON.stringify({ success: true, data }), { status: 200 });
     }
 
   // ?action=form&serial=test ( Fetch for form population )

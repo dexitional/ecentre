@@ -37,7 +37,7 @@ async function AspirantCardBox({ data }: Props) {
                   ? data?.ballot_no
                   : data?.is_candidate
                   ? 'Q'
-                  : ''
+                  : 'D'
                 }
             </div>
         </div>

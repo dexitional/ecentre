@@ -5,12 +5,9 @@ import PageNominee from './PageNominee';
 async function PgNominee({slug}:any) {
     return (
         <>
-            <PageHeader title="Nominations" addUrl=""  />
-           
-            <Suspense fallback={<>Testing Loading</>}> {
-              /* @ts-ignore */}
-              <PageNominee slug={slug} />
-            </Suspense>
+          <PageHeader title="Nominations" addUrl=""  />
+          {/* @ts-ignore */}
+          <PageNominee slug={slug} />
         </>
     )
 }

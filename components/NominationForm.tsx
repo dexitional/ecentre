@@ -41,8 +41,10 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   const { data:session }: any = useSession()
   const newData = applicant?.documents[0];
   const [ picture, setPicture ] = useState(newData?.photo)
-  const [ cv, setCV ] = useState(newData?.photo)
+  const [ cv, setCV ] = useState(newData?.cv)
   const [ loading, setLoading ] = useState(false)
+  const [ isPhotoLoading, setIsPhotoLoading ] = useState(false)
+  const [ isCvLoading, setIsCvLoading ] = useState(false)
   const [ photoUrl, setPhotoUrl ] = useState('')
   const [ cvUrl, setCvUrl ] = useState('')
   const [ form, setForm ] = useState<Inputs | any>({
@@ -77,17 +79,23 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
   const onChange = async (e:any) => {
      if(e.target.name == 'photo'){
+        setIsPhotoLoading(true)
         setPicture(URL.createObjectURL(e.target.files[0]));
         const photo = await uploadPicture(e.target.files[0], serial)
-        setPhotoUrl(photo)
-        console.log(photoUrl)
+        if(photo){
+          setIsPhotoLoading(false)
+          setPhotoUrl(photo)
+        } console.log(photoUrl)
      }
 
      if(e.target.name == 'cv'){
+        setIsCvLoading(true)
         setCV(URL.createObjectURL(e.target.files[0]));
         const cv = await uploadCv(e.target.files[0], serial)
-        setCvUrl(cv)
-        console.log(cvUrl)
+        if(cv){
+          setIsCvLoading(false)
+          setCvUrl(cv)
+        } console.log(cvUrl)
      }
 
      if(['photo','cv'].includes(e.target.name)) 
@@ -111,7 +119,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
   const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
 
-      const ok = window.confirm("DO YOU WANT COMMIT CHANGES AND PROCEED ?")
+      const ok = window.confirm("DO YOU WANT TO COMMIT CHANGES AND PROCEED ?")
       if(!ok) return
       try {
         setLoading(true)
@@ -121,7 +129,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         if(!form.teaser) throw new Error("Please Provide Teaser!")
         if(!form.guarantor1_regno) throw new Error("Please First Guarantor!")
         if(!form.guarantor2_regno) throw new Error("Please Second Guarantor!")
-
+        if(!picture && form.form_submit) throw new Error("Please Upload Candidate Photo or Flyer!")
+        if(!cv && form.form_submit) throw new Error("Please Upload Candidate CV!")
         // Upload to Storage
         // var photo,cv
         // if(form?.photo){
@@ -189,6 +198,19 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
             </div>
         </div> : null
      } */}
+   
+     { !picture || !cv ?
+     <div className="p-2 md:px-6 md:py-2 rounded shadow shadow-red-300/60 bg-red-50/80 space-y-4">
+        <div className="text-sm md:text-inherit space-y-3">
+          { !picture ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Upload Candidate Photo Before Final Submission</p> : null }
+          { !cv ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Upload Candidate CV Before Final Submission</p> : null }
+          {/* { errors.positionId ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Choose a Portfolio</p> : null }
+          { errors.guarantor1_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide First (1st) Guarantor</p> : null }
+          { errors.guarantor2_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide First (2nd) Guarantor</p> : null }
+          { errors.teaser ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide Candidate Teaser</p> : null }
+          { errors.consent ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Agree to the Terms & Conditions</p> : null } */}
+        </div>
+     </div> : null }
     <div className="grid md:grid-cols-3 gap-8">
         <form ref={formRef} className="md:col-span-2 space-y-6 md:space-y-14 order-2 md:order-1"  onSubmit={onSubmit}>
             <div className="space-y-4">
@@ -215,15 +237,31 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 <Input name="teaser" defaultValue={form.teaser} onChange={onChange} required label="Candidacy Teaser" placeholder="Teaser" />
                 <hr/>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                   { picture
-                    ? <PhotoCard src={picture} label="Candidate Photo" onClick={() => setPicture(null)} />
-                    : <File name="photo" label="Candidate Photo Upload" onChange={onChange} />
+                   {   picture && !photoUrl && !isPhotoLoading
+                    ?  <PhotoCard src={picture} label="Candidate Photo" onClick={() => { setPicture(null); setPhotoUrl(''); }} />
+                    :  picture && !photoUrl && isPhotoLoading
+                    ?   <div className="z-20 w-full h-full flex items-center space-x-4 justify-center rounded-lg bg-white bg-opacity-80 backdrop-blur-sm">
+                            <BiLoaderCircle className="text-[#153B50] rounded-full h-6 w-6 animate-spin"/>
+                            <span className="text-[#153B50] text-sm tracking-widest font-poppins font-bold animate-pulse">UPLOADING PHOTO ...</span>
+                        </div> 
+                    :  picture && photoUrl && !isPhotoLoading 
+                    ?  <PhotoCard src={picture} label="Candidate Photo" onClick={() => { setPicture(null); setPhotoUrl(''); }} />
+                    :  <File name="photo" label="Candidate Photo Upload" onChange={onChange} />
                    }
 
-                   { cv
-                    ? <PdfCard src={picture} label="Curriculum Vitae (CV)" onClick={() => setCV(null)} />
-                    : <File name="cv" label="Candidate Resume Upload" onChange={onChange} />
+                   {   cv && !cvUrl && !isCvLoading
+                    ?  <PdfCard src={picture} label="Curriculum Vitae (CV)" onClick={() => { setCV(null); setCvUrl(''); }} />
+                    :  cv && !cvUrl && isCvLoading
+                    ?   <div className="z-20 w-full h-full flex items-center space-x-4 justify-center rounded-lg bg-white bg-opacity-80 backdrop-blur-sm">
+                            <BiLoaderCircle className="text-[#153B50] rounded-full h-6 w-6 animate-spin"/>
+                            <span className="text-[#153B50] text-sm tracking-widest font-poppins font-bold animate-pulse">UPLOADING CV ...</span>
+                        </div> 
+                    :  cv && cvUrl && !isCvLoading 
+                    ?  <PdfCard src={cv} label="Curriculum Vitae (CV)" onClick={() => { setCV(null); setCvUrl(''); }} />
+                    :  <File name="cv" label="Candidate CV Upload" onChange={onChange} />
                    }
+
+
                 </div>
                 <hr/>
                 {/* <label id="agree-1" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
@@ -244,8 +282,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                       <span className="text-[#153B50] text-lg tracking-widest font-poppins font-bold animate-pulse">PROCESSING ...</span>
                   </div> : null
                 }
-                  <button type="submit" disabled={!form?.consent} onClick={saveForm} className="z-10 py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50] disabled:bg-[#153B50]/20">SAVE & EXIT</button>
-                  <button type="submit" disabled={!form?.consent} onClick={submitForm} className="z-10 py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700 disabled:bg-green-700/20 disabled:ring-green-700/20">SUBMIT NOMINATION</button>
+                  <button type="submit" disabled={!form?.consent } onClick={saveForm} className="z-10 py-3 px-6 rounded font-semibold tracking-wider text-white bg-[#153B50] disabled:bg-[#153B50]/20">SAVE & EXIT</button>
+                  <button type="submit" disabled={!form?.consent || !picture || !cv } onClick={submitForm} className="z-10 py-3 px-6 rounded font-semibold tracking-wider text-white ring-1 ring-green-700 bg-green-700 disabled:bg-green-700/20 disabled:ring-green-700/20">SUBMIT NOMINATION</button>
                 </div>
         </form>
         <section className="col-span-1 md:space-y-14 order-1 md:order-2">

@@ -3,6 +3,9 @@ import FormPrintAdmin from '@/components/FormPrintAdmin'
 import Link from 'next/link'
 import React from 'react'
 
+
+export const revalidate = 0;
+
 function Page({ searchParams, params }:{ searchParams:any, params: { id: string, returnpage: string }}) {
    const page = searchParams?.returnpage
 

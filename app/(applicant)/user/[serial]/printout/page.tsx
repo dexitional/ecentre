@@ -30,6 +30,8 @@ const getApplicant = async (serial: string) => {
     return { applicant, has_mate,g1_verified, g2_verified, cgpa, form_submit, title, group_name, data: mapData }
 }
 
+
+export const revalidate = 0;
 export default async function Page({ params}:{ params: { serial: string }}) {
   
   const data = await getApplicant(params?.serial);

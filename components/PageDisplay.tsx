@@ -54,7 +54,7 @@ async function PageDisplay({}: Props) {
                     <div className="grid grid-cols-3 gap-4 place-content-center">
                      { value?.map( (aspirant: any) => {
                         // @ts-ignore
-                        return (<AspirantCard key={aspirant.aspirant_regno} data={aspirant} />)
+                        return (<AspirantCardBox key={aspirant.aspirant_regno} data={aspirant} />)
                      })}
                        
                     </div>

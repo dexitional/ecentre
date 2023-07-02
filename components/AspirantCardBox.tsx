@@ -24,7 +24,7 @@ async function AspirantCardBox({ data }: Props) {
         </div>
         { true ?
         <div className="absolute bottom-[30%] min-h-fit w-16 flex items-center rounded-md bg-white bg-opacity-80 border-2 border-blue-950 overflow-hidden">
-            {/* <div className="p-2 text-2xl text-blue-950 font-bold">#</div> */}
+            { data?.ballot_no && <div className="p-2 text-2xl text-blue-950 font-bold">#</div>}
             <div className="px-2 py-1 flex flex-wrap items-center justify-center rounded-tl rounded-bl bg-blue-950/95 italic text-2xl text-white font-bold tracking-widest">{data?.ballot_no || 'Q'}</div>
         </div>
         : null

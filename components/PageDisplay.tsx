@@ -49,9 +49,9 @@ async function PageDisplay({}: Props) {
         <main className="mt-32 my-10 space-y-10">
             { Object.entries(data).map( ([key, value]: any) => {
              return(
-                <section key={key} className="space-y-4 pb-10 border-b-2 border-red-700/80 border-dashed">
-                    <h1 className="text-red-800 text-2xl text-center font-extrabold tracking-widest">{key?.toUpperCase()}</h1>
-                    <div className="grid grid-cols-3 gap-4 place-content-center">
+                <section key={key} className="space-y-6 pb-10 border-b-2 border-red-700/80 border-dashed">
+                    <h1 className="px-6 py-1 mx-auto w-fit -skew-x-12 bg-red-50/30 border-8 border-double border-red-700/80 text-red-800 text-2xl text-center font-extrabold tracking-widest">{key?.toUpperCase()}</h1>
+                    <div className="grid gap-4 justify-center grid-cols-[repeat(auto-fit,_32%)]">
                      { value?.map( (aspirant: any) => {
                         // @ts-ignore
                         return (<AspirantCardBox key={aspirant.aspirant_regno} data={aspirant} />)

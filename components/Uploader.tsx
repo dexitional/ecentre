@@ -7,6 +7,7 @@ import { uploadCv, uploadPicture } from '@/firabase'
 import { objectToFormData } from '@/utils/objectToFormData'
 import { useRouter } from 'next/navigation'
 import Notiflix from 'notiflix'
+import { BiLoaderCircle } from 'react-icons/bi'
 
 type Props = {
     serial: string;
@@ -18,6 +19,8 @@ function Uploader({ serial, data }: Props) {
     const [ picture, setPicture ] = useState(data?.photo)
     const [ cv, setCV ] = useState(data?.cv)
     const [ loading, setLoading ] = useState(false)
+    const [ isPhotoLoading, setIsPhotoLoading ] = useState(false)
+    const [ isCvLoading, setIsCvLoading ] = useState(false)
     const [ photoUrl, setPhotoUrl ] = useState('')
     const [ cvUrl, setCvUrl ] = useState('')
     const [ form, setForm ] = useState<any>({
@@ -27,15 +30,23 @@ function Uploader({ serial, data }: Props) {
 
     const onChange = async (e:any) => {
         if(e.target.name == 'photo'){
-           setPicture(URL.createObjectURL(e.target.files[0]));
-           const photo = await uploadPicture(e.target.files[0], serial)
-           setPhotoUrl(photo)
+            setIsPhotoLoading(true)
+            setPicture(URL.createObjectURL(e.target.files[0]));
+            const photo = await uploadPicture(e.target.files[0], serial)
+            if(photo){
+              setIsPhotoLoading(false)
+              setPhotoUrl(photo)
+            } console.log(photoUrl)
         }
-   
+
         if(e.target.name == 'cv'){
-           setCV(URL.createObjectURL(e.target.files[0]));
-           const cv = await uploadCv(e.target.files[0], serial)
-           setCvUrl(cv)
+            setIsCvLoading(true)
+            setCV(URL.createObjectURL(e.target.files[0]));
+            const cv = await uploadCv(e.target.files[0], serial)
+            if(cv){
+              setIsCvLoading(false)
+              setCvUrl(cv)
+            } console.log(cvUrl)
         }
    
         if(['photo','cv'].includes(e.target.name)) 
@@ -85,19 +96,33 @@ function Uploader({ serial, data }: Props) {
 
   return (
     <form className="w-full" onSubmit={onSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 scale-75">
-            { picture
-            ? <PhotoCard src={picture} label="Flyer" onClick={() => setPicture('')} />
-            : <File name="photo" label="Flyer Upload" onChange={onChange} />
-            }
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 scale-75">
+          {   picture && !photoUrl && !isPhotoLoading
+              ?  <PhotoCard src={picture} label="FLYER" onClick={() => { setPicture(''); setPhotoUrl(''); }} />
+              :  picture && !photoUrl && isPhotoLoading
+              ?   <div className="z-20 w-full h-full flex items-center space-x-2 justify-center rounded-lg bg-white bg-opacity-80 backdrop-blur-sm">
+                      <BiLoaderCircle className="text-[#153B50] rounded-full h-6 w-6 animate-spin"/>
+                      <span className="text-[#153B50] text-sm tracking-widest font-poppins font-bold animate-pulse">UPLOADING ...</span>
+                  </div> 
+              :  picture && photoUrl && !isPhotoLoading 
+              ?  <PhotoCard src={picture} label="FLYER" onClick={() => { setPicture(''); setPhotoUrl(''); }} />
+              :  <File name="photo" label="Flyer Upload" onChange={onChange} />
+              }
 
-            { cv
-            ? <PdfCard src={picture} label="Curriculum Vitae" onClick={() => setCV('')} />
-            : <File name="cv" label="CV Upload" onChange={onChange} />
+              {   cv && !cvUrl && !isCvLoading
+              ?  <PdfCard src={picture} label="CV" onClick={() => { setCV(''); setCvUrl(''); }} />
+              :  cv && !cvUrl && isCvLoading
+              ?   <div className="z-20 w-full h-full flex items-center space-x-2 justify-center rounded-lg bg-white bg-opacity-80 backdrop-blur-sm">
+                      <BiLoaderCircle className="text-[#153B50] rounded-full h-6 w-6 animate-spin"/>
+                      <span className="text-[#153B50] text-sm tracking-widest font-poppins font-bold animate-pulse">UPLOADING ...</span>
+                  </div> 
+              :  cv && cvUrl && !isCvLoading 
+              ?  <PdfCard src={cv} label="CV" onClick={() => { setCV(''); setCvUrl(''); }} />
+              :  <File name="cv" label="CV Upload" onChange={onChange} />
             }
         </div>
         <div className="w-full flex items-center justify-center">
-            <button className="mx-auto my-2 px-4 py-2 w-4/5 rounded bg-[#153B50] font-bold tracking-widest text-white text-sm" type="submit">UPLOAD</button>
+            <button disabled={ !picture || !cv } className="mx-auto my-2 px-4 py-2 w-4/5 rounded bg-[#153B50] disabled:opacity-50 font-bold tracking-widest text-white text-sm" type="submit">UPLOAD</button>
         </div>
        </form>
   )

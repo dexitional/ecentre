@@ -37,7 +37,8 @@ export default async function Page({ params}:{ params: { serial: string }}) {
           ): <h1 className="text-center font-bold text-[#153B50] flex flex-col items-center justify-center space-y-4"> NOMINATIONS ARE CLOSED ! <br/><Link href={`/user/${params?.serial}/printout`} className="my-4 px-4 py-2 w-fit rounded border text-xs bg-[#153B50] text-white">NOMINATION PRINTOUT</Link></h1> }
         </div>
         <div className="">
-          { !moment().isAfter(sess_res?.end_date) 
+          { false
+            
             ? <NominationForm data={data} />
             : <div className="mx-auto my-4 w-full max-w-sm rounded border-2 border-[#153B50] bg-blue-50/80 overflow-hidden"> 
                  <div className="flex-1 flex items-center justify-between overflow-hidden">

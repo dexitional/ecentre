@@ -11,6 +11,7 @@ import { Queue } from 'async-await-queue';
 import { getHelper } from '@/utils/getHelper';
 import { getGroup } from '@/utils/getGroup';
 import BadgeIconSuccess from './BadgeIconSuccess';
+import moment from 'moment';
 const myq = new Queue(1, 100);
 
 export const revalidate = 0;
@@ -81,6 +82,8 @@ async function PageVoucher() {
                         <span className="md:hidden py-0.5 px-3 rounded bg-blue-900/5 font-bold">GROUP</span>
                         <span className="ml-3 md:m-0">{ row?.group?.title }<br/>{row?.buyer_phone ? <span className="text-xs font-bold">( BUYER: { row?.buyer_phone } )</span> : null }</span>
                         {/* <span className="ml-3 md:m-0">{group?.name?.toUpperCase()}</span> */}
+                        <span className="ml-3 md:m-0 text-xs italic font-medium block">-- Sold on: { moment(row?.$updatedAt).format('ddd, MMM DD') }</span>
+                        
                     </td>
                     <td className="px-6 py-3 grid md:grid-cols-1 gap-y-2 md:border-b border-blue-900/10">
                         <span className="md:hidden py-0.5 px-3 rounded bg-green-900/5 font-bold">SESSION</span>

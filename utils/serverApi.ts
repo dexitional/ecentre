@@ -173,7 +173,6 @@ export const fetchNomineeOffset = async (keyword: string, pass: number, limit: n
        Query.orderAsc("groupId"),
        Query.orderAsc("positionId"),
        //Query.orderAsc("aspirant_regno"),
-       
        Query.limit(limit),
        Query.offset(pass*limit)
     ])

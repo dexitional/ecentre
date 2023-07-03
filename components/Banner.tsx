@@ -1,7 +1,6 @@
 "use client"
 import React, { useState } from 'react'
 import { BsArrowDownRightCircle } from 'react-icons/bs'
-import { FcGoogle } from 'react-icons/fc'
 import { useSearchParams, useRouter } from 'next/navigation';
 import { signIn,useSession } from "next-auth/react"
 import { BiLock } from 'react-icons/bi';
@@ -46,7 +45,7 @@ function Banner() {
         // } else {
         //   setIsUserLoading(false)
         // }
-        console.log(resp)
+        //console.log(resp)
       } catch(e){
         setIsUserLoading(false)
         console.log(e)
@@ -62,7 +61,8 @@ function Banner() {
             const pass = window.prompt("Enter Password !");
             if(tag && pass){
               setIsLoading(true)
-              const resp:any = await signIn('adminsignin', { callbackUrl: `/vouchers`, username: tag?.trim(), password: pass?.trim() })
+              const resp:any = await signIn('adminsignin', { callbackUrl: `/nominees`, username: tag?.trim(), password: pass?.trim() })
+              console.log(resp);
               if(resp?.url){
                 router.push(resp?.url)
                 setIsLoading(false)

@@ -1,4 +1,3 @@
-// import { useSearchParams } from 'next/navigation';
 import { fetchNomineeOffset, fetchNomineeOffsetById, fetchPosition, fetchSession } from '@/utils/serverApi';
 import React from 'react'
 import BadgeIcon from './BadgeIcon';
@@ -13,7 +12,7 @@ import { BiPhotoAlbum } from 'react-icons/bi';
 import moment from 'moment';
 import ActionGroup from './ActionGroup';
 
-export const revalidate = 0;
+//export const revalidate = 0;
 const getHelper = async( sessionId: string, positionId: string) => {
     const session_res:any = await fetchSession(sessionId)
     const session =  session_res?.documents[0]

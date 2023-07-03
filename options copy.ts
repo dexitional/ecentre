@@ -10,6 +10,18 @@ export const options: NextAuthOptions = {
       secret: process.env.NEXTAUTH_SECRET
     },
     providers: [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_ID!,
+        clientSecret: process.env.GOOGLE_SECRET!,
+        authorization: {
+          params: {
+            prompt: "consent",
+            access_type: "offline",
+            response_type: "code"
+          }
+        }
+      }),
+
       CredentialsProvider({
         id: "credentials",
         name: "Nomination Voucher",
@@ -24,11 +36,9 @@ export const options: NextAuthOptions = {
           
           const resp = await getVoucher(serial,pin);
           if(resp.total > 0){
-             const user:any = resp?.documents[0];
+             const user:any = resp.documents[0];
              return { ...user, gid: 1 }
-          } else { 
-            throw new Error("Invalid details")
-          }
+          }  throw new Error("Invalid details")
         },   
       }),
 
@@ -48,9 +58,7 @@ export const options: NextAuthOptions = {
           if(resp.total > 0){
              const user:any = resp.documents[0];
              return { ...user, gid: 2 }
-          } else {
-             throw new Error("Invalid details")
-          }
+          }  throw new Error("Invalid details")
         },   
       }),
     ],
@@ -61,8 +69,14 @@ export const options: NextAuthOptions = {
         },
         async session({ session, token, user }: any) {
             // Send properties to the client, like an access_token from a provider.
-            session.user = { ...token };
+            session.user = { ...token, isAdmin: session?.user?.email };
             return session;
+        },
+        async signIn({ account, profile }: any) {
+          if (account?.provider === "google") {
+           return profile?.email_verified && profile?.email.endsWith("@ucc.edu.gh")
+          }
+          return true // Do different verification for other providers that don't have `email_verified`
         },
     },
     

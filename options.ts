@@ -69,9 +69,7 @@ export const options: NextAuthOptions = {
         },
         async session({ session, token, user }: any) {
             // Send properties to the client, like an access_token from a provider.
-            console.log("In Session: ", token, user, session)
             session.user = { ...token, isAdmin: session?.user?.email };
-            console.log("NEW SESSION: ", session)
             return session;
         },
         async signIn({ account, profile }: any) {

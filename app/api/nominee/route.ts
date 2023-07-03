@@ -113,8 +113,7 @@ export async function GET(request: Request) {
       const serial: any = searchParams.get("serial")
       const applicant:any = await fetchNominee(serial);
       const del = await deleteNominee(applicant.documents[0].$id)
-      console.log(del)
-      if(del) return new Response(JSON.stringify({ success: true, data:null, message: `Nomination Form Deleted!` }), { status: 200 });
+      return new Response(JSON.stringify({ success: true, data:null, message: `Nomination Form Deleted!` }), { status: 200 });
     }
 
     else if(action == 'remind'){

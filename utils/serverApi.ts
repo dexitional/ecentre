@@ -204,6 +204,7 @@ export const fetchNomineesDisplay = async (groupId: string) => {
     return res;
 }
 
+
 export const postNominee = async (body: object) => {
     const res = await db.createDocument(NEXT_PUBLIC_APPWRITE_DATABASE_ID!, COLLECTION_APPLICATION!, ID.unique(), body);
     return res;

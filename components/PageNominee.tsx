@@ -46,11 +46,11 @@ async function PageNominee({ slug }: any) {
 
    return (
     <div className="pb-12 overflow-y-scroll scrollbar-hide">
-        <h1 className="my-4 md:my-6 pl-3 px-1 py-1 md:px-6 md:py-2 flex items-center justify-between font-bold text-base md:text-2xl- tracking-widest rounded border md:border-2 border-blue-950/60 text-blue-950">
+        <h1 className="my-4 md:my-6 pl-3 px-1 py-2 md:px-6 md:py-2 flex flex-col md:flex-row space-y-2 md:space-y-0 md:items-center md:justify-between font-bold text-base md:text-2xl- tracking-widest rounded border md:border-2 border-blue-950/60 text-blue-950">
            <span>{ group?.title?.toUpperCase() || 'ADMINISTRATOR' }</span> 
-           <div className="flex space-x-4">
+           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
               {userDetail?.groupId && <ActionGroup groupId={userDetail?.groupId} /> }
-              <span className="px-3 py-0.5 rounded border border-slate-300 bg-slate-100 text-xs text-slate-700">PAGE {page+1}</span>
+              <span className="px-3 py-0.5 w-fit rounded border border-slate-300 bg-slate-100 text-xs text-slate-700">PAGE {page+1}</span>
            </div>
            
         </h1>

@@ -1,31 +1,34 @@
 
 import { options } from "@/options";
 import { getContacts } from "@/utils/getContacts";
+import { getEndorserLink } from "@/utils/getEndorserLink";
 import { getGroup } from "@/utils/getGroup";
 import { getHelper, getHelperWithPost } from "@/utils/getHelper";
 import { getUserDetail } from "@/utils/getUserDetail";
-import { deleteNominee, fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, postNominee, updateNominee } from "@/utils/serverApi";
+import { getVerification } from "@/utils/getVerification";
+import { sendMessageByRegNo } from "@/utils/sendMessageByRegNo";
+import { deleteNominee, fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, fetchNominees, fetchNomineesDisplay, postNominee, updateNominee } from "@/utils/serverApi";
 import { getServerSession } from "next-auth";
 
 
 export async function POST(request: Request) {
  
   try {
-    const formData  = await request.formData()
-    const body:any = Object.fromEntries(formData)
-    // const body = await request.json();
-    
-    //delete body.photo
-    //delete body.cv
-    delete body.$id
-    delete body.g1_verified
-    delete body.g2_verified
+        const formData  = await request.formData()
+        const body:any = Object.fromEntries(formData)
+        // const body = await request.json();
+        
+        //delete body.photo
+        //delete body.cv
+        delete body.$id
+        delete body.g1_verified
+        delete body.g2_verified
 
-    // Checks & Validations [ Guarantors - assigned, Applicants & Guarantors registered ]
+        // Checks & Validations [ Guarantors - assigned, Applicants & Guarantors registered ]
 
-    // Fetch CGPA
-    const cgpa = await fetchCgpa(body?.aspirant_regno)
-    // if(cgpa && ((cgpa.toString().toLowerCase() == 'pass') || (parseFloat(cgpa) >= 2.5))){ 
+        // Fetch CGPA
+        const cgpa = await fetchCgpa(body?.aspirant_regno)
+        // if(cgpa && ((cgpa.toString().toLowerCase() == 'pass') || (parseFloat(cgpa) >= 2.5))){ 
        
         // Fetch Helper Data
         const session = await fetchActiveSession();
@@ -41,11 +44,15 @@ export async function POST(request: Request) {
           ...({ cgpa: cgpa.toString() }),
         }
       
-        let resp
+        let resp;
         if(applicant.total > 0){
           resp = await updateNominee(applicant?.documents[0]?.$id, data);
+        
         } else {
-          resp = await postNominee(data);
+           data.g1_verified = false;
+           data.g2_verified = false;
+          
+           resp = await postNominee(data);
         } 
 
         if(data.form_submit) await getContacts(data); // Send Acknowledgement only after final submission
@@ -70,6 +77,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const action: any = searchParams.get("action")
     
+    console.log(action)
 
     if(action == 'verify'){
         const ua: any = searchParams.get("ua")
@@ -83,7 +91,7 @@ export async function GET(request: Request) {
         if(ups) return new Response(JSON.stringify({ message: `Thank you for Approving and Endorsement Aspirant, ${user?.name} !` }), { status: 200 });
     }
 
-    if(action == 'load'){
+    else if(action == 'load'){
         const search: any = searchParams.get("search")
         const page: any = searchParams.get("page")
         const limit: any = searchParams.get("limit")
@@ -101,7 +109,7 @@ export async function GET(request: Request) {
         if(data) return new Response(JSON.stringify({ success: true, data }), { status: 200 });
     }
 
-    if(action == 'delete'){
+    else if(action == 'delete'){
       const serial: any = searchParams.get("serial")
       const applicant:any = await fetchNominee(serial);
       const del = await deleteNominee(applicant.documents[0].$id)
@@ -109,12 +117,39 @@ export async function GET(request: Request) {
       if(del) return new Response(JSON.stringify({ success: true, data:null, message: `Nomination Form Deleted!` }), { status: 200 });
     }
 
+    else if(action == 'remind'){
+      const groupId: any = searchParams.get("groupId")
+      const noms:any = groupId ? await fetchNomineesDisplay(groupId) : await fetchNominees(); // Get All Nominees
+      console.log("NOMS: ",noms.total)
+      if(noms.total > 0) {
+         let count = 0;
+         for(const nom of noms.documents){
+           if(nom.photo && nom.cv && nom.g1_verified && nom.g2_verified) continue;
+           
+           let message = `Hi aspirant! please`
+               message += !nom.photo ? `, upload flyer`: ``
+               message += !nom.cv ? `, upload CV`: ``
+               message += !nom.g1_verified ? `, follow-up on 1st Guarantor`: ``
+               message += !nom.g2_verified ? `, follow-up on 2nd Guarantor`: ``
+               message += ` to complete nomination.`
+               console.log("ASPIRANT: ",nom.aspirant_regno, " MESSAGE: ", message)
+               const ss = await sendMessageByRegNo(nom.aspirant_regno,message)
+               const sm = await getEndorserLink(nom);
+        
+               //const ups = await updateNominee(nom.$id, { form_submit: false })
+               if(ss) count += 1;
+         }
+         return new Response(JSON.stringify({ success: true, data:count, message: `Reminders sent!` }), { status: 200 });
+      }
+      return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
+    }
+
   // ?action=form&serial=test ( Fetch for form population )
   // ?action=print&serial=test ( Fetch for Printview with 3rd party endpoints )
   
   // Fetch Application Data ( form, print )
   // Fetch Aspirant, Mate, Gurantor 1  & 2 - Biodata ( print )
-    return new Response(JSON.stringify({ action }), { status: 200 });
+  else return new Response(JSON.stringify({ action }), { status: 200 });
 }
 
 export async function DELETE(request: Request, { params}:{ params: { id: string }} ) {

@@ -5,7 +5,7 @@ export const sendMessageByRegNo = async (regno: string, message: string) => {
     const asp = await asp_res.json()
     const phone = asp?.data[0]?.user?.phone
     
-    const asp_sms = sms(phone,message);
+    const asp_sms = await sms(phone,message);
     console.log(asp_sms)
     return asp_sms;
 }

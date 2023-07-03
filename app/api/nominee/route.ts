@@ -139,16 +139,10 @@ export async function GET(request: Request) {
                if(ss) count += 1;
          }
          return new Response(JSON.stringify({ success: true, data:count, message: `Reminders sent!` }), { status: 200 });
-      }
-      return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
+      }  return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
     }
-
-  // ?action=form&serial=test ( Fetch for form population )
-  // ?action=print&serial=test ( Fetch for Printview with 3rd party endpoints )
-  
-  // Fetch Application Data ( form, print )
-  // Fetch Aspirant, Mate, Gurantor 1  & 2 - Biodata ( print )
-  else return new Response(JSON.stringify({ action }), { status: 200 });
+    
+    else return new Response(JSON.stringify({ action }), { status: 200 });
 }
 
 export async function DELETE(request: Request, { params}:{ params: { id: string }} ) {

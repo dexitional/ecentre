@@ -83,7 +83,11 @@ export default async function Page({ params}:{ params: { serial: string }}) {
                  <div className="relative space-y-4 border-r-2 border-dashed print:space-y-2">
                     <legend className="my-4 px-4 py-2 flex flex-col md:flex-row items-start md:items-center space-x-6 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">
                         <span>GUARANTOR #1</span>
-                        { g1_verified ? <span className="py-0.5 px-3 border-2 border-green-700 rounded bg-white text-green-900 text-xs">VERIFIED</span>: null }
+                        {/* { g1_verified ? <span className="py-0.5 px-3 border-2 border-green-700 rounded bg-white text-green-900 text-xs">VERIFIED</span>: null } */}
+                        {  g1_verified 
+                          ? <span className="py-0.5 px-3 border-2 border-green-700 rounded bg-white text-green-900 text-xs">VERIFIED</span>
+                          : <span className="py-0.5 px-3 border-2 border-red-700 rounded bg-white text-red-900 text-xs">PENDING</span>
+                        }
                     </legend>
                     <div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
                       <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor1?.regno}`)} alt="" fill/>
@@ -121,11 +125,9 @@ export default async function Page({ params}:{ params: { serial: string }}) {
                 <div className="relative space-y-4 border-r-2 border-dashed print:space-y-2">
                     <legend className="my-4 px-4 py-2 flex flex-col md:flex-row items-start md:items-center space-x-6 print:py-0.5 bg-slate-100 border text-sm md:text-base print:text-sm text-[#153B50] font-semibold tracking-[0.2em]">
                         <span>GUARANTOR #2</span>
-                        { form_submit 
-                          ? g2_verified 
+                        {  g2_verified 
                           ? <span className="py-0.5 px-3 border-2 border-green-700 rounded bg-white text-green-900 text-xs">VERIFIED</span>
                           : <span className="py-0.5 px-3 border-2 border-red-700 rounded bg-white text-red-900 text-xs">PENDING</span>
-                          : null 
                         }
                     </legend><div className="p-2 absolute -top-8 md:-top-14 -right-2 bg-white rounded border md:border-2 h-20 w-20 md:h-28 md:w-28 print:w-20 print:h-20">
                       <Image className="object-contain" src={encodeURI(`${IMAGE_URL}/api/photos/?tag=${guarantor2?.regno}`)} alt="" fill/>

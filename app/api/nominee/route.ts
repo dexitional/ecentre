@@ -141,9 +141,34 @@ export async function GET(request: Request) {
          return new Response(JSON.stringify({ success: true, data:count, message: `Reminders sent!` }), { status: 200 });
       }  return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
     }
+
+    else if(action == 'finalize'){
+      const groupId: any = searchParams.get("groupId")
+      const noms:any = groupId ? await fetchNomineesDisplay(groupId) : await fetchNominees(); // Get All Nominees
+      if(noms.total > 0) {
+         let count = 0;
+         for(const nom of noms.documents){
+           if(nom.g1_verified && nom.g2_verified) continue;
+           
+           let message = `Hi aspirant! please`
+               message += !nom.g1_verified ? `, 1st endorsement is done`: ``
+               message += !nom.g2_verified ? `, 2nd endorsement is done`: ``
+               message += `.`
+               console.log("ASPIRANT: ",nom.aspirant_regno, " MESSAGE: ", message)
+              // const ss = await sendMessageByRegNo(nom.aspirant_regno,message)
+               //const sm = await getEndorserLink(nom);
+               const ups = await updateNominee(nom.$id, { form_submit: true, g1_verified: true, g2_verified: true })
+               //if(ss) count += 1;
+               console.log(ups)
+         }
+         return new Response(JSON.stringify({ success: true, data:count, message: `Form Finalized!` }), { status: 200 });
+      }  return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
+    }
     
     else return new Response(JSON.stringify({ action }), { status: 200 });
 }
+
+
 
 export async function DELETE(request: Request, { params}:{ params: { id: string }} ) {
   const id = params.id;

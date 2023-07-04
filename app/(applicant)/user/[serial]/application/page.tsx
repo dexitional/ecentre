@@ -54,7 +54,7 @@ export default async function Page({ params}:{ params: { serial: string }}) {
                     <h4 className="font-mono font-bold text-sm">CV: <span>{applicant?.documents[0]?.cv ? 'UPLOADED': 'NOT UPLOADED'}</span></h4>
                     <h4 className="font-mono font-bold text-sm">FLYER: <span>{applicant?.documents[0]?.photo ? 'UPLOADED': 'NOT UPLOADED'}</span></h4>
                  </div>
-                 { !applicant?.documents[0]?.photo || !applicant?.documents[0]?.cv  ? 
+                 {/*!applicant?.documents[0]?.photo || !applicant?.documents[0]?.cv*/ true  ? 
                   <>
                     <hr className="outline outline-slate-600"/>
                     <Uploader serial={applicant?.documents[0]?.serial} data={applicant?.documents[0]} />

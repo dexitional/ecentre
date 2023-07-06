@@ -78,42 +78,46 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
 
   const onChange = async (e:any) => {
-     if(e.target.name == 'photo'){
-        setIsPhotoLoading(true)
-        setPicture(URL.createObjectURL(e.target.files[0]));
-        const photo = await uploadPicture(e.target.files[0], serial)
-        if(photo){
-          setIsPhotoLoading(false)
-          setPhotoUrl(photo)
-        } console.log(photoUrl)
-     }
-
-     if(e.target.name == 'cv'){
-        setIsCvLoading(true)
-        setCV(URL.createObjectURL(e.target.files[0]));
-        const cv = await uploadCv(e.target.files[0], serial)
-        if(cv){
-          setIsCvLoading(false)
-          setCvUrl(cv)
-        } console.log(cvUrl)
-     }
-
-     if(['photo','cv'].includes(e.target.name)) 
-       setForm({ ...form, [e.target.name] : e.target.files[0] })
-     else if(e.target.name == 'consent') 
+     if (!e || !e.target || !e.target.files || e.target.files.length === 0) {
+       return;
+     } else if(e.target.name == 'photo'){
+        if(['image/jpeg','image/png','image/gif','image/svg','image/avif'].includes(e.target?.files[0]?.type)){
+          setIsPhotoLoading(true)
+          setPicture(URL.createObjectURL(e.target.files[0]));
+          const photo = await uploadPicture(e.target.files[0], serial)
+          if(photo){
+            setIsPhotoLoading(false)
+            setPhotoUrl(photo)
+            setForm({ ...form, [e.target.name] : e.target.files[0] })
+          } 
+        } else {
+          alert("Please choose an image with a picture format! \n Allowed formats are 'JPG','PNG','GIF','AVIF,'SVG'")
+        }
+     } else if(e.target.name == 'cv'){
+        if(['application/pdf'].includes(e.target?.files[0]?.type)){
+          setIsCvLoading(true)
+          setCV(URL.createObjectURL(e.target.files[0]));
+          const cv = await uploadCv(e.target.files[0], serial)
+          if(cv){
+            setIsCvLoading(false)
+            setCvUrl(cv)
+            setForm({ ...form, [e.target.name] : e.target.files[0] })
+          } 
+        } else {
+          alert("Please choose a PDF document!")
+        }
+     } else if(e.target.name == 'consent') 
        setForm({ ...form, [e.target.name] : !form.consent })
      else 
        setForm({ ...form, [e.target.name] : e.target.value })
   }
 
   const saveForm = (e: any) => {
-     //e.preventDefault()
      setForm({ ...form, 'form_submit': false })
   } 
 
   const submitForm = (e: any) => {
-    //e.preventDefault()
-    setForm({ ...form, 'form_submit': true })
+     setForm({ ...form, 'form_submit': true })
   } 
 
   const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {

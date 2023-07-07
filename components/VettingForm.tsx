@@ -18,7 +18,7 @@ function VettingForm({ applicants, positions }: any ) {
     for(let i = 0; i < applicants.length; i++){
       const row = applicants[i];
       dm[`ballot_no_${i}`] = row.ballot_no;
-      dm[`vetscore_no_${i}`] = row.vetscore?.toString();
+      dm[`vetscore_${i}`] = row.vetscore;
       dm[`is_candidate_${i}`] = row.is_candidate; 
     }
     return dm;
@@ -31,6 +31,7 @@ function VettingForm({ applicants, positions }: any ) {
   const [ loading, setLoading ] = useState(false)
   
   console.log(applicants)
+  console.log(form)
 
   const getPosition = (positionId: string) => {
      return positions.find((r:any) => r.$id == positionId)?.title
@@ -39,6 +40,8 @@ function VettingForm({ applicants, positions }: any ) {
   const onChange = async (e:any) => {
      if (!e || !e.target) {
        return;
+     }else if (e.target.type == 'checkbox') {
+       setForm({ ...form, [e.target.name] : !form[e.target.name] })
      } else 
        setForm({ ...form, [e.target.name] : e.target.value })
   }

@@ -27,8 +27,8 @@ async function AspirantCardBox({ data }: Props) {
         <div className="absolute bottom-[30%] min-h-fit w-fit flex items-center rounded-md bg-white bg-opacity-80 border-2 border-blue-950 overflow-hidden">
             { data?.ballot_no 
             ? <div className="p-2 text-2xl text-blue-950 font-bold">#</div>
-            ? data?.vetscore 
-            : <div className="p-2 text-lg text-blue-950 font-bold">{data?.vetscore}%</div> 
+            : data?.vetscore 
+            ? <div className="p-2 text-lg text-blue-950 font-bold">{data?.vetscore}%</div> 
             : <div className="p-2 text-lg text-blue-950 font-bold"></div> 
             }
             <div className="px-2 py-1 flex flex-wrap items-center justify-center rounded-tl rounded-bl bg-blue-950/95 italic text-2xl text-white font-bold tracking-widest">

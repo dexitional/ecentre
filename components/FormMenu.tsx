@@ -92,12 +92,14 @@ function FormMenu({ page, serial }: Props) {
   }
  
   return (
-    <div className="print:hidden flex">
+    <div className="print:hidden flex flex-col md:flex-row ">
         {/* Go Back */}
-        <Link href={`/nominees?page=${page || 1}`} className="px-6 py-2 flex-1 flex items-center justify-center border-blue-950 bg-slate-100 text-blue-950 text-center font-extrabold print:hidden">GO BACK</Link>
+        <Link href={`/nominees?page=${page || 1}`} className="px-6 py-2 flex-1 flex items-center justify-center border-blue-950 bg-slate-100 text-blue-950 text-sm text-center font-extrabold print:hidden">GO BACK</Link>
         <button onClick={viewCV} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">VIEW CV</button>
         <button onClick={resetForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">RESET FORM</button>
         <button onClick={verifyForm} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">RESEND LINKS</button>
+        <button onClick={deleteForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">REMOVE CV</button>
+        <button onClick={verifyForm} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">REMOVE FLYER</button>
         <button onClick={deleteForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">DELETE FORM</button>
     </div>
   )

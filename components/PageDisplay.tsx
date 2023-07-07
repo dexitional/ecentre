@@ -45,12 +45,13 @@ async function PageDisplay({}: Props) {
             <div className="mx-auto w-fit rounded text-lg print:hidden border-2 border-red-700/50 uppercase"><Print /></div>
         
             { Object.entries(data).map( ([key, value]: any) => {
+             
              return(
                 <section key={key} className="space-y-6 pb-10 print:border-0 border-b-2 border-red-700/80 border-dashed print:break-after-page">
                     <DisplayHeader title={group?.title} print={true} />
                     <h1 className="px-4 md:px-6 print:px-6 py-1 mx-auto w-fit -skew-x-12 bg-red-50/30 border-4 md:border-8 print:border-8 border-double border-red-700/80 text-red-800 text-lg md:text-2xl print:text-2xl text-center font-extrabold tracking-widest">{key?.toUpperCase()}</h1>
                     <div className="grid gap-4 justify-center grid-cols-1 md:grid-cols-[repeat(auto-fit,_32%)] print:grid-cols-[repeat(auto-fit,_32%)]">
-                     { value?.map( (aspirant: any) => {
+                     { value?.sort((a:any,b:any) => (a.ballot_no - b.ballot_no) || (b.vetscore - a.vetscore) )?.map( (aspirant: any) => {
                         // @ts-ignore
                         return (<AspirantCardBox key={aspirant.aspirant_regno} data={aspirant} />)
                      })}

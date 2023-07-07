@@ -19,7 +19,8 @@ export async function POST(request: Request) {
           const id = body[`id_${i}`];
           const ballot_no = body[`ballot_no_${i}`] && body[`ballot_no_${i}`] != '' ? parseInt(body[`ballot_no_${i}`]) : null;
           const vetscore = body[`vetscore_${i}`] && body[`vetscore_${i}`] != '' ? parseFloat(body[`vetscore_${i}`]) : null;
-          const is_candidate = body[`is_candidate_${i}`] && body[`is_candidate_${i}`]?.toLowerCase() == 'on' ? true: false;
+          // const is_candidate = body[`is_candidate_${i}`] && body[`is_candidate_${i}`]?.toLowerCase() == 'on' ? true: false;
+          const is_candidate = JSON.parse(body[`is_candidate_${i}`])
           const dt = {
              ballot_no,
              vetscore,

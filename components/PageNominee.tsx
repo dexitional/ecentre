@@ -107,7 +107,7 @@ async function PageNominee({ slug }: any) {
                         </div> */}
                     </td>
                     <td className="px-6 py-3 border-b border-blue-900/10 flex md:justify-end">
-                        <div className="md:px-2 w-fit flex flex-wrap items-center justify-center">
+                        <div className="md:px-2 w-fit flex flex-wrap items-center justify-center space-x-1">
                             {/* <BadgeIcon title="FORM" Icon={MdOutlineArticle}/> */}
                             <Link href={`/nominee/${row?.serial}/view?returnpage=${page+1}`}><BadgeIcon title="FORM" Icon={MdOutlineArticle}/></Link>
                             { row.cv ? <Link href={row?.cv} target='_blank'><BadgeIcon title="CV" Icon={BsFilePdf}/></Link> : null }

@@ -164,6 +164,20 @@ export async function GET(request: Request) {
          return new Response(JSON.stringify({ success: true, data:count, message: `Form Finalized!` }), { status: 200 });
       }  return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
     }
+
+    else if(action == 'delphoto'){
+      const serial: any = searchParams.get("serial")
+      const applicant:any = await fetchNominee(serial);
+      const ups = await updateNominee(applicant.documents[0].$id, { photo: null })
+      return new Response(JSON.stringify({ success: true, data:ups, message: `Photo Removed!` }), { status: 200 });
+    }
+
+    else if(action == 'delcv'){
+      const serial: any = searchParams.get("serial")
+      const applicant:any = await fetchNominee(serial);
+      const ups = await updateNominee(applicant.documents[0].$id, { cv: null })
+      return new Response(JSON.stringify({ success: true, data:ups, message: `CV Removed!` }), { status: 200 });
+    }
     
     else return new Response(JSON.stringify({ action }), { status: 200 });
 }

@@ -69,7 +69,50 @@ function FormMenu({ page, serial }: Props) {
         // Notiflix.Notify.failure(error);
         }
     }  return
-    
+  }
+
+  const deletePhoto = async (e: any) => {
+    const ok = window.confirm("REMOVE UPLOADED PHOTO/FLYER !")
+    if(ok){
+        try {
+            const resp = await fetch(`/api/nominee?action=delphoto&serial=${serial}`)
+            const response = await resp.json()
+            console.log(response)
+            if(response.success){
+               Notiflix.Notify.success('PHOTO DELETED !');
+            } else {
+               Notiflix.Notify.failure("PHOTO DELETION FAILED !");
+            }
+            // @ts-ignore
+            window.location = `/nominees?page=${page || 1}`
+            
+        } catch (error: any) {
+            console.log(error)
+        // Notiflix.Notify.failure(error);
+        }
+    }  return
+  }
+
+  const deleteCv = async (e: any) => {
+    const ok = window.confirm("REMOVE UPLOADED CV !")
+    if(ok){
+        try {
+            const resp = await fetch(`/api/nominee?action=delcv&serial=${serial}`)
+            const response = await resp.json()
+            console.log(response)
+            if(response.success){
+               Notiflix.Notify.success('CV DELETED !');
+            } else {
+               Notiflix.Notify.failure("CV DELETION FAILED !");
+            }
+            // @ts-ignore
+            window.location = `/nominees?page=${page || 1}`
+            
+        } catch (error: any) {
+            console.log(error)
+        // Notiflix.Notify.failure(error);
+        }
+    }  return
   }
 
   const viewCV = async (e: any) => {
@@ -98,8 +141,8 @@ function FormMenu({ page, serial }: Props) {
         <button onClick={viewCV} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">VIEW CV</button>
         <button onClick={resetForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">RESET FORM</button>
         <button onClick={verifyForm} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">RESEND LINKS</button>
-        <button onClick={deleteForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">REMOVE CV</button>
-        <button onClick={verifyForm} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">REMOVE FLYER</button>
+        <button onClick={deleteCv} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">REMOVE CV</button>
+        <button onClick={deletePhoto} className="px-6 py-2 flex-1 border-blue-950 bg-blue-200 text-blue-950 text-center font-extrabold print:hidden">REMOVE FLYER</button>
         <button onClick={deleteForm} className="px-6 py-2 flex-1 border-blue-950 bg-slate-200 text-blue-950 text-center font-extrabold print:hidden">DELETE FORM</button>
     </div>
   )

@@ -99,7 +99,7 @@ function VettingForm({ applicants, positions }: any ) {
     <div className="px-2">
         <form ref={formRef} className="md:col-span-2 space-y-4 md:space-y-4 order-2 md:order-1"  onSubmit={onSubmit}>
            { applicants?.map((row: any,i: React.Key) => (
-            <div className="p-2 grid grid-cols-1 md:grid-cols-7 gap-2 place-items-center rounded shadow-lg shadow-blue-100/50 bg-blue-50/50 ">
+            <div key={row.$id} className="p-2 grid grid-cols-1 md:grid-cols-7 gap-2 place-items-center rounded shadow-lg shadow-blue-100/50 bg-blue-50/50 ">
                 <div className="md:col-span-2 flex item-center space-x-2">
                   <div className='relative h-10 w-10'>
                     <Image src={`https://ehub.ucc.edu.gh/api/photos/?tag=${row?.aspirant_regno}` || None} className='object-contain' alt="" fill/>

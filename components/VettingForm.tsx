@@ -13,11 +13,24 @@ import None from '@/public/none.png'
 
 function VettingForm({ applicants, positions }: any ) {
 
+  const getDefaultData = () => {
+    let dm:any = {};
+    for(let i = 0; i < applicants.length; i++){
+      const row = applicants[i];
+      dm[`ballot_no_${i}`] = row.ballot_no;
+      dm[`vetscore_no_${i}`] = row.vetscore?.toString();
+      dm[`is_candidate_${i}`] = row.is_candidate; 
+    }
+    return dm;
+  }
+  
   const formRef = useRef<any>(null)
   const router = useRouter()
   const { data:session }: any = useSession()
-  const [ form, setForm ] = useState<any>({})
+  const [ form, setForm ] = useState<any>(getDefaultData())
   const [ loading, setLoading ] = useState(false)
+  
+  console.log(applicants)
 
   const getPosition = (positionId: string) => {
      return positions.find((r:any) => r.$id == positionId)?.title
@@ -37,28 +50,33 @@ function VettingForm({ applicants, positions }: any ) {
       if(!ok) return
       try {
         setLoading(true)
+        const idx:any = {};
+        for(let i = 0; i < applicants.length; i++){
+            idx[`id_${i}`] = applicants[i].$id
+        }
         const newForm: any = { 
           ...form,
+          ...idx,
           count: applicants?.length
         }
         alert(JSON.stringify(newForm))
-        // const formData = objectToFormData(form);
+        const formData = objectToFormData(newForm);
         
         // Save to Database
-        // const resp = await fetch('/api/nominee',{
-        //   method: 'POST',
-        //   body: formData
-        // })
+        const resp = await fetch('/api/vetting',{
+          method: 'POST',
+          body: formData
+        })
         
-        // const response = await resp.json()
-        // if(response.success){
-        //    router.push(`/nominees`)
-        //    setLoading(false)
-        //    Notiflix.Notify.success('VETCARD SAVED !');
-        // } else {
-        //   setLoading(false)
-        //    Notiflix.Notify.failure(response?.msg?.toUpperCase());
-        // }
+        const response = await resp.json()
+        if(response.success){
+           router.push(`/nominees`)
+           setLoading(false)
+           Notiflix.Notify.success('VETCARD SAVED !');
+        } else {
+          setLoading(false)
+           Notiflix.Notify.failure(response?.msg?.toUpperCase());
+        }
 
       } catch(e:any){
           console.log(e)
@@ -70,29 +88,11 @@ function VettingForm({ applicants, positions }: any ) {
 
   return (
     <div className="space-y-4"> 
-     {/* { errors ?
-        <div className="p-2 md:px-6 md:py-2 rounded shadow shadow-red-300/60 bg-red-50/80 space-y-4">
-            <div className="text-sm md:text-inherit space-y-3">
-              { errors.aspirant_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide Aspirant Registration Number</p> : null }
-              { errors.positionId ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Choose a Portfolio</p> : null }
-              { errors.guarantor1_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide First (1st) Guarantor</p> : null }
-              { errors.guarantor2_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide First (2nd) Guarantor</p> : null }
-              { errors.teaser ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide Candidate Teaser</p> : null }
-              { errors.consent ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Agree to the Terms & Conditions</p> : null }
-            </div>
-        </div> : null
-     } */}
-   
-   
-     <div className="p-2 md:px-6 md:py-2 rounded shadow shadow-red-300/60 bg-red-50/80 space-y-4">
+     {/* <div className="p-2 md:px-6 md:py-2 rounded shadow shadow-red-300/60 bg-red-50/80 space-y-4">
         <div className="text-sm md:text-inherit space-y-3">
-          {/* { errors.positionId ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Choose a Portfolio</p> : null }
-          { errors.guarantor1_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide First (1st) Guarantor</p> : null }
-          { errors.guarantor2_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide First (2nd) Guarantor</p> : null }
-          { errors.teaser ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide Candidate Teaser</p> : null }
-          { errors.consent ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Agree to the Terms & Conditions</p> : null } */}
+          { errors.positionId ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Choose a Portfolio</p> : null }
         </div>
-     </div> 
+     </div>  */}
     <div className="px-2">
         <form ref={formRef} className="md:col-span-2 space-y-4 md:space-y-4 order-2 md:order-1"  onSubmit={onSubmit}>
            { applicants?.map((row: any,i: React.Key) => (
@@ -104,13 +104,12 @@ function VettingForm({ applicants, positions }: any ) {
                   <Legend label={row?.aspirant_regno} />
                 </div>
                 <div className="md:col-span-2 text-xs"><Legend label={getPosition(row?.positionId)?.toUpperCase()} /></div>
-                <div className="col-span-1"><Input name="vetscore_1" defaultValue={form.vetscore} onChange={onChange} required label="" placeholder="Score (%)" /></div>
-                <div className="col-span-1"><Input name="ballot_no_1" defaultValue={form.ballot_no} onChange={onChange} required label="" placeholder="Ballot #" /></div>
+                <div className="col-span-1"><Input name={`vetscore_${i}`} defaultValue={form[`vetscore_${i}`]} onChange={onChange}  label="" placeholder="Score (%)" /></div>
+                <div className="col-span-1"><Input name={`ballot_no_${i}`} defaultValue={form[`ballot_no_${i}`]} onChange={onChange}  label="" placeholder="Ballot #" /></div>
                 <div className="col-span-1 place-self-center">
-                  <label id="passed_1" className="flex flex-row space-y-0 space-x-2 md:items-center md:justify-center">
-                      <input name="is_candidate_1" checked={form.is_candidate_1} onChange={onChange} id="passed_1" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
+                  <label id={`passed_${i}`} className="flex flex-row space-y-0 space-x-2 md:items-center md:justify-center">
+                      <input name={`is_candidate_${i}`} checked={form[`is_candidate_${i}`]} onChange={onChange} id={`passed_${i}`} className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                       <p className="w-full font-serif text-base tracking-wider">Passed</p>
-                      <input type="hidden" name="id_1" value="1234" />
                   </label>
                 </div>
              </div>

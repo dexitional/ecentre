@@ -3,6 +3,7 @@ import { options } from "@/options";
 import { fetchNominee, fetchNomineesDisplay, fetchPositions, fetchSession, fetchVoucher } from "@/utils/serverApi";
 import { getServerSession } from "next-auth";
 
+export const revalidate = 0; 
 export default async function Page({ params}:{ params: { serial: string }}) {
   const session:any = await getServerSession(options)
    const applicants:any = await fetchNomineesDisplay(session?.user?.groupId);

@@ -1,9 +1,8 @@
 import PageRegisterOnline from "@/components/PageRegisterOnline"
 
-export default function Home() {
-
+export default function Home({ searchParams }: { searchParams: { eid: string}}) {
   return (
-   <PageRegisterOnline eid={'50'} />
+   <PageRegisterOnline eid={searchParams?.eid || '50'} />
   )
 }
 

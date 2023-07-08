@@ -13,7 +13,7 @@ import { MdBallot } from 'react-icons/md'
 function QuickCard() {
   return (
     <div className="p-4 md:p-8 md:col-span-2 grid md:grid-cols-2 gap-4 md:gap-8 bg-slate-100">
-        <IntroPill title="2023 Convocation Elections" Icon={MdBallot} url={`/elections/convocation-23`}/>
+        <IntroPill title="2023 Convocation Elections" Icon={MdBallot} url={`/elections/50`}/>
         <IntroPill title="Press Releases" Icon={GiPublicSpeaker} />
         <IntroPill title="Electoral Calendar" Icon={GoCalendar} />
         <IntroPill title="General Instructions" Icon={BsCardChecklist} />

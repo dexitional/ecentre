@@ -1,3 +1,4 @@
+import { cleanPhone } from "./cleanPhone";
 import { sms } from "./sms";
 
 export const getContacts = async (data: any) => {
@@ -8,8 +9,7 @@ export const getContacts = async (data: any) => {
         console.log(row)
         const asp_res = await fetch(`https://ehub.ucc.edu.gh/api/sso/identity?search=${encodeURIComponent(row)}`)
         const asp = await asp_res.json()
-        const phone = asp.data[0].user.phone
-        console.log(phone)
+        const phone = cleanPhone(asp.data[0].user.phone)
         let msg;
         if( i == 0 ){
             // Send Message - Aspirant

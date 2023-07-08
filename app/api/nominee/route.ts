@@ -20,9 +20,9 @@ export async function POST(request: Request) {
         
         //delete body.photo
         //delete body.cv
-        delete body.$id
-        delete body.g1_verified
-        delete body.g2_verified
+        //delete body?.$id
+        delete body?.g1_verified
+        delete body?.g2_verified
 
         // Checks & Validations [ Guarantors - assigned, Applicants & Guarantors registered ]
 
@@ -45,13 +45,14 @@ export async function POST(request: Request) {
         }
       
         let resp;
-        if(applicant.total > 0){
-          resp = await updateNominee(applicant?.documents[0]?.$id, data);
+        
+        if(body.$id){
+           resp = await updateNominee(body?.$id, data);
         
         } else {
+           delete data.$id;
            data.g1_verified = false;
            data.g2_verified = false;
-          
            resp = await postNominee(data);
         } 
 
@@ -77,8 +78,6 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const action: any = searchParams.get("action")
     
-    console.log(action)
-
     if(action == 'verify'){
         const ua: any = searchParams.get("ua")
         const tp: any = searchParams.get("tp")
@@ -143,13 +142,15 @@ export async function GET(request: Request) {
     }
 
     else if(action == 'finalize'){
+      console.log(action)
       const groupId: any = searchParams.get("groupId")
       const noms:any = groupId ? await fetchNomineesDisplay(groupId) : await fetchNominees(); // Get All Nominees
-      if(noms.total > 0) {
+      console.log("GROUP ID: ",groupId,noms.documents?.length)
+      if(noms.documents?.length > 0) {
          let count = 0;
          for(const nom of noms.documents){
            if(nom.g1_verified && nom.g2_verified) continue;
-           
+           console.log(nom)
            let message = `Hi aspirant! please`
                message += !nom.g1_verified ? `, 1st endorsement is done`: ``
                message += !nom.g2_verified ? `, 2nd endorsement is done`: ``
@@ -159,10 +160,12 @@ export async function GET(request: Request) {
                //const sm = await getEndorserLink(nom);
                const ups = await updateNominee(nom.$id, { form_submit: true, g1_verified: true, g2_verified: true })
                //if(ss) count += 1;
+               if(ups) count += 1;
                console.log(ups)
-         }
+         } 
          return new Response(JSON.stringify({ success: true, data:count, message: `Form Finalized!` }), { status: 200 });
-      }  return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
+      }  
+      return new Response(JSON.stringify({ success: true, data:null, message: `Reminders sent!` }), { status: 200 });
     }
 
     else if(action == 'delphoto'){

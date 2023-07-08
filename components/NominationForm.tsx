@@ -30,6 +30,7 @@ export type Inputs = {
   cv: string;
   position: string;
   consent: boolean;
+  $id: string;
   //is_candidate, vetscore, vettotal, 
   
 };
@@ -63,6 +64,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
     serial: newData?.serial || session?.user?.serial,
     groupId: newData?.groupId || session?.user?.groupId,
     aspirant_regno: newData?.aspirant_regno || '',
+    $id: newData?.$id || '',
   })
 
   //const { NEXT_PUBLIC_IMAGE_URL : IMAGE_URL } = process.env

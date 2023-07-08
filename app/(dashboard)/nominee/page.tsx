@@ -3,7 +3,7 @@ import React from 'react'
 
 export const revalidate = 60;
 
-function Dashboard({searchParams}: any) {
+function Dashboard({ searchParams }: any) {
   return (
     // @ts-ignore
     <PgNominee slug={searchParams}/>

@@ -62,7 +62,6 @@ function VettingForm({ applicants, positions }: any ) {
           ...idx,
           count: applicants?.length
         }
-        alert(JSON.stringify(newForm))
         const formData = objectToFormData(newForm);
         
         // Save to Database

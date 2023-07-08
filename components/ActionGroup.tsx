@@ -28,7 +28,7 @@ function ActionGroup({ groupId }: { groupId: string }) {
    try {
       const ok = window.confirm("Finalize Nominations !")
       if(!ok) return
-      const res = await fetch(`/api/nominee?action=finalize`); //&groupId=${groupId}
+      const res = await fetch(`/api/nominee?action=finalize&groupId=${groupId}`); //&groupId=${groupId}
       console.log(res)
       const resp = await res.json()
       if(resp.success){

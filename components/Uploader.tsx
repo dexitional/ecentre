@@ -11,7 +11,7 @@ import { BiLoaderCircle } from 'react-icons/bi'
 
 type Props = {
     serial: string;
-    data: { photo: string; cv: string };
+    data: { photo: string; cv: string, aspirant_regno: string; $id: string };
 }
 
 function Uploader({ serial, data }: Props) {
@@ -26,27 +26,59 @@ function Uploader({ serial, data }: Props) {
     const [ form, setForm ] = useState<any>({
       photo: data?.photo || '',
       cv: data?.cv || '',
+      aspirant_regno: data?.aspirant_regno,
+      $id: data?.$id  
     })
 
     const onChange = async (e:any) => {
-        if(e.target.name == 'photo'){
-            setIsPhotoLoading(true)
-            setPicture(URL.createObjectURL(e.target.files[0]));
-            const photo = await uploadPicture(e.target.files[0], serial)
-            if(photo){
-              setIsPhotoLoading(false)
-              setPhotoUrl(photo)
-            } console.log(photoUrl)
-        }
+        // if(e.target.name == 'photo'){
+        //     setIsPhotoLoading(true)
+        //     setPicture(URL.createObjectURL(e.target.files[0]));
+        //     const photo = await uploadPicture(e.target.files[0], serial)
+        //     if(photo){
+        //       setIsPhotoLoading(false)
+        //       setPhotoUrl(photo)
+        //     } console.log(photoUrl)
+        // }
 
-        if(e.target.name == 'cv'){
-            setIsCvLoading(true)
-            setCV(URL.createObjectURL(e.target.files[0]));
-            const cv = await uploadCv(e.target.files[0], serial)
-            if(cv){
-              setIsCvLoading(false)
-              setCvUrl(cv)
-            } console.log(cvUrl)
+        // if(e.target.name == 'cv'){
+        //     setIsCvLoading(true)
+        //     setCV(URL.createObjectURL(e.target.files[0]));
+        //     const cv = await uploadCv(e.target.files[0], serial)
+        //     if(cv){
+        //       setIsCvLoading(false)
+        //       setCvUrl(cv)
+        //     } console.log(cvUrl)
+        // }
+
+        if (!e || !e.target || !e.target.files || e.target.files.length === 0) {
+          return;
+        } else if(e.target.name == 'photo'){
+           if(['image/jpeg','image/png','image/gif','image/svg','image/avif','image/webp'].includes(e.target?.files[0]?.type)){
+             setIsPhotoLoading(true)
+             setPicture(URL.createObjectURL(e.target.files[0]));
+             const photo = await uploadPicture(e.target.files[0], serial)
+             if(photo){
+               setIsPhotoLoading(false)
+               setPhotoUrl(photo)
+               setForm({ ...form, [e.target.name] : e.target.files[0] })
+             } 
+           } else {
+             alert("Please choose an image with a picture format! \n Allowed formats are 'JPG','PNG','GIF','SVG','AVIF','WEBP'")
+           }
+        } else if(e.target.name == 'cv'){
+           if(['application/pdf'].includes(e.target?.files[0]?.type)){
+             setIsCvLoading(true)
+             setCV(URL.createObjectURL(e.target.files[0]));
+             const cv = await uploadCv(e.target.files[0], serial)
+             if(cv){
+               setIsCvLoading(false)
+               setCvUrl(cv)
+               setForm({ ...form, [e.target.name] : e.target.files[0] })
+             } 
+           } else {
+             alert("Please choose a PDF document!")
+           }
         }
    
         if(['photo','cv'].includes(e.target.name)) 
@@ -66,6 +98,8 @@ function Uploader({ serial, data }: Props) {
             ...(photoUrl && { photo: photoUrl }),
             ...(cvUrl && { cv: cvUrl })
           }
+
+          alert(JSON.stringify(newForm))
           const formData = objectToFormData(newForm);
           
           // Save to Database
@@ -83,7 +117,6 @@ function Uploader({ serial, data }: Props) {
             setLoading(false)
              Notiflix.Notify.failure(response?.msg?.toUpperCase());
           }
-  
         } catch(e:any){
             console.log(e)
             setLoading(false)

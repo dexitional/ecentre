@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import VoterCard from './VoterCard'
+import Logo from '@/public/logo.png'
+import Image from 'next/image';
+import moment from 'moment';
 
 type Props = {
     eid: string;
@@ -33,12 +36,22 @@ function PageRegisterOnline({ eid }: Props) {
   return (
     <main className="space-y-6">
       {/* Title & Search Section */}
-      <section className="px-6 py-4 md:py-16 md:px-10 rounded bg-blue-600 space-y-2">
-         <h1 className="text-lg text-white">VOTER REGISTER</h1>
-         <h2 className="text-base text-white">{data?.name}</h2>
-         <div className="w-full md:w-96 relative flex items-center rounded border border-blue-700 ring-1 ring-white">
-            <input className="w-full h-10 rounded" name="" type="search" onChange={(e) => setSearch(e.target.value)} placeholder="Search register" />
-            <BiSearch className="absolute right-6 h-5 w-5 peer-focus:hidden" />
+      <section className="px-8 py-6 md:py-10 md:px-10 grid grid-cols-1 md:grid-cols-2 gap-6 rounded bg-[#153b50] overflow-hidden">
+        <div className="z-10 space-y-2">
+          <h1 className="text-2xl md:text-4xl text-white font-bugee tracking-widest">{data?.name}</h1>
+          <h2 className="text-sm text-white tracking-widest">VOTERS REGISTER </h2>
+          <div className="w-full md:w-96 relative flex items-center rounded border border-[#153b50] ring-1 ring-white">
+              <input className="w-full h-10 rounded" name="" type="search" onChange={(e) => setSearch(e.target.value)} placeholder="Search register" />
+              <BiSearch className="absolute right-6 h-5 w-5 peer-focus:hidden" />
+          </div>
+         </div>
+         <div className="relative">
+            <Image className="z-1 absolute -top-20 right-0 w-80 h-80 opacity-10" src={Logo} alt="Logo" height={100} width={100} />
+            <div className="flex flex-col items-start text-base font-bold font-poppins text-white tracking-widest space-y-2 ">
+              <span className="space-x-3"><span>ELECTIONS STARTS:</span> <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] tracking-wider text-sm md:text-base">{moment(data?.start).format('LLL').toUpperCase()}</span></span>
+              <span className="space-x-3 md:space-x-8"><span>ELECTIONS ENDS:</span> <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] tracking-wider text-sm md:text-base">{moment(data?.end).format('LLL').toUpperCase()}</span></span>
+              <span className="space-x-3 md:space-x-7"><span>ELIGIBLE VOTERS:</span> <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] font-extrabold tracking-widest">{voters.length}</span></span>
+            </div>
          </div>
       </section>
       {/* Register section */}

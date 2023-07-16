@@ -51,9 +51,7 @@ function Uploader({ serial, data }: Props) {
         //     } console.log(cvUrl)
         // }
 
-        if (!e || !e.target || !e.target.files || e.target.files.length === 0) {
-          return;
-        } else if(e.target.name == 'photo'){
+        if(e.target.name == 'photo'){
            if(['image/jpeg','image/png','image/gif','image/svg','image/avif','image/webp'].includes(e.target?.files[0]?.type)){
              setIsPhotoLoading(true)
              setPicture(URL.createObjectURL(e.target.files[0]));

@@ -7,13 +7,10 @@ import File from './File';
 import PhotoBox from './PhotoBox';
 import None from '../public/none.png'
 import { useSession } from 'next-auth/react';
-import uploadImage from '@/utils/uploadImage';
 import Notiflix from 'notiflix'
 import { useRouter } from 'next/navigation';
 import { objectToFormData } from '@/utils/objectToFormData';
 import { uploadCv, uploadPicture } from '@/firabase';
-import Image from 'next/image';
-import { CgClose, CgCloseO } from 'react-icons/cg';
 import PhotoCard from './PhotoCard';
 import PdfCard from './PdfCard';
 import { BiLoaderCircle } from 'react-icons/bi';
@@ -59,7 +56,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
     g1_verified: newData?.g1_verified || false,
     g2_verified: newData?.g2_verified || false,
     teaser: newData?.teaser || '',
-    consent: newData?.consent ? true : undefined,
+    consent: newData?.consent || false,
     form_submit: newData?.form_submit || false,
     serial: newData?.serial || session?.user?.serial,
     groupId: newData?.groupId || session?.user?.groupId,
@@ -80,9 +77,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
 
   const onChange = async (e:any) => {
-     if (!e || !e.target || !e.target.files || e.target.files.length === 0) {
-       return;
-     } else if(e.target.name == 'photo'){
+     if(e.target.name == 'photo'){
         if(['image/jpeg','image/png','image/gif','image/svg','image/avif'].includes(e.target?.files[0]?.type)){
           setIsPhotoLoading(true)
           setPicture(URL.createObjectURL(e.target.files[0]));
@@ -110,8 +105,11 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
         }
      } else if(e.target.name == 'consent') 
        setForm({ ...form, [e.target.name] : !form.consent })
-     else 
+     else{
        setForm({ ...form, [e.target.name] : e.target.value })
+     } 
+     //setForm({ ...form, [e.target.name] : e.target.value })
+       
   }
 
   const saveForm = (e: any) => {
@@ -192,7 +190,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
 
   return (
     <div className="space-y-4"> 
-     {/* { errors ?
+      {/* { errors ?
         <div className="p-2 md:px-6 md:py-2 rounded shadow shadow-red-300/60 bg-red-50/80 space-y-4">
             <div className="text-sm md:text-inherit space-y-3">
               { errors.aspirant_regno ? <p className="italic text-xs md:text-inherit font-semibold text-red-950">** Please Provide Aspirant Registration Number</p> : null }
@@ -276,7 +274,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                 </label>
                 <hr/> */}
                 <label htmlFor="agree-2" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
-                    <input name="consent" checked={undefined} onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
+                    <input name="consent" checked={form?.consent} onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                     <p className="w-full font-serif text-base tracking-wider">I hereby pledge to abide by all rules and regulations governing elections and students conduction on UCC campus during the electioneering and voting period, and that should I or any of my polling agents/supporters do contrary, I be disqualified from the elections.</p>
                 </label>
                 <hr/>

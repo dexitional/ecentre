@@ -51,6 +51,14 @@ function PageRegisterOnline({ eid }: Props) {
               <span className="space-x-3"><span>ELECTIONS STARTS:</span> <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] tracking-wider text-sm md:text-base">{moment(data?.start).format('LLL').toUpperCase()}</span></span>
               <span className="space-x-3 md:space-x-8"><span>ELECTIONS ENDS:</span> <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] tracking-wider text-sm md:text-base">{moment(data?.end).format('LLL').toUpperCase()}</span></span>
               <span className="space-x-3 md:space-x-7"><span>ELIGIBLE VOTERS:</span> <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] font-extrabold tracking-widest">{voters.length}</span></span>
+              <span className="space-x-3 md:space-x-7">
+                <span>ELECTIONS STATUS:</span> 
+                { voters.group_id 
+                  ? <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] font-extrabold tracking-widest">{voters.length}</span>
+                  : <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] font-extrabold tracking-widest">{voters.length}</span>
+                }
+              </span>
+              <span className="space-x-3 md:space-x-7"><span>ELECTORAL GROUP:</span> <span className="inline-block rounded-lg py-0.5 px-4 bg-white text-[#153b50] font-extrabold tracking-widest">{data.group_id > 1 ? ' STAFF':'STUDENTS'}</span></span>
             </div>
          </div>
       </section>

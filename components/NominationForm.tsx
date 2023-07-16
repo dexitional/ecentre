@@ -29,7 +29,7 @@ export type Inputs = {
   photo: string;
   cv: string;
   position: string;
-  consent: boolean;
+  consent: boolean | undefined;
   $id: string;
   //is_candidate, vetscore, vettotal, 
   
@@ -59,7 +59,7 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
     g1_verified: newData?.g1_verified || false,
     g2_verified: newData?.g2_verified || false,
     teaser: newData?.teaser || '',
-    consent: newData?.consent || false,
+    consent: newData?.consent ? true : undefined,
     form_submit: newData?.form_submit || false,
     serial: newData?.serial || session?.user?.serial,
     groupId: newData?.groupId || session?.user?.groupId,
@@ -275,8 +275,8 @@ function NominationForm({ data: [ applicant , positions ] }: { data: any}) {
                     <p className="w-full font-serif text-base tracking-wider">I agree that all information provided in this form is true and therefore held accountable and suffer disqualification if proven false.</p>
                 </label>
                 <hr/> */}
-                <label id="agree-2" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
-                    <input name="consent" checked={form.consent} onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
+                <label htmlFor="agree-2" className="mt-10 flex flex-row space-y-0 space-x-4 md:space-x-8 md:items-center md:justify-center">
+                    <input name="consent" checked={undefined} onChange={onChange} id="agree-2" className="w-6 h-6 checked:bg-[#153B50] checked:hover:bg-[#153B50] focus:ring-0 focus:outline-none" type="checkbox"/>
                     <p className="w-full font-serif text-base tracking-wider">I hereby pledge to abide by all rules and regulations governing elections and students conduction on UCC campus during the electioneering and voting period, and that should I or any of my polling agents/supporters do contrary, I be disqualified from the elections.</p>
                 </label>
                 <hr/>

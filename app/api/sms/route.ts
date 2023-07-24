@@ -1,5 +1,6 @@
 
 import { options } from "@/options";
+import { addSenderId } from "@/utils/addSenderId";
 import { flySMS } from "@/utils/flySMS";
 import { deleteNominee, fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, fetchNominees, fetchNomineesDisplay, postNominee, updateNominee } from "@/utils/serverApi";
 import { getServerSession } from "next-auth";
@@ -21,8 +22,8 @@ export async function POST(request: Request) {
         const { credit, sender_id,campaigns } = applicant.documents[0]
         console.log(message,sender_id,sgroup)
         
-        // if(parseInt(estimated_credit) > (credit || 0) ) 
-        //    return new Response(JSON.stringify({ success: false, data:null, message: `You don't have enough balance!` }), { status: 401 });
+        if(parseInt(estimated_credit) > (credit || 0) ) 
+           return new Response(JSON.stringify({ success: false, data:null, message: `You don't have enough balance!` }), { status: 401 });
         // Calculate & Send SMS
         const sms_res = await flySMS(message,sender_id,sgroup) // return { receipient: [], credits_used: 5000 } 
         if(sms_res.success){
@@ -52,17 +53,25 @@ export async function GET(request: Request) {
       const sender_id: any = searchParams.get("sender_id")
       const applicant:any = await fetchNominee(serial);
       // Update Sender ID
-      const ups = await updateNominee(applicant.documents[0].$id, { sender_id })
-      if(ups) return new Response(JSON.stringify({ message: `Sender ID updated for ${serial}!` }), { status: 200 });
+      const resp = await addSenderId(sender_id);
+      if(resp.status){
+        const ups = await updateNominee(applicant.documents[0].$id, { sender_id })
+        if(ups) return new Response(JSON.stringify({ message: `Sender ID updated for ${serial}!` }), { status: 200 });
+      }
+      return new Response(JSON.stringify({ message: `Sender ID update failed!` }), { status: 401 });
     }
 
     else if(action == 'updatecredit'){
       const serial: any = searchParams.get("serial")
       const credit: any = searchParams.get("credit")
       const applicant:any = await fetchNominee(serial);
-      // Update SMS Credit Balance & Campaign No
-      const ups = await updateNominee(applicant.documents[0].$id, { credit: +credit })
-      if(ups) return new Response(JSON.stringify({ message: `Candidate SMS Credit of ${credit} added!` }), { status: 200 });
+      console.log(applicant);
+      if(applicant.total > 0){
+        // Update SMS Credit Balance & Campaign No
+        const ups = await updateNominee(applicant.documents[0].$id, { credit: ((applicant.documents[0].credit || 0) + parseInt(credit)) })
+        if(ups) return new Response(JSON.stringify({ success:true, message: `Candidate SMS Credit of ${credit} added!` }), { status: 200 });
+      }
+      return new Response(JSON.stringify({ success: false, data: null, message: "Invalid Request" }), { status: 200 });
     }
   
     else return new Response(JSON.stringify({ action }), { status: 200 });

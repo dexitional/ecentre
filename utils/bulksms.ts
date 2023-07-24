@@ -32,7 +32,6 @@ export const bulksms = async (phones: any,message: string, senderId: string  = '
     // }
     //const resp = await res.json()
     //return resp;
-    console.log(res.data)
     return res.data;
 
 }

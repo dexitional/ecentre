@@ -1,9 +1,7 @@
 import SMSForm from "@/components/SMSForm";
 import TeaserPreview from "@/components/TeaserPreview";
 import { fetchNominee, fetchSmsData } from "@/utils/serverApi";
-import { CgAdd } from "react-icons/cg";
 import { GrAddCircle } from "react-icons/gr";
-import { MdAdd } from "react-icons/md";
 
 const getApplicant = async (serial: string) => {
    const applicant:any = await fetchNominee(serial);
@@ -40,13 +38,18 @@ export default async function Page({ params}:{ params: { serial: string }}) {
            <div className="p-4 bg-blue-100 rounded space-y-2">
               <h3 className="text-base md:text-xl font-bold text-slate-700">HOW TO BUY SMS CREDIT</h3>
               <ol className="px-6 py-3 space-y-2 list-decimal font-medium italic">
-                <li>Confirm cost of SMS with Calculator.</li>
+                <li>Confirm Cost of SMS by typing your message and setting the appropriate voter group for the message.</li>
                 <li>Send Amount to <span className="underline font-semibold">MOMO Number</span>: <b>0559100608</b>.</li>
                 <li>After transaction, <b>Send a text message</b> to the <b>same number</b> with message,</li>
-                <li><code className="font-semibold">{`"`}Ref: serial number of aspirant, Amount: GHC 130, senderID: xxxxxx{`"`}</code></li>
+                <li><code className="font-semibold">{`"`}Ref: serial number of aspirant, Amount: GHC XXX, senderID: xxxxxx{`"`}</code></li>
                 <li>Your <b>SMS credit</b> shall be <b>credited after confirmation</b> by System Administrator.</li>
               </ol>
-
+           </div>
+           <div className="p-4 bg-blue-100 rounded space-y-2">
+              <h3 className="text-base md:text-xl font-bold text-slate-700">HOW TO ADD SENDER ID</h3>
+              <ol className="px-6 py-3 space-y-2 list-decimal font-medium italic">
+                <li>Click on the {`"`} <GrAddCircle className="inline-block h-5 w-5 font-bold"/> {`"`} and add a 10-character word as Sender ID</li>
+              </ol>
            </div>
             
          </section>

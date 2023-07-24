@@ -12,6 +12,7 @@ const getApplicant = async (serial: string) => {
    return { applicant: applicant.documents[0], voterdata: vdata?.data[0] }
 }
 
+export const revalidate = 0;
 export default async function Page({ params}:{ params: { serial: string }}) {
   const data:any = await getApplicant(params?.serial);
   return (

@@ -326,6 +326,22 @@ export const fetchSmsSenderId = async (id: string) => {
     return res;
 }
 
+export const fetchSmsData = async (groupId: string) => {
+    console.log(groupId)
+    try {
+        const resp = await fetch(`${process.env.NEXT_PUBLIC_IMAGE_URL}/zeus/getsmsdata?groupId=${groupId}`,{ cache:'no-store'})
+        const response = await resp.json()
+        return response;
+     } catch (error) {
+       console.log(error)
+       return null
+     }
+    
+}
+
+
+
+
 
 
 // SETUP COLLECTIONS

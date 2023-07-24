@@ -1,5 +1,6 @@
 
 import { options } from "@/options";
+import { flySMS } from "@/utils/flySMS";
 import { getContacts } from "@/utils/getContacts";
 import { getEndorserLink } from "@/utils/getEndorserLink";
 import { getGroup } from "@/utils/getGroup";
@@ -181,9 +182,35 @@ export async function GET(request: Request) {
       const ups = await updateNominee(applicant.documents[0].$id, { cv: null })
       return new Response(JSON.stringify({ success: true, data:ups, message: `CV Removed!` }), { status: 200 });
     }
+
+    else if(action == 'smsfly'){
+      const serial: any = searchParams.get("serial")
+      const sgroup: any = searchParams.get("sgroup")
+      const message: any = searchParams.get("message")
+      const estimated_credit: any = searchParams.get("credit")
+      console.log(serial)
+      // // Get Current SMS Credit & Campaign No
+      // const applicant:any = await fetchNominee(serial);
+      // const { credit, sender_id,campaigns } = applicant.documents[0]
+      // if(parseInt(estimated_credit) < credit ) 
+      //    return new Response(JSON.stringify({ success: false, data:null, message: `You don't have enough balance!` }), { status: 401 });
+      // // Calculate & Send SMS
+      // const sms_res = await flySMS(message,sender_id,sgroup) // return { receipient: [], credits_used: 5000 } 
+      // if(sms_res.success){
+      //    // Update New SMS Credit Balance & Campaign No
+      //    const ups = await updateNominee(applicant.documents[0].$id, { credit: (credit-parseInt(sms_res.credit_used)), campaigns: campaigns+1, })
+      //    // Store SMS History By Serial
+      //    return new Response(JSON.stringify({ success: true, data:ups, message: `Message sent!` }), { status: 200 });
+      // }
+      
+    }
+
+    
     
     else return new Response(JSON.stringify({ action }), { status: 200 });
 }
+
+
 
 
 

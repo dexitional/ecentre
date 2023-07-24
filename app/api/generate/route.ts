@@ -242,6 +242,8 @@ export async function GET(request: Request) {
       return new Response(JSON.stringify({ success: false, data: null, msg: `Link could not be sent !` }), { status: 200 });
     }
 
+    
+
 
 
     // ?action=form&serial=test ( Fetch for form population )

@@ -9,11 +9,10 @@ export const flySMS = async (message: string, senderId: string, sgroup: string) 
    if(asp.success){
         const phones = JSON.parse(asp.data[0]?.data)[sender_group]
         if(phones && phones.length > 0){
-            const asp_sms = await bulksms(phones,message,senderId);
-            //const asp_sms = await bulksms(["0277675089","0558641826"],message);
-            if(asp_sms.code == '2000') return { success: true, credit_used: asp_sms.summary?.credit_used, receipient: asp_sms.summary?.numbers_sent, campaign_id: asp_sms.summary?._id }
+          const asp_sms = await bulksms(phones,message,senderId);
+          //const asp_sms = await bulksms(["0277675089","0558641826"],message);
+          if(asp_sms.code == '2000') return { success: true, credit_used: asp_sms.summary?.credit_used, receipient: asp_sms.summary?.numbers_sent, campaign_id: asp_sms.summary?._id }
         }
     }
-   
-   return { success: false, credit_used: 0, receipient: [], campaign_id: '' }; 
+    return { success: false, credit_used: 0, receipient: [], campaign_id: '' }; 
 }

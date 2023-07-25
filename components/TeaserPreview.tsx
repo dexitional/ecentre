@@ -17,17 +17,16 @@ function TeaserPreview({ senderId,serial }: Props) {
     e.preventDefault;
     const senderid = window.prompt("Please enter 10-character Sender ID without spaces for Campaign !")
     if(senderid && senderid != '' && senderid.length <= 11){
-         alert(senderid)
-         // Submit Sender ID
-         const res = await axios.get(`/api/sms?action=updatesenderid&sender_id=${senderid}&serial=${serial}`)
-         console.log(res.data)
-         const resp = res.data;
-         if(resp.message){
-           router.refresh()
-         } 
+        alert(senderid)
+        // Submit Sender ID
+        const res = await axios.get(`/api/sms?action=updatesenderid&sender_id=${senderid}&serial=${serial}`)
+        console.log(res.data)
+        const resp = res.data;
+        if(resp.message){
+          router.refresh()
+        } 
     }else if(senderid && senderid != '' && senderid.length > 11){
        Notiflix.Notify.failure("Sender ID is more than 11 - characters !");
-        
     }
   }
 

@@ -133,7 +133,7 @@ export const fetchNominees = async () => {
 
 export const fetchNomineesAll = async () => {
     const limit = 100
-    var pass = 0;
+    var pass = 1;
     var data = []
     
     // while(true){

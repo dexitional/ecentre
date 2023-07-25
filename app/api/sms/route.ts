@@ -2,7 +2,8 @@
 import { options } from "@/options";
 import { addSenderId } from "@/utils/addSenderId";
 import { flySMS } from "@/utils/flySMS";
-import { deleteNominee, fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, fetchNominees, fetchNomineesDisplay, postNominee, updateNominee } from "@/utils/serverApi";
+import { sendMessageByRegNo } from "@/utils/sendMessageByRegNo";
+import { deleteNominee, fetchActiveSession, fetchCgpa, fetchNominee, fetchNomineeOffset, fetchNomineeOffsetById, fetchNominees, fetchNomineesAll, fetchNomineesDisplay, postNominee, updateNominee } from "@/utils/serverApi";
 import { getServerSession } from "next-auth";
 
 
@@ -65,13 +66,37 @@ export async function GET(request: Request) {
       const serial: any = searchParams.get("serial")
       const credit: any = searchParams.get("credit")
       const applicant:any = await fetchNominee(serial);
-      console.log(applicant);
       if(applicant.total > 0){
         // Update SMS Credit Balance & Campaign No
         const ups = await updateNominee(applicant.documents[0].$id, { credit: ((applicant.documents[0].credit || 0) + parseInt(credit)) })
         if(ups) return new Response(JSON.stringify({ success:true, message: `Candidate SMS Credit of ${credit} added!` }), { status: 200 });
       }
       return new Response(JSON.stringify({ success: false, data: null, message: "Invalid Request" }), { status: 200 });
+    }
+
+    else if(action == 'updatecredit'){
+      const serial: any = searchParams.get("serial")
+      const credit: any = searchParams.get("credit")
+      const applicant:any = await fetchNominee(serial);
+      if(applicant.total > 0){
+        // Update SMS Credit Balance & Campaign No
+        const ups = await updateNominee(applicant.documents[0].$id, { credit: ((applicant.documents[0].credit || 0) + parseInt(credit)) })
+        if(ups) return new Response(JSON.stringify({ success:true, message: `Candidate SMS Credit of ${credit} added!` }), { status: 200 });
+      }
+      return new Response(JSON.stringify({ success: false, data: null, message: "Invalid Request" }), { status: 200 });
+    }
+
+    if(action == 'notify'){
+      let scount = 0;
+      const applicant:any = await fetchNomineesAll();
+      if(applicant.length > 0){
+        for(const dt of applicant){
+           const send = await sendMessageByRegNo(dt?.aspirant_regno, `Hi! SMSFly Platform is live! Please navigate to the nomination system with your Serial and Pin to use the feature. Please set your Sender ID for approval. Thank you!`)
+           if(send && send.code == '2000') scount += 1;
+        }
+        return new Response(JSON.stringify({ success: true, count: scount }), { status: 200 });
+      }
+      return new Response(JSON.stringify({ success: false, data: null, msg: `Link could not be sent !` }), { status: 200 });
     }
   
     else return new Response(JSON.stringify({ action }), { status: 200 });

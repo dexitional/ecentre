@@ -3,6 +3,7 @@ import React, { FormEvent } from 'react'
 import { GrAddCircle } from 'react-icons/gr'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import Notiflix from 'notiflix'
 
 type Props = {
     senderId: string;
@@ -15,7 +16,7 @@ function TeaserPreview({ senderId,serial }: Props) {
   const getTeaser = async (e:FormEvent) => {
     e.preventDefault;
     const senderid = window.prompt("Please enter 10-character Sender ID without spaces for Campaign !")
-    if(senderid && senderid != ''){
+    if(senderid && senderid != '' && senderid.length <= 11){
          alert(senderid)
          // Submit Sender ID
          const res = await axios.get(`/api/sms?action=updatesenderid&sender_id=${senderid}&serial=${serial}`)
@@ -24,6 +25,9 @@ function TeaserPreview({ senderId,serial }: Props) {
          if(resp.message){
            router.refresh()
          } 
+    }else if(senderid && senderid != '' && senderid.length > 11){
+       Notiflix.Notify.failure("Sender ID is more than 11 - characters !");
+        
     }
   }
 

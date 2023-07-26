@@ -56,7 +56,7 @@ function SMSForm({ data,applicant, serial }: Props) {
                  router.refresh()
               } else {
                  setLoading(false)
-                 Notiflix.Notify.failure(response?.msg?.toUpperCase());
+                 Notiflix.Notify.failure(response?.message?.toUpperCase());
               }
 
             } catch (error) {

@@ -20,20 +20,23 @@ export async function POST(request: Request) {
         const estimated_credit: any = body.credit
         // Get Current SMS Credit & Campaign No
         const applicant:any = await fetchNominee(serial);
-        const { credit,sender_id,campaigns } = applicant.documents[0]
-        
-        if(parseInt(estimated_credit) > (credit || 0) ) {
-           console.log("NOT ENOUGH")
-           return new Response(JSON.stringify({ success: false, data:null, message: `You don't have enough balance!` }), { status: 200 });
-        }
-        // Calculate & Send SMS
-        const sms_res = await flySMS(message,sender_id,sgroup) // return { receipient: [], credits_used: 5000 } 
-        console.log(sms_res)
-        if(sms_res.success){
-           // Update New SMS Credit Balance & Campaign No
-           const ups = await updateNominee(applicant.documents[0].$id, { credit: ((credit || 0) - parseInt(sms_res.credit_used)), campaigns: campaigns+1, })
-           // Store SMS History By Serial
-           return new Response(JSON.stringify({ success: true, data:ups, message: `Message sent!` }), { status: 200 });
+        if(applicant.total > 0){
+            const { credit,sender_id,campaigns } = applicant.documents[0]
+            if(parseInt(estimated_credit) > (credit || 0) ) {
+              console.log("NOT ENOUGH")
+              return new Response(JSON.stringify({ success: false, data:null, message: `You don't have enough balance!` }), { status: 200 });
+            }
+            // Calculate & Send SMS
+            const sms_res = await flySMS(message,sender_id,sgroup) // return { receipient: [], credits_used: 5000 } 
+            console.log(sms_res)
+            if(sms_res?.success){
+              // Update New SMS Credit Balance & Campaign No
+              const ups = await updateNominee(applicant.documents[0].$id, { credit: ((credit || 0) - parseInt(sms_res.credit_used)), campaigns: campaigns+1, })
+              // Store SMS History By Serial
+              return new Response(JSON.stringify({ success: true, data:ups, message: `Message sent!` }), { status: 200 });
+            }
+        } else {
+           return new Response(JSON.stringify({ success: true, data:null, message: `Candidate inactive!` }), { status: 200 });
         }
         
   } catch (error: any) {

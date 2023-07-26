@@ -27,14 +27,14 @@ export async function POST(request: Request) {
               return new Response(JSON.stringify({ success: false, data:null, message: `You don't have enough balance!` }), { status: 200 });
             }
             // Calculate & Send SMS
-            const sms_res = await flySMS(message,sender_id,sgroup) // return { receipient: [], credits_used: 5000 } 
+            const sms_res:any = await flySMS(message,sender_id,sgroup) // return { receipient: [], credits_used: 5000 } 
             console.log(sms_res)
-            if(sms_res?.success){
+            //if(sms_res?.success){
               // Update New SMS Credit Balance & Campaign No
-              const ups = await updateNominee(applicant.documents[0].$id, { credit: ((credit || 0) - parseInt(sms_res.credit_used)), campaigns: campaigns+1, })
+              const ups = await updateNominee(applicant.documents[0].$id, { credit: ((credit || 0) - parseInt(sms_res?.credit_used)), campaigns: campaigns+1, })
               // Store SMS History By Serial
               return new Response(JSON.stringify({ success: true, data:ups, message: `Message sent!` }), { status: 200 });
-            }
+            //}
         } else {
            return new Response(JSON.stringify({ success: true, data:null, message: `Candidate inactive!` }), { status: 200 });
         }
